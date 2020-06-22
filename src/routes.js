@@ -1,11 +1,18 @@
 import { Router } from 'express';
 
-import ProductController from './app/controllers/ProductController';
+import multer from 'multer';
+import multerConfig from './config/multer';
+
+import UsersController from './app/controllers/UsersController';
+import AvatarController from './app/controllers/AvatarController';
 
 const routes = new Router();
+const upload = multer(multerConfig);
 
-routes.post('/products', ProductController.create);
-routes.get('/products', ProductController.getAll);
-routes.get('/products/:id', ProductController.getById);
+routes.post('/users', UsersController.create);
+routes.get('/users', UsersController.getAll);
+routes.put('/users/:id', UsersController.update);
+
+routes.post('/avatar', upload.single('file'), AvatarController.create);
 
 export default routes;

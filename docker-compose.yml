@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  app:
+    build: .
+    container_name: "sid"
+    command: npm run dev
+    ports:
+      - "3777:3777"
+    networks:
+      - overlay
+    depends_on:
+      - db
+    volumes:
+      - .:/usr/app
+  db:
+    image: 'postgres:12.3-alpine'
+    container_name: "sid-database"
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - /var/lib/postgresql/data 
+    networks:
+      - overlay
+    ports:
+      - "5432:5432"
+networks:
+  overlay:

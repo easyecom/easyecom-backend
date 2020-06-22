@@ -3,8 +3,6 @@ import path from 'path';
 import cors from 'cors';
 import routes from './routes';
 
-import './database';
-
 class App {
     constructor() {
         this.server = express();
@@ -16,11 +14,7 @@ class App {
         this.server.use(cors());
         this.server.use(express.json());
         this.server.use(
-            '/products',
-            express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
-        );
-        this.server.use(
-            '/accessories',
+            '/avatar',
             express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
         );
     }
