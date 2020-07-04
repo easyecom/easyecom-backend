@@ -10,6 +10,11 @@ class AvatarController {
         });
         return res.json(data);
     }
+
+    async getAll(req, res) {
+        const file = await connection('avatar').select('*');
+        return res.json(file);
+    }
 }
 
 export default new AvatarController();

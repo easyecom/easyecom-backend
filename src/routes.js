@@ -14,5 +14,6 @@ routes.get('/users', UsersController.getAll);
 routes.put('/users/:id', UsersController.update);
 
 routes.post('/avatar', upload.single('file'), AvatarController.create);
+routes.get('/avatar', AvatarController.getAll);
 
 export default routes;
