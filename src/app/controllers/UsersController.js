@@ -12,13 +12,21 @@ class UsersController {
                 password,
             });
 
-        return res.json(data);
+        return res.status(201).json(data);
     }
 
     async getAll(req, res) {
-        const users = await connection('users').select('*');
+        try {
+            const users = await connection('users').select('*');
 
-        return res.json(users);
+            if (!users.length) {
+                return res.status(200).json({ message: 'without users' });
+            }
+
+            return res.status(200).json(users);
+        } catch (err) {
+            return res.status(500).json(err.message);
+        }
     }
 
     async update(req, res) {
