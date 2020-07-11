@@ -5,7 +5,7 @@
 .env
 
 # mock
-mock
+mock.js
 
 # Logs
 logs

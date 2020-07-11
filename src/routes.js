@@ -14,6 +14,7 @@ routes.post('/users', UsersController.create);
 routes.get('/users', UsersController.getAll);
 routes.get('/users/:id', UsersController.getOne);
 routes.put('/users/:id', UsersController.update);
+routes.delete('/users/:id', UsersController.delete);
 
 routes.post('/session', SessionController.create);
 

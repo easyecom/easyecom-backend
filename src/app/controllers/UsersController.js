@@ -4,10 +4,10 @@ const bcrypt = require('bcrypt');
 
 class UsersController {
     create(req, res) {
+        const { name, email, password } = req.body;
+
         const user = new Promise((resolve, reject) => {
             try {
-                const { name, email, password } = req.body;
-
                 bcrypt.hash(String(password), 7, (err, hash) => {
                     if (err) {
                         return reject(err);
@@ -24,7 +24,8 @@ class UsersController {
                 });
                 return res.status(201).send(`create success`);
             } catch (err) {
-                return res.status(500).send('something broke');
+                console.log(err);
+                return res.status(500).send('sorry, something broke...');
             }
         });
 
@@ -71,7 +72,32 @@ class UsersController {
                 'avatar_id',
             ]);
 
+        if (!data.length) {
+            return res.json({ message: 'user not exist' });
+        }
+
         return res.json(data);
+    }
+
+    async delete(req, res) {
+        try {
+            const { id } = req.params;
+
+            const data = await connection('users')
+                .where('id', id)
+                .del();
+
+            if (!data.length) {
+                return res.status(204).json({ message: 'user not exist' });
+            }
+
+            return res.json({ message: 'deleted success' });
+        } catch (e) {
+            console.log({
+                message: e.message,
+                stack: e.stack,
+            });
+        }
     }
 }
 

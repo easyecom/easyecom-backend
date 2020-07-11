@@ -13,7 +13,7 @@ class SessionController {
                 .first();
 
             if (!user) {
-                return res.status(401).send({ message: 'User not exist' });
+                return res.status(404).send({ message: 'user not exist' });
             }
 
             const match = await bcrypt.compare(String(password), user.password);
@@ -21,11 +21,11 @@ class SessionController {
             if (match === false) {
                 return res
                     .status(401)
-                    .send({ message: 'password do not math' });
+                    .send({ message: 'password do not match' });
             }
 
             if (match) {
-                return res.status(200).send({ message: 'login success' });
+                return res.status(202).send({ message: 'login success' });
             }
         } catch (e) {
             console.error({
