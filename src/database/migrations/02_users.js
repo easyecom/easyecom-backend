@@ -3,15 +3,20 @@ exports.up = knex => {
         table
             .increments('id')
             .unsigned()
-            .primary();
-        table.string('name', 30).notNullable();
+            .primary()
+            .unique();
+
+        table.string('name', 50).notNullable();
+
         table
             .string('email', 30)
             .notNullable()
             .unique();
-        table.string('password', 20).notNullable();
+
+        table.string('password').notNullable();
+
         table
-            .boolean('admin')
+            .boolean('store')
             .notNullable()
             .defaultTo(false);
 

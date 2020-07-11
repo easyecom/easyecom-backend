@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 services:
   app:
@@ -14,7 +14,7 @@ services:
     volumes:
       - .:/usr/app
   db:
-    image: 'postgres:12.3-alpine'
+    image: 'postgres:latest'
     container_name: "sid-database"
     environment:
       POSTGRES_USER: ${DATABASE_USER}
@@ -25,6 +25,6 @@ services:
     networks:
       - overlay
     ports:
-      - "5432:5432"
+      - "5434:5432"
 networks:
   overlay:

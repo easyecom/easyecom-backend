@@ -1,18 +1,38 @@
 import connection from '../../database/connection';
 
+const bcrypt = require('bcrypt');
+
 class UsersController {
-    async create(req, res) {
-        const { name, email, password } = await req.body;
+    create(req, res) {
+        const user = new Promise((resolve, reject) => {
+            try {
+                const { name, email, password } = req.body;
 
-        const data = await connection('users')
-            .returning('id')
-            .insert({
-                name,
-                email,
-                password,
-            });
+                bcrypt.hash(String(password), 7, (err, hash) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    return resolve(
+                        connection('users')
+                            .returning('id')
+                            .insert({
+                                name,
+                                email,
+                                password: hash,
+                            })
+                    );
+                });
+                return res.status(201).send(`create success`);
+            } catch (err) {
+                return res.status(500).send('something broke');
+            }
+        });
 
-        return res.status(201).json(data);
+        user.then(result => {
+            console.log(result);
+        }).catch(err => {
+            console.error(err);
+        });
     }
 
     async getAll(req, res) {
@@ -29,10 +49,17 @@ class UsersController {
         }
     }
 
+    async getOne(req, res) {
+        const { id } = req.params;
+        const data = await connection('users')
+            .select('*')
+            .where('id', id);
+        return res.json(data);
+    }
+
     async update(req, res) {
         const { id } = req.params;
 
-        // save user data in localstorage
         const { name, email, password, avatar_id } = await req.body;
 
         const data = await connection('users')
