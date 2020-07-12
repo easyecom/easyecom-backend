@@ -20,5 +20,7 @@ routes.post('/session', SessionController.create);
 
 routes.post('/avatar', upload.single('file'), AvatarController.create);
 routes.get('/avatar', AvatarController.getAll);
+routes.get('/avatar/:id', AvatarController.getOne);
+routes.delete('/avatar/:id', AvatarController.delete);
 
 export default routes;

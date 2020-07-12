@@ -41,7 +41,7 @@ class UsersController {
             const users = await connection('users').select('*');
 
             if (!users.length) {
-                return res.status(200).json({ message: 'without users' });
+                return res.status(404).json({ message: 'without users' });
             }
 
             return res.status(200).json(users);
@@ -73,7 +73,7 @@ class UsersController {
             ]);
 
         if (!data.length) {
-            return res.json({ message: 'user not exist' });
+            return res.status(404).json({ message: 'user not exist' });
         }
 
         return res.json(data);
@@ -87,11 +87,11 @@ class UsersController {
                 .where('id', id)
                 .del();
 
-            if (!data.length) {
-                return res.status(204).json({ message: 'user not exist' });
+            if (!data) {
+                return res.status(404).json({ message: 'user not exist' });
             }
 
-            return res.json({ message: 'deleted success' });
+            return res.status(202).json({ message: 'deleted success' });
         } catch (e) {
             console.log({
                 message: e.message,
