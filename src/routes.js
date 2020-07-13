@@ -1,6 +1,7 @@
 import { Router } from 'express';
-
 import multer from 'multer';
+import authMiddleware from './app/middlewares/auth';
+
 import multerConfig from './config/multer';
 
 import UsersController from './app/controllers/UsersController';
@@ -13,7 +14,7 @@ const upload = multer(multerConfig);
 routes.post('/users', UsersController.create);
 routes.get('/users', UsersController.getAll);
 routes.get('/users/:id', UsersController.getOne);
-routes.put('/users/:id', UsersController.update);
+routes.put('/users/:id', authMiddleware, UsersController.update);
 routes.delete('/users/:id', UsersController.delete);
 
 routes.post('/session', SessionController.create);

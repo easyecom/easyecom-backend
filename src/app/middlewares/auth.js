@@ -1,34 +1,24 @@
-import jwt from 'express-jwt';
-import secret from '../../config/auth';
+import jwt from 'jsonwebtoken';
+import { promisify } from 'util';
 
-function getTokenFromHeaders(req, res) {
+import authConfig from '../../config/auth';
+
+export default async (req, res, next) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        return res.status(401).json({ error: 'Token not provider' });
+    }
+
+    const [, token] = authHeader.split(' ');
+
     try {
-        if (!req.headers.authorization) {
-            return res.status(401).json({ message: 'not authorization' });
-        }
-        const token = req.headers.authorization.split(' ');
+        const decoded = await promisify(jwt.verify)(token, authConfig.secret);
 
-        if (token[0] === 'Bearer') {
-            return res.status(401).json({ message: 'not authorization' });
-        }
-        return token[1];
+        req.userId = decoded.id;
+
+        return next();
     } catch (err) {
         return res.status(401).json({ error: 'Token invalid' });
     }
-}
-
-const auth = {
-    required: jwt({
-        secret,
-        userProperty: 'payload',
-        getToken: getTokenFromHeaders,
-    }),
-    optional: jwt({
-        secret,
-        userProperty: 'payload',
-        credentialsRequired: false,
-        getToken: getTokenFromHeaders,
-    }),
 };
-
-export default auth;

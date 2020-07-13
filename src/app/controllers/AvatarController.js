@@ -1,4 +1,4 @@
-import connection, { select } from '../../database/connection';
+import connection from '../../database/connection';
 
 class AvatarController {
     async create(req, res) {

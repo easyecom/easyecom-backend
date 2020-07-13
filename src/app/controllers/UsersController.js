@@ -68,7 +68,6 @@ class UsersController {
             .update({ name, email, password, avatar_id }, [
                 'name',
                 'email',
-                'password',
                 'avatar_id',
             ]);
 
