@@ -3,7 +3,7 @@ import connection from '../../database/connection';
 const bcrypt = require('bcrypt');
 
 class UsersController {
-    create(req, res) {
+    store(req, res) {
         const { name, email, password } = req.body;
 
         const user = new Promise((resolve, reject) => {
@@ -24,7 +24,7 @@ class UsersController {
                 });
                 return res.status(201).send(`create success`);
             } catch (err) {
-                console.log(err);
+                console.error(err);
                 return res.status(500).send('sorry, something broke...');
             }
         });
@@ -33,6 +33,7 @@ class UsersController {
             console.log(result);
         }).catch(err => {
             console.error(err);
+            return res.status(500).json('sorry, something broke...');
         });
     }
 
@@ -46,36 +47,47 @@ class UsersController {
 
             return res.status(200).json(users);
         } catch (err) {
-            return res.status(500).json(err.message);
+            console.error(err);
+            return res.status(500).json('sorry, something broke...');
         }
     }
 
     async getOne(req, res) {
-        const { id } = req.params;
-        const data = await connection('users')
-            .select('*')
-            .where('id', id);
-        return res.json(data);
+        try {
+            const { id } = req.params;
+            const data = await connection('users')
+                .select('*')
+                .where('id', id);
+            return res.status(200).json(data);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json('sorry, something broke...');
+        }
     }
 
     async update(req, res) {
-        const { id } = req.params;
+        try {
+            const { id } = req.params;
 
-        const { name, email, password, avatar_id } = await req.body;
+            const { name, email, password, avatar_id } = await req.body;
 
-        const data = await connection('users')
-            .where('id', id)
-            .update({ name, email, password, avatar_id }, [
-                'name',
-                'email',
-                'avatar_id',
-            ]);
+            const data = await connection('users')
+                .where('id', id)
+                .update({ name, email, password, avatar_id }, [
+                    'name',
+                    'email',
+                    'avatar_id',
+                ]);
 
-        if (!data.length) {
-            return res.status(404).json({ message: 'user not exist' });
+            if (!data.length) {
+                return res.status(404).json({ message: 'user not exist' });
+            }
+
+            return res.status(200).json(data);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json('sorry, something broke...');
         }
-
-        return res.json(data);
     }
 
     async delete(req, res) {
@@ -91,11 +103,9 @@ class UsersController {
             }
 
             return res.status(202).json({ message: 'deleted success' });
-        } catch (e) {
-            console.log({
-                message: e.message,
-                stack: e.stack,
-            });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json('sorry, something broke...');
         }
     }
 }

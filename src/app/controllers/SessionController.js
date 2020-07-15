@@ -50,11 +50,9 @@ class SessionController {
             return res
                 .status(500)
                 .json({ message: 'sorry, something broke...' });
-        } catch (e) {
-            console.error({
-                message: e.message,
-                stack: e.stack,
-            });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json('sorry, something broke...');
         }
     }
 }
