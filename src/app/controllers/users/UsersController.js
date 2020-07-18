@@ -1,4 +1,4 @@
-import connection from '../../database/connection';
+import connection from '../../../database/connection';
 
 const bcrypt = require('bcrypt');
 
@@ -22,10 +22,10 @@ class UsersController {
                             })
                     );
                 });
-                return res.status(201).send(`create success`);
+                return res.status(201).json(`create success`);
             } catch (err) {
                 console.error(err);
-                return res.status(500).send('sorry, something broke...');
+                return res.status(500).json('sorry, something broke...');
             }
         });
 

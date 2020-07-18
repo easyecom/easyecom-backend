@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import connection from '../../database/connection';
-import authConfig from '../../config/auth';
+import connection from '../../../database/connection';
+import authConfig from '../../../config/auth';
 
 const bcrypt = require('bcrypt');
 
