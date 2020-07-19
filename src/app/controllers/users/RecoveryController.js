@@ -30,19 +30,24 @@ class RecoveryController {
             });
         }
 
-        const tokenRecoveryPssword = () => {
-            const recovery = [];
-            const token = crypto.randomBytes(16).toString('hex');
-            const date = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
-            recovery.push({ token, date });
-            return recovery;
-        };
+        const token = crypto.randomBytes(16).toString('hex');
 
-        const recoveryData = tokenRecoveryPssword();
+        const date = new Date();
 
-        // criar campo recovery e armazenar dados no banco para recuperar token e liberar criação de nova senha
-        // após o recebimento do mesmo que será enviado por email ao cliente
-        return res.json(recoveryData);
+        date.setHours(date.getHours() + 2);
+
+        const data = await connection('users')
+            .where('id', user.id)
+            .update({ recoveryToken: token, recoveryExpireToken: date }, [
+                'recoveryToken',
+                'recoveryExpireToken',
+            ]);
+
+        if (!data.length) {
+            return res.status(404).json({ message: 'user not exist' });
+        }
+
+        return res.status(200).json(data);
     }
 }
 

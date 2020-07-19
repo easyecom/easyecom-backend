@@ -37,7 +37,7 @@ class AvatarController {
                 .select('*');
 
             if (!file.length) {
-                return res.status(204).json({ message: 'user not exist' });
+                return res.status(204).json({ message: 'user does not exist' });
             }
 
             return res.status(200).json(file);
@@ -56,7 +56,7 @@ class AvatarController {
                 .del();
 
             if (!file) {
-                return res.status(404).json({ message: 'file not exist' });
+                return res.status(404).json({ message: 'file does not exist' });
             }
 
             return res.status(202).json({ message: 'deleted success' });

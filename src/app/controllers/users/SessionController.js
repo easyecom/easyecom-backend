@@ -19,7 +19,7 @@ class SessionController {
                 .first();
 
             if (!user) {
-                return res.status(404).send({ message: 'user not exist' });
+                return res.status(404).send({ message: 'user does not exist' });
             }
 
             const match = await bcrypt.compare(String(password), user.password);

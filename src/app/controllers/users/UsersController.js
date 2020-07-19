@@ -14,7 +14,7 @@ class UsersController {
                     }
                     return resolve(
                         connection('users')
-                            .returning('id')
+                            .returning('*')
                             .insert({
                                 name,
                                 email,
@@ -22,7 +22,7 @@ class UsersController {
                             })
                     );
                 });
-                return res.status(201).json(`create success`);
+                return res.status(201).json('create success');
             } catch (err) {
                 console.error(err);
                 return res.status(500).json('sorry, something broke...');
@@ -80,7 +80,7 @@ class UsersController {
                 ]);
 
             if (!data.length) {
-                return res.status(404).json({ message: 'user not exist' });
+                return res.status(404).json({ message: 'user does not exist' });
             }
 
             return res.status(200).json(data);
@@ -99,7 +99,7 @@ class UsersController {
                 .del();
 
             if (!data) {
-                return res.status(404).json({ message: 'user not exist' });
+                return res.status(404).json({ message: 'user does not exist' });
             }
 
             return res.status(202).json({ message: 'deleted success' });

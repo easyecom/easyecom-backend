@@ -15,6 +15,10 @@ exports.up = knex => {
 
         table.string('password').notNullable();
 
+        table.string('recoveryToken');
+
+        table.specificType('recoveryExpireToken', 'date');
+
         table
             .boolean('store')
             .notNullable()
