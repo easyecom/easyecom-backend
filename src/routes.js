@@ -7,16 +7,16 @@ import multerConfig from './config/multer';
 import UsersController from './app/controllers/users/UsersController';
 import SessionController from './app/controllers/users/SessionController';
 import AvatarController from './app/controllers/users/AvatarController';
-import recoveryController from './app/controllers/users/RecoveryController';
-import recoveredController from './app/controllers/users/RecoveredController';
+import RecoveryController from './app/controllers/users/RecoveryController';
+import RecoveredController from './app/controllers/users/RecoveredController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
 
-routes.get('/recovery', recoveryController.showRecovery);
-routes.post('/recovery', recoveryController.createRecovery);
-routes.get('/recovered', recoveredController.showCompleteRecovery);
-routes.post('/recovered', recoveredController.completeRecovery);
+routes.get('/recovery', RecoveryController.showRecovery);
+routes.post('/recovery', RecoveryController.createRecovery);
+routes.get('/recovered', RecoveredController.showCompleteRecovery);
+routes.post('/recovered', RecoveredController.completeRecovery);
 
 routes.post('/users', UsersController.store);
 routes.get('/users', UsersController.getAll);

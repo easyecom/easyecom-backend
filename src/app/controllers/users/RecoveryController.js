@@ -1,4 +1,5 @@
 import connection from '../../../database/connection';
+import emailTemplateRecovery from '../../../../helpers/emailRecovery';
 
 const crypto = require('crypto');
 
@@ -14,7 +15,7 @@ class RecoveryController {
         const { email } = req.body;
         if (!email) {
             return res.render('recovery', {
-                error: 'set your email',
+                error: 'Ops, acho que você esqueceu o seu email',
                 success: null,
             });
         }
@@ -25,7 +26,7 @@ class RecoveryController {
 
         if (!user) {
             return res.render('recovery', {
-                error: 'email not exist',
+                error: 'email does not exist',
                 success: null,
             });
         }
@@ -34,7 +35,7 @@ class RecoveryController {
 
         const date = new Date();
 
-        date.setHours(date.getHours() + 2);
+        date.setHours(date.getHours() + 24);
 
         const data = await connection('users')
             .where('id', user.id)
@@ -43,8 +44,15 @@ class RecoveryController {
                 'recoveryExpireToken',
             ]);
 
+        await emailTemplateRecovery(
+            { user, token },
+            (error = null, success = null) => {
+                return res.render('recovery', { error, success });
+            }
+        );
+
         if (!data.length) {
-            return res.status(404).json({ message: 'user not exist' });
+            return res.status(404).json({ message: 'user does not exist' });
         }
 
         return res.status(200).json(data);

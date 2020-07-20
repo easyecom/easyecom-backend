@@ -10,7 +10,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-3 col-sm-offset-3">
-                <h2>recovery password</h2>
+                <h2>Recuperação de senha</h2>
                 <hr /><br />
 
                 <% if(success){ %>
@@ -18,7 +18,7 @@
                     <%= success %>
                 </div>
                 <div class="text-center">
-                    <h3>make your login :)</h3>
+                    <h3>faça login :)</h3>
                 </div>
                 <% } %>
 
@@ -30,16 +30,16 @@
 
                 <% if(!success) { %>
                 <p>
-                    write here your email
+                    digite aqui sua nova senha
                 </p>
                 <form action="/recovered" method="POST">
                     <input type="hidden" name="token" value="<%= token %>" />
                     <div class="form-group">
                         <input type="password" name="password" class="form-control"
-                            placeholder="Set new password" />
+                            placeholder="nova senha" />
                     </div>
                     <button class="btn btn-primary">
-                        create new password
+                        enviar
                     </button>
                 </form>
                 <% } %>
