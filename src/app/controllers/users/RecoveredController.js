@@ -1,5 +1,7 @@
 import connection from '../../../database/connection';
 
+const bcrypt = require('bcrypt');
+
 class RecoveredController {
     async showCompleteRecovery(req, res, next) {
         try {
@@ -33,9 +35,44 @@ class RecoveredController {
     }
 
     async completeRecovery(req, res) {
-        const { token, password } = req.body;
-        console.log(token);
-        console.log(password);
+   
+        const { id } = await connection('users')
+        .where('recoveryToken', req.query.token)
+        .select('*')
+        .first();
+
+        const { password } = req.body;
+
+        const user = new Promise((resolve, reject) => {
+            try {
+                bcrypt.hash(String(password), 7, (err, hash) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    return resolve(
+                        connection('users')
+                            .where('id', id)
+                            .update({   password: hash,}, [
+                                'password',
+                            ])
+      
+                    );
+                });
+                return res.status(201).json('update success');
+
+                } catch (err) {
+                    console.error(err);
+                    return res.status(500).json('sorry, something broke...');
+                }
+            });
+
+            user.then(result => {
+                console.log(result);
+            }).catch(err => {
+                console.error(err);
+                return res.status(500).json('sorry, something broke...');
+            });
+
         return res.json('hello');
     }
 }
