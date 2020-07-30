@@ -9,6 +9,7 @@ import SessionController from './app/controllers/users/SessionController';
 import AvatarController from './app/controllers/users/AvatarController';
 import RecoveryController from './app/controllers/users/RecoveryController';
 import RecoveredController from './app/controllers/users/RecoveredController';
+import StoresController from './app/controllers/stores/StoresController'
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -35,5 +36,11 @@ routes.post(
 routes.get('/avatar', AvatarController.getAll);
 routes.get('/avatar/:id', authMiddleware, AvatarController.getOne);
 routes.delete('/avatar/:id', authMiddleware, AvatarController.delete);
+
+routes.post('/stores', StoresController.store);
+routes.get('/stores', StoresController.getAll);
+routes.get('/stores/:id', StoresController.getOne);
+routes.put('/stores/:id', StoresController.update);
+routes.delete('/stores/:id', StoresController.delete);
 
 export default routes;

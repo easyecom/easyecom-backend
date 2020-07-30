@@ -69,14 +69,15 @@ class UsersController {
         try {
             const { id } = req.params;
 
-            const { name, email, avatar_id } = await req.body;
+            const { name, email, avatar_id, store_id } = await req.body;
 
             const data = await connection('users')
                 .where('id', id)
-                .update({ name, email, avatar_id }, [
+                .update({ name, email, avatar_id, store_id }, [
                     'name',
                     'email',
                     'avatar_id',
+                    "store_id"
                 ]);
 
             if (!data.length) {

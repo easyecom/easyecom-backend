@@ -21,16 +21,19 @@ exports.up = knex => {
 
         table.specificType('recoveryExpireToken', 'date');
 
+        table.integer('store_id')
         table
-            .boolean('store')
-            .notNullable()
-            .defaultTo(false);
+            .foreign('store_id')
+            .references('id')
+            .inTable('stores')
+            .onUpdate('CASCADE')
+            .onDelete('SET NULL');
 
         table.integer('avatar_id');
         table
             .foreign('avatar_id')
             .references('id')
-            .inTable('avatar')
+            .inTable('avatars')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 

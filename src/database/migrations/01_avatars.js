@@ -1,9 +1,11 @@
 exports.up = knex => {
-    return knex.schema.createTable('avatar', table => {
+    return knex.schema.createTable('avatars', table => {
         table
             .increments('id')
             .unsigned()
-            .primary();
+            .primary()
+            .unique();;
+            
         table.string('name').notNullable();
         table.string('path').notNullable();
 
@@ -13,5 +15,5 @@ exports.up = knex => {
 };
 
 exports.down = knex => {
-    knex.schema.dropTable('avatar');
+    knex.schema.dropTable('avatars');
 };

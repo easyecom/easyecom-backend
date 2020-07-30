@@ -5,7 +5,7 @@ class AvatarController {
         try {
             const { filename: name, originalname: path } = await req.file;
 
-            const data = await connection('avatar')
+            const data = await connection('avatars')
                 .returning('id')
                 .insert({
                     name,
@@ -20,7 +20,7 @@ class AvatarController {
 
     async getAll(req, res) {
         try {
-            const file = await connection('avatar').select('*');
+            const file = await connection('avatars').select('*');
             return res.json(file);
         } catch (err) {
             console.error(err);
