@@ -14,6 +14,8 @@ exports.up = knex => {
             .unique();
 
         table.string('password').notNullable();
+        
+        table.specificType('permission', 'text[]').defaultTo('{client}');
 
         table.string('recoveryToken');
 
