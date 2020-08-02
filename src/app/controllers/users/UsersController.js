@@ -1,4 +1,4 @@
-import connection from '../../../database/connection';
+import connection, { first } from '../../../database/connection';
 
 const bcrypt = require('bcrypt');
 
@@ -55,9 +55,15 @@ class UsersController {
     async getOne(req, res) {
         try {
             const { id } = req.params;
+
             const data = await connection('users')
                 .select('*')
                 .where('id', id);
+
+            if (!data.length) {
+                return res.status(404).json({ message: 'user does not exist' });
+            }
+
             return res.status(200).json(data);
         } catch (err) {
             console.error(err);
@@ -69,15 +75,22 @@ class UsersController {
         try {
             const { id } = req.params;
 
-            const { name, email, avatar_id, store_id } = await req.body;
+            const {
+                name,
+                email,
+                avatar_id,
+                store_id,
+                permission,
+            } = await req.body;
 
             const data = await connection('users')
                 .where('id', id)
-                .update({ name, email, avatar_id, store_id }, [
+                .update({ name, email, avatar_id, store_id, permission }, [
                     'name',
                     'email',
                     'avatar_id',
-                    "store_id"
+                    'store_id',
+                    'permission',
                 ]);
 
             if (!data.length) {

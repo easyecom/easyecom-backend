@@ -41,6 +41,10 @@ class StoresController {
                 .where('id', id)
                 .select('*');
 
+            if (!data.length) {
+                return res.status(404).json({ message: 'store does not exist' });
+            }
+
             return res.status(200).json(data);
         } catch (err) {
             console.error(err);
@@ -54,6 +58,7 @@ class StoresController {
             const { name, cnpj, email, businessPhone, cellPhone } = req.body;
 
             const data = await connection('stores')
+                .returning('*')
                 .where('id', id)
                 .update({ name, cnpj, email, businessPhone, cellPhone });
 
@@ -67,7 +72,7 @@ class StoresController {
         try {
             const { id } = req.params;
 
-            const data = await connection('stores')
+            await connection('stores')
                 .where('id', id)
                 .del();
 
