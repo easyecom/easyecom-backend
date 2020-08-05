@@ -5,6 +5,19 @@ class StoresController {
         try {
             const { name, cnpj, email, businessPhone, cellPhone } = req.body;
 
+            let error = [];
+
+            if (!name) error.push('name');
+            if (!cnpj) error.push('cnpj');
+            if (!email) error.push('email');
+            if (!businessPhone && !cellPhone) error.push('phone');
+
+            if (error.length > 0) {
+                return res
+                    .status(422)
+                    .json({ error: 'sorry, you forgot', required: error });
+            }
+
             const data = await connection('stores')
                 .returning('*')
                 .insert({
@@ -42,7 +55,9 @@ class StoresController {
                 .select('*');
 
             if (!data.length) {
-                return res.status(404).json({ message: 'store does not exist' });
+                return res
+                    .status(404)
+                    .json({ message: 'store does not exist' });
             }
 
             return res.status(200).json(data);

@@ -6,6 +6,18 @@ class UsersController {
     store(req, res) {
         const { name, email, password } = req.body;
 
+        let error = [];
+
+        if (!name) error.push('name');
+        if (!email) error.push('email');
+        if (!password) error.push('password');
+
+        if (error.length > 0) {
+            return res
+                .status(422)
+                .json({ error: 'you forgot', required: error });
+        }
+
         const user = new Promise((resolve, reject) => {
             try {
                 bcrypt.hash(String(password), 7, (err, hash) => {
