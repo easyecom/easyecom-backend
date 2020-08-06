@@ -9,8 +9,15 @@ class SessionController {
         try {
             const { email, password } = await req.body;
 
-            if (!email && !password) {
-                return res.status(401).json({ message: 'data required' });
+            let error = [];
+
+            if (!email) error.push('email');
+            if (!password) error.push('password');
+    
+            if (error.length > 0) {
+                return res
+                    .status(422)
+                    .json({ error: 'you forgot', required: error });
             }
 
             const user = await connection('users')

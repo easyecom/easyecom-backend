@@ -3,7 +3,7 @@ const connection = require('../../../database/connection');
 export default async (req, res, next) => {
     const { user_id } = req.headers;
 
-    if (!user_id) return res.status(401).json('You need to be an admin');
+    if (!user_id) return res.status(401).json('this action needs a user');
 
     const { id } = req.params;
 
@@ -16,7 +16,7 @@ export default async (req, res, next) => {
     }
 
     if (!user[0].permission.includes('admin')) {
-        return res.status(401).json('user does not have authorization');
+        return res.status(401).json('user does not have administrator permission');
     }
 
     const store = await connection('stores')

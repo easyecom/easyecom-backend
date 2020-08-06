@@ -83,6 +83,8 @@ class StoresController {
             return res.status(500).json('sorry, something broke...');
         }
     }
+
+    // not enable for user
     async delete(req, res) {
         try {
             const { id } = req.params;
