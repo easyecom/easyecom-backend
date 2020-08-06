@@ -14,6 +14,8 @@ import StoresController from './app/controllers/stores/StoresController';
 
 import AddressController from './app/controllers/addresses/addressesController';
 
+import ClientController from './app/controllers/clients/ClientController';
+
 const routes = new Router();
 const upload = multer(multerConfig);
 
@@ -46,6 +48,8 @@ routes.get('/stores/:id', authMiddleware, StoresController.getOne);
 routes.put('/stores/:id', authMiddleware, storeValidation, StoresController.update);
 routes.delete('/stores/:id', authMiddleware, storeValidation, StoresController.delete);
 
-routes.post('/addresses', AddressController.create)
+routes.post('/addresses', AddressController.store)
+
+routes.post('/clients', ClientController.store)
 
 export default routes;

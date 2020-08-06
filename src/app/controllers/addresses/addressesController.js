@@ -1,7 +1,7 @@
 import connection from '../../../database/connection';
 
 class AddressController {
-    async create(req, res) {
+    async store(req, res) {
         try {
             const {
                 zipcode,
