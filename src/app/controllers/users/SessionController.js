@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 class SessionController {
     async create(req, res) {
         try {
-            const { email, password } = await req.body;
+            const { email, password } = req.body;
 
             let error = [];
 

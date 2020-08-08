@@ -1,4 +1,4 @@
-import connection, { first } from '../../../database/connection';
+import connection from '../../../database/connection';
 
 const bcrypt = require('bcrypt');
 
