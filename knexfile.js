@@ -36,22 +36,23 @@ module.exports = {
     },
 
     staging: {
-        client: 'postgres',
+        client: 'pg',
         connection: {
-            /*
-      /*host: process.env.DATABASE_HOST,
-      /*database: process.env.DATABASE_NAME,
-      /*port: process.env.DATABASE_PORT,
-      /*user: process.env.DATABASE_USER,
-      /*password: process.env.DATABASE_PASSWORD
-      */
+            host: process.env.DATABASE_STAGE_HOST,
+            database: process.env.DATABASE_STAGE_NAME,
+            port: process.env.DATABASE_STAGE_PORT,
+            user: process.env.DATABASE_STAGE_USER,
+            password: process.env.DATABASE_STAGE_PASSWORD,
+        },
+        migrations: {
+            directory: './src/database/migrations',
         },
         pool: {
             min: 2,
             max: 10,
         },
-        migrations: {
-            tableName: 'knex_migrations',
-        },
+        //migrations: {
+        //    tableName: 'knex_migrations',
+        //},
     },
 };
