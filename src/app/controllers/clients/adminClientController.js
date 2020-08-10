@@ -1,6 +1,6 @@
 import connection from '../../../database/connection';
 
-class adminClienteController {
+class adminClientController {
     async getClientsByStore(req, res) {
         const { id } = req.params;
         const { page = 1 } = req.query;
@@ -29,7 +29,6 @@ class adminClienteController {
 
     async getOneClientByStore(req, res) {
         const { id } = req.params;
-        const { page = 1 } = req.query;
         const { client_id } = req.headers;
 
         try {
@@ -37,9 +36,6 @@ class adminClienteController {
                 .join('stores', 'stores.id', 'users.store_id')
                 .join('addresses', 'users.id', 'addresses.user_id')
                 .join('clients', 'users.id', 'clients.user_id')
-
-                .limit(20)
-                .offset((page - 1) * 20)
 
                 .select(
                     'users.id',
@@ -59,7 +55,7 @@ class adminClienteController {
 
                     'users.store_id',
                     'users.avatar_id',
-                    'users.permission',
+                    'users.permission'
                 )
                 .where({
                     'stores.id': id,
@@ -76,4 +72,4 @@ class adminClienteController {
     }
 }
 
-export default new adminClienteController();
+export default new adminClientController();

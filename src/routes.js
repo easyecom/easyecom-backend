@@ -63,6 +63,7 @@ routes.delete(
 routes.post('/addresses', AddressController.store);
 
 routes.post('/clients', ClientController.store);
+routes.delete('/clients/:id', ClientController.delete);
 
 routes.get(
     '/clients/stores/:id',

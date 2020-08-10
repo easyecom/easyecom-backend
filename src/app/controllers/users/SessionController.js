@@ -13,7 +13,7 @@ class SessionController {
 
             if (!email) error.push('email');
             if (!password) error.push('password');
-    
+
             if (error.length > 0) {
                 return res
                     .status(422)
@@ -38,20 +38,18 @@ class SessionController {
             }
 
             const { id } = user;
+            const { name } = user;
 
             if (match) {
-                const token = jwt.sign(
-                    {
-                        id,
-                    },
-                    authConfig.secret,
-                    {
-                        expiresIn: authConfig.expiresIn,
-                    }
-                );
-                return res
-                    .status(200)
-                    .json({ message: 'authentication success', token });
+                const token = jwt.sign({ id }, authConfig.secret, {
+                    expiresIn: authConfig.expiresIn,
+                });
+                return res.status(200).json({
+                    id,
+                    name,
+                    message: 'authentication success',
+                    token,
+                });
             }
 
             return res

@@ -49,6 +49,7 @@ class UsersController {
         });
     }
 
+    // for dev
     async getAll(req, res) {
         try {
             const users = await connection('users').select('*');
