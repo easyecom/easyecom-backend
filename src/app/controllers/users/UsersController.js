@@ -3,7 +3,7 @@ import connection from '../../../database/connection';
 const bcrypt = require('bcrypt');
 
 class UsersController {
-    store(req, res) {
+    async store(req, res) {
         const { name, email, password } = req.body;
 
         let error = [];
@@ -16,6 +16,14 @@ class UsersController {
             return res
                 .status(422)
                 .json({ error: 'you forgot', required: error });
+        }
+
+        const checkEmail = await connection('users')
+            .select('*')
+            .where('email', email);
+
+        if (checkEmail.length) {
+            return res.status(400).json('email alredy exist');
         }
 
         const user = new Promise((resolve, reject) => {
@@ -36,7 +44,6 @@ class UsersController {
                 });
                 return res.status(201).json('create success');
             } catch (err) {
-                console.error(err);
                 return res.status(500).json('sorry, something broke...');
             }
         });
@@ -60,7 +67,6 @@ class UsersController {
 
             return res.status(200).json(users);
         } catch (err) {
-            console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
     }
@@ -79,7 +85,6 @@ class UsersController {
 
             return res.status(200).json(data);
         } catch (err) {
-            console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
     }
@@ -112,7 +117,6 @@ class UsersController {
 
             return res.status(200).json(data);
         } catch (err) {
-            console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
     }
@@ -131,7 +135,6 @@ class UsersController {
 
             return res.status(202).json({ message: 'deleted success' });
         } catch (err) {
-            console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
     }
