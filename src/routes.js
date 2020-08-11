@@ -16,6 +16,10 @@ import AddressController from './app/controllers/addresses/addressesController';
 
 import ClientController from './app/controllers/clients/ClientController';
 
+import adminClientController from './app/controllers/clients/adminClientController';
+
+import CategoriesController from './app/controllers/categories/CategoriesController'
+
 const routes = new Router();
 const upload = multer(multerConfig);
 
@@ -45,11 +49,39 @@ routes.delete('/avatar/:id', authMiddleware, AvatarController.delete);
 routes.post('/stores', authMiddleware, StoresController.store);
 routes.get('/stores', authMiddleware, StoresController.getAll);
 routes.get('/stores/:id', authMiddleware, StoresController.getOne);
-routes.put('/stores/:id', authMiddleware, storeValidation, StoresController.update);
-routes.delete('/stores/:id', authMiddleware, storeValidation, StoresController.delete);
+routes.put(
+    '/stores/:id',
+    authMiddleware,
+    storeValidation,
+    StoresController.update
+);
+routes.delete(
+    '/stores/:id',
+    authMiddleware,
+    storeValidation,
+    StoresController.delete
+);
 
-routes.post('/addresses', AddressController.store)
+routes.post('/addresses', AddressController.store);
 
-routes.post('/clients', ClientController.store)
+routes.post('/clients', ClientController.store);
+routes.delete('/clients/:id', ClientController.delete);
+
+routes.get(
+    '/clients/stores/:id',
+    authMiddleware,
+    storeValidation,
+    adminClientController.getClientsByStore
+);
+
+routes.get(
+    '/client/stores/:id',
+    authMiddleware,
+    storeValidation,
+    adminClientController.getOneClientByStore
+);
+
+
+routes.post('/categories', CategoriesController.store)
 
 export default routes;
