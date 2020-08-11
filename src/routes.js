@@ -18,6 +18,8 @@ import ClientController from './app/controllers/clients/ClientController';
 
 import adminClientController from './app/controllers/clients/adminClientController';
 
+import CategoriesController from './app/controllers/categories/CategoriesController'
+
 const routes = new Router();
 const upload = multer(multerConfig);
 
@@ -78,5 +80,8 @@ routes.get(
     storeValidation,
     adminClientController.getOneClientByStore
 );
+
+
+routes.post('/categories', CategoriesController.store)
 
 export default routes;

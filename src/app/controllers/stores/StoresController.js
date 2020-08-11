@@ -19,12 +19,12 @@ class StoresController {
             }
 
             const checkCNPJ = await connection('stores')
-                .select('*')
-                .where('cnpj', cnpj);
+            .select('*')
+            .where('cnpj', cnpj);
 
-            if (checkCNPJ.length) {
-                return res.status(400).json('cnpj alredy exist');
-            }
+        if (checkCNPJ.length) {
+            return res.status(400).json('cnpj alredy exist');
+        }
 
             const data = await connection('stores')
                 .returning('*')
