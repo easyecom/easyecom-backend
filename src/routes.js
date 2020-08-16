@@ -5,20 +5,25 @@ import storeValidation from './app/controllers/validator/storeValidation';
 
 import multerConfig from './config/multer';
 
+// user
 import UsersController from './app/controllers/users/UsersController';
 import SessionController from './app/controllers/users/SessionController';
 import AvatarController from './app/controllers/users/AvatarController';
 import RecoveryController from './app/controllers/users/RecoveryController';
 import RecoveredController from './app/controllers/users/RecoveredController';
+
+// store
 import StoresController from './app/controllers/stores/StoresController';
-
-import AddressController from './app/controllers/addresses/addressesController';
-
+import AddressController from './app/controllers/addresses/AddressesController';
 import ClientController from './app/controllers/clients/ClientController';
-
-import adminClientController from './app/controllers/clients/adminClientController';
-
-import CategoriesController from './app/controllers/categories/CategoriesController'
+import AdminClientController from './app/controllers/clients/AdminClientController';
+import CategoriesController from './app/controllers/categories/CategoriesController';
+import InactiveCategoriesController from './app/controllers/categories/InactiveCategoriesController';
+import BrandsController from './app/controllers/brands/BrandsController';
+import EvaluationsController from './app/controllers/evaluations/EvaluationsController';
+import ProductsController from './app/controllers/products/ProductsController';
+import VariationsController from './app/controllers/variations/VariationsController';
+import ImagesController from './app/controllers/images/ImagesController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -48,15 +53,15 @@ routes.delete('/avatar/:id', authMiddleware, AvatarController.delete);
 
 routes.post('/stores', authMiddleware, StoresController.store);
 routes.get('/stores', authMiddleware, StoresController.getAll);
-routes.get('/stores/:id', authMiddleware, StoresController.getOne);
+routes.get('/stores/:store_id', authMiddleware, StoresController.getOne);
 routes.put(
-    '/stores/:id',
+    '/stores/:store_id',
     authMiddleware,
     storeValidation,
     StoresController.update
 );
 routes.delete(
-    '/stores/:id',
+    '/stores/:store_id',
     authMiddleware,
     storeValidation,
     StoresController.delete
@@ -68,20 +73,65 @@ routes.post('/clients', ClientController.store);
 routes.delete('/clients/:id', ClientController.delete);
 
 routes.get(
-    '/clients/stores/:id',
+    '/clients/stores/:store_id',
     authMiddleware,
     storeValidation,
-    adminClientController.getClientsByStore
+    AdminClientController.getClientsByStore
 );
 
 routes.get(
-    '/client/stores/:id',
+    '/client/stores/:store_id',
     authMiddleware,
     storeValidation,
-    adminClientController.getOneClientByStore
+    AdminClientController.getOneClientByStore
 );
 
+// active category
+routes.get('/categories', CategoriesController.getAll);
+routes.get('/categories/:category_id', CategoriesController.getOne);
+routes.post(
+    '/stores/:store_id/categories',
+    authMiddleware,
+    storeValidation,
+    CategoriesController.store
+);
+routes.put(
+    '/stores/:store_id/categories/:category_id',
+    authMiddleware,
+    storeValidation,
+    CategoriesController.update
+);
+routes.delete(
+    '/stores/:store_id/categories/:category_id',
+    authMiddleware,
+    storeValidation,
+    CategoriesController.delete
+);
 
-routes.post('/categories', CategoriesController.store)
+// inactive category (just admin)
+routes.get(
+    '/stores/:store_id/inactive-categories',
+    authMiddleware,
+    storeValidation,
+    InactiveCategoriesController.getAll
+);
+routes.get(
+    '/stores/:store_id/inactive-categories/:inactive_categoriesId',
+    authMiddleware,
+    storeValidation,
+    InactiveCategoriesController.getOne
+);
+routes.put(
+    '/stores/:store_id/inactive-categories/:inactive_categoriesId',
+    authMiddleware,
+    storeValidation,
+    InactiveCategoriesController.update
+);
+routes.delete(
+    '/stores/:store_id/inactive-categories/:inactive_categoriesId',
+    authMiddleware,
+    storeValidation,
+    InactiveCategoriesController.delete
+);
 
 export default routes;
