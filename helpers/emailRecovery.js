@@ -6,7 +6,7 @@ const baseURL = 'http://localhost:3777';
 
 module.exports = ({ user, token }, cb) => {
     const message = `
-        <h1 style="text-align: center;> recuperação de senha </h1>
+        <h1 style="text-align: center;> Recuperação de senha </h1>
         <br />
         <p>Acesse o link para redefinir a sua senha.</p>
         <a href: "${baseURL}/recovered?token=${token}">
@@ -14,14 +14,14 @@ module.exports = ({ user, token }, cb) => {
         </a>
         <br /><br /><hr />  
         <p>
-            Obs.: Se você não solicitou a redefinicao, apenas ignore esse email.
+            Obs.: Caso você nao tenha solicitado essa redefinicao, apenas ignore esse email.
         </p>
         <br />
         <p>Atenciosamente, Ecommerce Sid Surf Store</p>
     `;
 
     const optionEmail = {
-        from: 'naoresponda@gmail.com',
+        from: 'naoresponda@sidsurfstore.com.br',
         to: user.email,
         subject: 'Redefinição de senha - Sid Surf Store',
         html: message,
@@ -32,18 +32,18 @@ module.exports = ({ user, token }, cb) => {
             if (error) {
                 console.log(error);
                 return cb(
-                    'Aconteceu um erro no envio do email, tente novamente.'
+                    'Ocorreu um erro no envio do email, tente novamente.'
                 );
             }
             return cb(
                 null,
-                'Link para redefinicao de senha foi enviado com sucesso para seu email.'
+                'O link para redefinir sua senha foi enviado para seu email.'
             );
         });
     }
     console.log(optionEmail);
     return cb(
         null,
-        'Link para redefinicao de senha foi enviado com sucesso para seu email.'
+        'O link para redefinir sua senha foi enviado para seu email.'
     );
 };
