@@ -16,19 +16,19 @@ exports.up = knex => {
         table.string('state_code');
         table.string('country');
 
-        table.integer('user_id')
-        table
-            .foreign('user_id')
-            .references('id')
-            .inTable('users')
-            .onUpdate('CASCADE')
-            .onDelete('SET NULL');
-
         table.integer('store_id');
         table
             .foreign('store_id')
             .references('id')
             .inTable('stores')
+            .onUpdate('CASCADE')
+            .onDelete('SET NULL');
+
+        table.integer('user_id');
+        table
+            .foreign('user_id')
+            .references('id')
+            .inTable('users')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 

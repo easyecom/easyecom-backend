@@ -2,7 +2,7 @@ import connection from '../../../database/connection';
 
 class adminClientController {
     async getClientsByStore(req, res) {
-        const { id } = req.params;
+        const { store_id } = req.params;
         const { page = 1 } = req.query;
 
         try {
@@ -18,7 +18,7 @@ class adminClientController {
                     'avatar_id',
                     'users.permission'
                 )
-                .where({ 'stores.id': id });
+                .where({ 'stores.id': store_id });
 
             return res.status(200).json(data);
         } catch (err) {
@@ -28,7 +28,7 @@ class adminClientController {
     }
 
     async getOneClientByStore(req, res) {
-        const { id } = req.params;
+        const { store_id } = req.params;
         const { client_id } = req.headers;
 
         try {
@@ -58,7 +58,7 @@ class adminClientController {
                     'users.permission'
                 )
                 .where({
-                    'stores.id': id,
+                    'stores.id': store_id,
                     'users.id': client_id,
                     'addresses.user_id': client_id,
                     'clients.user_id': client_id,
