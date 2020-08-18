@@ -164,4 +164,29 @@ routes.delete(
     BrandsController.delete
 );
 
+routes.post(
+    '/stores/:store_id/products',
+    authMiddleware,
+    storeValidation,
+    ProductsController.store
+);
+
+routes.get('/stores/:store_id/products', ProductsController.getAll);
+
+routes.get('/stores/:store_id/products/:product_id', ProductsController.getOne);
+
+routes.put(
+    '/stores/:store_id/products/:product_id',
+    authMiddleware,
+    storeValidation,
+    ProductsController.update
+);
+
+routes.delete(
+    '/stores/:store_id/products/:product_id',
+    authMiddleware,
+    storeValidation,
+    ProductsController.delete
+);
+
 export default routes;
