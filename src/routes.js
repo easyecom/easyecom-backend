@@ -69,6 +69,10 @@ routes.delete(
 
 routes.post('/addresses', AddressController.store);
 
+/*
+/* clients
+*/
+
 routes.post('/clients', ClientController.store);
 routes.delete('/clients/:id', ClientController.delete);
 
@@ -86,15 +90,19 @@ routes.get(
     AdminClientController.getOneClientByStore
 );
 
+/*
+/* catalog 
+*/
+
 // active category
-routes.get('/categories', CategoriesController.getAll);
-routes.get('/categories/:category_id', CategoriesController.getOne);
 routes.post(
     '/stores/:store_id/categories',
     authMiddleware,
     storeValidation,
     CategoriesController.store
 );
+routes.get('/categories', CategoriesController.getAll);
+routes.get('/categories/:category_id', CategoriesController.getOne);
 routes.put(
     '/stores/:store_id/categories/:category_id',
     authMiddleware,
@@ -132,6 +140,28 @@ routes.delete(
     authMiddleware,
     storeValidation,
     InactiveCategoriesController.delete
+);
+
+// brands
+routes.post(
+    '/stores/:store_id/brands',
+    authMiddleware,
+    storeValidation,
+    BrandsController.store
+);
+routes.get('/stores/:store_id/brands', BrandsController.getAll);
+routes.get('/stores/:store_id/brands/:brandId', BrandsController.getOne);
+routes.put(
+    '/stores/:store_id/brands/:brandId',
+    authMiddleware,
+    storeValidation,
+    BrandsController.update
+);
+routes.delete(
+    '/stores/:store_id/brands/:brandId',
+    authMiddleware,
+    storeValidation,
+    BrandsController.delete
 );
 
 export default routes;
