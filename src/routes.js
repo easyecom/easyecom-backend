@@ -17,11 +17,14 @@ import StoresController from './app/controllers/stores/StoresController';
 import AddressController from './app/controllers/addresses/AddressesController';
 import ClientController from './app/controllers/clients/ClientController';
 import AdminClientController from './app/controllers/clients/AdminClientController';
+
+// catalog
 import CategoriesController from './app/controllers/categories/CategoriesController';
 import InactiveCategoriesController from './app/controllers/categories/InactiveCategoriesController';
 import BrandsController from './app/controllers/brands/BrandsController';
 import EvaluationsController from './app/controllers/evaluations/EvaluationsController';
 import ProductsController from './app/controllers/products/ProductsController';
+import CategoryProductController from './app/controllers/category_products/CatProdController';
 import VariationsController from './app/controllers/variations/VariationsController';
 import ImagesController from './app/controllers/images/ImagesController';
 
@@ -101,7 +104,7 @@ routes.post(
     storeValidation,
     CategoriesController.store
 );
-routes.get('/categories', CategoriesController.getAll);
+routes.get('/stores/:store_id/categories', CategoriesController.getAll);
 routes.get('/categories/:category_id', CategoriesController.getOne);
 routes.put(
     '/stores/:store_id/categories/:category_id',
@@ -164,6 +167,7 @@ routes.delete(
     BrandsController.delete
 );
 
+// product
 routes.post(
     '/stores/:store_id/products',
     authMiddleware,
@@ -188,5 +192,21 @@ routes.delete(
     storeValidation,
     ProductsController.delete
 );
+
+// category product
+routes.post(
+    '/stores/:store_id/category_products',
+    authMiddleware,
+    storeValidation,
+    CategoryProductController.store
+);
+
+routes.get('/category_products', CategoryProductController.getAll);
+
+routes.delete('/category_products/:id', CategoryProductController.delete);
+
+routes.post('/stores/:store_id/variations', VariationsController.store);
+routes.post('/stores/:store_id/evaluations/', EvaluationsController.store);
+routes.post('/images', upload.single('files'), ImagesController.store);
 
 export default routes;

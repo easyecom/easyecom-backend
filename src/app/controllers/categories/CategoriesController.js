@@ -35,9 +35,12 @@ class CategoriesController {
 
     async getAll(req, res) {
         try {
+            const { store_id } = req.params;
+
             const data = await connection('categories')
                 .select('*')
-                .where('isActive', true);
+                .where({ isActive: true, store_id: store_id });
+
             return res.status(200).json(data);
         } catch (err) {
             return res.status(500).json('sorry, something broke...');

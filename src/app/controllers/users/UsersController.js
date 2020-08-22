@@ -15,7 +15,7 @@ class UsersController {
         if (error.length > 0) {
             return res
                 .status(422)
-                .json({ error: 'you forgot', required: error });
+                .json({ error: 'thing that you forgot', required: error });
         }
 
         const checkEmail = await connection('users')
