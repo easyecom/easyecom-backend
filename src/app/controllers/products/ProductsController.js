@@ -36,8 +36,12 @@ class ProductsController {
                 .where('name', name)
                 .select('*');
 
-            if (checkName.length) {
-                return res.status(400).json('name already exist');
+            const checkStore = await connection('products')
+                .where('store_id', store_id)
+                .select('*');
+
+            if (checkName.length && checkStore.length) {
+                return res.status(400).json('product already exist');
             }
 
             const data = await connection('products')
@@ -65,7 +69,11 @@ class ProductsController {
 
     async getAll(req, res) {
         try {
-            const data = await connection('products');
+            const { store_id } = req.params;
+            
+            const data = await connection('products')
+                .select('*')
+                .where('store_id', store_id);
 
             return res.status(200).json(data);
         } catch (err) {
@@ -83,7 +91,7 @@ class ProductsController {
 
             return res.status(200).json(data);
         } catch (err) {
-            console.error(err)
+            console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
     }
