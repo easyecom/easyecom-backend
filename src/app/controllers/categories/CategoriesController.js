@@ -23,7 +23,6 @@ class CategoriesController {
                 .insert({
                     name,
                     isActive,
-                    store_id,
                     description,
                 });
 

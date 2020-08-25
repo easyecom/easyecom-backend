@@ -2,9 +2,11 @@ import connection from '../../../database/connection';
 
 class InactiveCategoriesController {
     async getAll(req, res) {
+        const { store_id } = req.params;
+
         const data = await connection('categories')
             .select('*')
-            .where('isActive', false);
+            .where({ isActive: false, store_id: store_id });
         return res.status(200).json(data);
     }
 
@@ -13,7 +15,11 @@ class InactiveCategoriesController {
 
         const data = await connection('categories')
             .select('*')
-            .where({ id: inactive_categoriesId, isActive: false });
+            .where({
+                id: inactive_categoriesId,
+                isActive: false,
+                store_id: store_id,
+            });
         return res.status(200).json(data);
     }
 

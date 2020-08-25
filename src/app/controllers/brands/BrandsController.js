@@ -2,13 +2,13 @@ import connection from '../../../database/connection';
 
 class BrandsController {
     async store(req, res) {
-        const { name, description, isActive, store_id } = req.body;
+        const { store_id } = req.params;
+        const { name, description, isActive } = req.body;
 
         try {
             let error = [];
 
             if (!name) error.push('name');
-            if (!isActive) error.push('isActive');
             if (!store_id) error.push('store_id');
             if (!description) error.push('description');
 
@@ -44,11 +44,16 @@ class BrandsController {
         }
     }
     async getAll(req, res) {
+        const { store_id } = req.params;
+
         try {
-            const data = await connection('brands');
+            const data = await connection('brands')
+                .select('id', 'name', 'description')
+                .where('store_id', store_id);
+
             return res.status(200).json(data);
         } catch (err) {
-            return err;
+            return res.status(500).json('sorry, something broke...');
         }
     }
     async getOne(req, res) {
@@ -61,7 +66,7 @@ class BrandsController {
 
             return res.status(200).json(data);
         } catch (err) {
-            return err;
+            return res.status(500).json('sorry, something broke...');
         }
     }
     async update(req, res) {
@@ -80,7 +85,7 @@ class BrandsController {
 
             return res.status(200).json(data);
         } catch (err) {
-            return err;
+            return res.status(500).json('sorry, something broke...');
         }
     }
     async delete(req, res) {
@@ -93,9 +98,9 @@ class BrandsController {
 
             return res
                 .status(200)
-                .json({ message: 'brand delete successfully' });
+                .json({ message: 'brand deleted successfully' });
         } catch (err) {
-            return err;
+            return res.status(500).json('sorry, something broke...');
         }
     }
 }
