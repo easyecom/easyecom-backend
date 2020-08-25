@@ -101,6 +101,14 @@ class UsersController {
                 permission,
             } = await req.body;
 
+            const checkStore = await connection('stores')
+                .where('id', store_id)
+                .select('*');
+
+            if (!checkStore.length) {
+                return res.status(400).json({ message: 'store not exist' });
+            }
+
             const data = await connection('users')
                 .where('id', id)
                 .update({ name, email, avatar_id, store_id, permission }, [

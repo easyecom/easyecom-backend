@@ -7,10 +7,9 @@ describe('user', () => {
             .post('/users')
             .send({
                 name: 'test jest',
-                email: 'jest18@gmail.com',
+                email: 'jest59@gmail.com',
                 password: 12345,
             });
-
         expect(response.body).toEqual('create success');
     });
 });

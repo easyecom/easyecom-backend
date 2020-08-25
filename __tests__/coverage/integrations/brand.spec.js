@@ -4,7 +4,7 @@ import app from '../../../src/app';
 describe('brands', () => {
     it('should be return status code 201', async () => {
         const response = await request(app)
-            .post('/brands')
+            .post('/stores/1/brands')
             .send({
                 name: 'Vans',
                 description: 'Skate life',
