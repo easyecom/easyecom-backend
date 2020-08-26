@@ -70,13 +70,26 @@ class ProductsController {
     async getAll(req, res) {
         try {
             const { store_id } = req.params;
-            
+
             const data = await connection('products')
-                .select('*')
-                .where('store_id', store_id);
+                .join('categories', 'products.id', 'categories.id')
+                .join('brands', 'products.id', 'brands.id')
+                .select(
+                    'products.name',
+                    'products.descriptionShort',
+                    'products.salesPrice',
+                    'products.offerPrice',
+                    'brands.brand',
+                    'categories.category'
+                )
+                .where({
+                    'products.store_id': store_id,
+                    'brands.store_id': store_id,
+                });
 
             return res.status(200).json(data);
         } catch (err) {
+            console.log(err);
             return res.status(500).json('sorry, something broke...');
         }
     }
