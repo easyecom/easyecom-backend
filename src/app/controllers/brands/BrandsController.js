@@ -3,12 +3,12 @@ import connection from '../../../database/connection';
 class BrandsController {
     async store(req, res) {
         const { store_id } = req.params;
-        const { name, description, isActive } = req.body;
+        const { brand, description, isActive } = req.body;
 
         try {
             let error = [];
 
-            if (!name) error.push('name');
+            if (!brand) error.push('brand');
             if (!store_id) error.push('store_id');
             if (!description) error.push('description');
 
@@ -19,7 +19,7 @@ class BrandsController {
             }
 
             const checkBrand = await connection('brands')
-                .where('name', name)
+                .where('brand', brand)
                 .select('*');
 
             if (checkBrand.length) {
@@ -29,17 +29,18 @@ class BrandsController {
                 });
             }
 
-            await connection('brands')
+            const data = await connection('brands')
                 .returning('*')
                 .insert({
-                    name,
+                    brand,
                     description,
                     isActive,
                     store_id,
                 });
 
-            return res.status(201).json('brands performed successfully');
+            return res.status(201).json(data);
         } catch (err) {
+            console.error(err)
             return res.status(500).json('sorry, something broke...');
         }
     }
@@ -48,11 +49,15 @@ class BrandsController {
 
         try {
             const data = await connection('brands')
-                .select('id', 'name', 'description')
+                .select('id', 'brand', 'description')
                 .where('store_id', store_id);
 
             return res.status(200).json(data);
         } catch (err) {
+            console.error({
+                message: err.message,
+                stack: err.stack,
+            });
             return res.status(500).json('sorry, something broke...');
         }
     }
@@ -72,12 +77,12 @@ class BrandsController {
     async update(req, res) {
         try {
             const { brandId } = req.params;
-            const { name, description, isActive, store_id } = req.body;
+            const { brand, description, isActive, store_id } = req.body;
 
             const data = await connection('brands')
                 .where('id', brandId)
-                .update({ name, description, isActive, store_id }, [
-                    'name',
+                .update({ brand, description, isActive, store_id }, [
+                    'brand',
                     'description',
                     'isActive',
                     'store_id',

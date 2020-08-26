@@ -29,8 +29,14 @@ class Category_product_controller {
     }
 
     async getAll(req, res) {
+        const { store_id } = req.params;
+
         try {
-            const data = await connection('categorie_products').select('*');
+            const data = await connection('categorie_products')
+                .select('*')
+                .where('id', store_id);
+
+            console.table(data);
 
             return res.status(200).json(data);
         } catch (err) {
