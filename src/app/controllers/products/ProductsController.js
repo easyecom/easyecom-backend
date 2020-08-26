@@ -70,10 +70,13 @@ class ProductsController {
     async getAll(req, res) {
         try {
             const { store_id } = req.params;
+            const { page = 1 } = req.query;
 
             const data = await connection('products')
                 .join('categories', 'products.id', 'categories.id')
                 .join('brands', 'products.id', 'brands.id')
+                .limit(20)
+                .offset((page - 1) * 20)
                 .select(
                     'products.name',
                     'products.descriptionShort',
