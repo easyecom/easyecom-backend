@@ -3,12 +3,12 @@ import connection from '../../../database/connection';
 class CategoriesController {
     async store(req, res) {
         const { store_id } = req.params;
-        const { name, isActive, description } = req.body;
+        const { category, isActive, description } = req.body;
 
         try {
             let error = [];
 
-            if (!name) error.push('name');
+            if (!category) error.push('category');
             if (!store_id) error.push('params store_id');
             if (!description) error.push('description');
 
@@ -18,15 +18,15 @@ class CategoriesController {
                     .json({ error: 'you forgot', required: error });
             }
 
-            await connection('categories')
-                .returning('id')
+            const data = await connection('categories')
+                .returning('*')
                 .insert({
-                    name,
-                    isActive,
+                    category,
                     description,
+                    store_id
                 });
 
-            return res.status(201).json('categories performed successfully');
+            return res.status(201).json(data);
         } catch (err) {
             return res.status(500).json('sorry, something broke...');
         }
@@ -61,13 +61,13 @@ class CategoriesController {
 
     async update(req, res) {
         const { category_id, store_id } = req.params;
-        const { name, isActive, description } = req.body;
+        const { category, isActive, description } = req.body;
 
         try {
             const data = await connection('categories')
                 .where('id', category_id)
-                .update({ name, isActive, store_id, description }, [
-                    'name',
+                .update({ category, isActive, store_id, description }, [
+                    'category',
                     'isActive',
                     'store_id',
                     'description',

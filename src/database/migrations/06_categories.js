@@ -6,7 +6,7 @@ exports.up = knex => {
             .primary()
             .unique();
 
-        table.string('name').notNullable();
+        table.string('category').notNullable();
         table.string('description')
         table.boolean('isActive').defaultTo(true);
 

@@ -6,9 +6,9 @@ exports.up = knex => {
             .primary()
             .unique();
 
-        table.string('name').notNullable();
-        table.string('text').notNullable();
-        table.integer('score').defaultTo(1);
+        table.string('evaluation').notNullable();
+        table.string('evaluationText').notNullable();
+        table.integer('evaluationScore').defaultTo(1);
 
         table.integer('store_id');
         table
