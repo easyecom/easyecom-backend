@@ -70,7 +70,11 @@ routes.delete(
     StoresController.delete
 );
 
-routes.post('/addresses', AddressController.store);
+routes.post('/stores/:store_id/addresses', AddressController.store);
+routes.get('/stores/:store_id/addresses', AddressController.findAll);
+routes.get('/stores/:store_id/addresses/:address_id', AddressController.findOne);
+routes.put('/stores/:store_id/addresses/:address_id', AddressController.update);
+routes.delete('/stores/:store_id/addresses/:address_id', AddressController.delete);
 
 /*
 /* clients
