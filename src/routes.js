@@ -86,21 +86,38 @@ routes.delete(
 /* clients
 */
 
-routes.post('/clients', ClientController.store);
-routes.delete('/clients/:id', ClientController.delete);
+// clients
+routes.post('/stores/:store_id/clients/:client_id', ClientController.store);
+routes.put('/stores/:store_id/clients/:client_id', ClientController.update);
+routes.delete('/stores/:store_id/clients/:client_id', ClientController.delete);
 
+// admins
 routes.get(
-    '/clients/stores/:store_id',
+    '/stores/:store_id/clients',
     authMiddleware,
     storeValidation,
     AdminClientController.getClientsByStore
 );
 
 routes.get(
-    '/client/stores/:store_id',
+    '/stores/:store_id/clients/client_id',
     authMiddleware,
     storeValidation,
     AdminClientController.getOneClientByStore
+);
+
+routes.put(
+    '/stores/:store_id/clients/client_id',
+    authMiddleware,
+    storeValidation,
+    AdminClientController.updateOneClientByStore
+);
+
+routes.delete(
+    '/stores/:store_id/clients/client_id',
+    authMiddleware,
+    storeValidation,
+    AdminClientController.deleteOneClientByStore
 );
 
 /*
@@ -213,6 +230,8 @@ routes.post(
 routes.get('/category_products', CategoryProductController.getAll);
 routes.delete('/category_products/:id', CategoryProductController.delete);
 
+// variations
+
 routes.post('/stores/:store_id/variations', VariationsController.store);
 routes.get('/stores/:store_id/variations', VariationsController.findAll);
 routes.get(
@@ -227,6 +246,8 @@ routes.delete(
     '/stores/:store_id/variations/:variation_id',
     VariationsController.delete
 );
+
+// evaluations
 
 routes.post('/stores/:store_id/evaluations', EvaluationsController.store);
 routes.get('/stores/:store_id/evaluations/', EvaluationsController.findAll);
@@ -244,5 +265,9 @@ routes.delete(
 );
 
 routes.post('/images', upload.single('files'), ImagesController.store);
+
+/*
+/* orders 
+*/
 
 export default routes;
