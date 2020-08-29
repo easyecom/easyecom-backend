@@ -70,7 +70,17 @@ routes.delete(
     StoresController.delete
 );
 
-routes.post('/addresses', AddressController.store);
+routes.post('/stores/:store_id/addresses', AddressController.store);
+routes.get('/stores/:store_id/addresses', AddressController.findAll);
+routes.get(
+    '/stores/:store_id/addresses/:address_id',
+    AddressController.findOne
+);
+routes.put('/stores/:store_id/addresses/:address_id', AddressController.update);
+routes.delete(
+    '/stores/:store_id/addresses/:address_id',
+    AddressController.delete
+);
 
 /*
 /* clients
@@ -200,12 +210,24 @@ routes.post(
     storeValidation,
     CategoryProductController.store
 );
-
 routes.get('/category_products', CategoryProductController.getAll);
-
 routes.delete('/category_products/:id', CategoryProductController.delete);
 
 routes.post('/stores/:store_id/variations', VariationsController.store);
+routes.get('/stores/:store_id/variations', VariationsController.findAll);
+routes.get(
+    '/stores/:store_id/variations/:variation_id',
+    VariationsController.findOne
+);
+routes.put(
+    '/stores/:store_id/variations/:variation_id',
+    VariationsController.update
+);
+routes.delete(
+    '/stores/:store_id/variations/:variation_id',
+    VariationsController.delete
+);
+
 routes.post('/stores/:store_id/evaluations/', EvaluationsController.store);
 routes.post('/images', upload.single('files'), ImagesController.store);
 
