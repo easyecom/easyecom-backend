@@ -228,7 +228,21 @@ routes.delete(
     VariationsController.delete
 );
 
-routes.post('/stores/:store_id/evaluations/', EvaluationsController.store);
+routes.post('/stores/:store_id/evaluations', EvaluationsController.store);
+routes.get('/stores/:store_id/evaluations/', EvaluationsController.findAll);
+routes.get(
+    '/stores/:store_id/evaluations/:evaluation_id',
+    EvaluationsController.findOne
+);
+routes.put(
+    '/stores/:store_id/evaluations/:evaluation_id',
+    EvaluationsController.update
+);
+routes.delete(
+    '/stores/:store_id/evaluations/:evaluation_id',
+    EvaluationsController.remove
+);
+
 routes.post('/images', upload.single('files'), ImagesController.store);
 
 export default routes;
