@@ -78,6 +78,7 @@ class ProductsController {
                 .limit(20)
                 .offset((page - 1) * 20)
                 .select(
+                    'products.id',
                     'products.name',
                     'products.descriptionShort',
                     'products.salesPrice',

@@ -114,7 +114,7 @@ class AddressController {
     async delete(req, res) {
         const { store_id, address_id } = req.params;
 
-        // make role that, if address is equal or less then one, dont permission delete
+        // make role that, if item is equal or less then one, dont permission delete
         try {
             await connection('addresses')
                 .where({ store_id: store_id, id: address_id })
