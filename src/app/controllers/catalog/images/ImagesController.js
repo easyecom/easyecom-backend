@@ -1,4 +1,4 @@
-import connection from '../../../database/connection';
+import connection from '../../../../database/connection';
 
 class ImagesController {
     async store(req, res) {

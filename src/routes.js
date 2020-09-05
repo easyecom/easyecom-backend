@@ -19,14 +19,14 @@ import ClientController from './app/controllers/clients/ClientController';
 import AdminClientController from './app/controllers/clients/AdminClientController';
 
 // catalog
-import CategoriesController from './app/controllers/categories/CategoriesController';
-import InactiveCategoriesController from './app/controllers/categories/InactiveCategoriesController';
-import BrandsController from './app/controllers/brands/BrandsController';
-import EvaluationsController from './app/controllers/evaluations/EvaluationsController';
-import ProductsController from './app/controllers/products/ProductsController';
-import CategoryProductController from './app/controllers/category_products/CatProdController';
-import VariationsController from './app/controllers/variations/VariationsController';
-import ImagesController from './app/controllers/images/ImagesController';
+import CategoriesController from './app/controllers/catalog/categories/CategoriesController';
+import InactiveCategoriesController from './app/controllers/catalog/categories/InactiveCategoriesController';
+import BrandsController from './app/controllers/catalog/brands/BrandsController';
+import EvaluationsController from './app/controllers/catalog/evaluations/EvaluationsController';
+import ProductsController from './app/controllers/catalog/products/ProductsController';
+import CategoryProductController from './app/controllers/catalog/category_products/CatProdController';
+import VariationsController from './app/controllers/catalog/variations/VariationsController';
+import ImagesController from './app/controllers/catalog/images/ImagesController';
 
 const routes = new Router();
 const upload = multer(multerConfig);

@@ -1,11 +1,10 @@
 const connection = require('../../../database/connection');
 
 export default async (req, res, next) => {
+    const { store_id } = req.params;
     const { user_admin } = req.headers;
 
     if (!user_admin) return res.status(401).json('need to be an user admin');
-
-    const { store_id } = req.params;
 
     if (store_id == 0 || !store_id || !store_id.length) {
         return res.status(401).json('please, put id store');

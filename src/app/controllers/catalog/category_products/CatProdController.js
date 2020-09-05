@@ -1,4 +1,4 @@
-import connection, { returning } from '../../../database/connection';
+import connection from '../../../../database/connection';
 
 class Category_product_controller {
     async store(req, res) {
