@@ -1,27 +1,33 @@
 import connection from '../../../database/connection';
 
-class DeliveryController {
+class PaymentsController {
     async create(req, res) {
         const { store_id } = req.params;
         const {
+            value,
+            formOfPay,
+            installment,
             status,
-            tracking,
-            type,
-            cost,
-            deliveryTime,
+            codeGateway,
             address_id,
+            card_id,
+            order_id,
+            deliveryAddressEqualBilling
         } = req.body;
 
         try {
-            const data = await connection('deliveries')
+            const data = await connection('payments')
                 .returning('*')
                 .insert({
+                    value,
+                    formOfPay,
+                    installment,
                     status,
-                    tracking,
-                    type,
-                    cost,
-                    deliveryTime,
+                    codeGateway,
                     address_id,
+                    card_id,
+                    order_id,
+                    deliveryAddressEqualBilling,
                     store_id,
                 });
 
@@ -32,9 +38,9 @@ class DeliveryController {
     }
 
     async findAll(req, res){
-        const data = await connection('deliveries')
+        const data = await connection('payments')
         return res.status(200).json(data)
     }
 }
 
-export default new DeliveryController();
+export default new PaymentsController();
