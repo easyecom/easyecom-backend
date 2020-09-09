@@ -294,6 +294,12 @@ routes.get(
     storeValidation,
     AdminOrdersController.findOne
 );
+routes.get(
+    '/stores/:store_id/listOrdersByClient/:client_id',
+    authMiddleware,
+    storeValidation,
+    AdminOrdersController.listOrdersByClient
+);
 routes.delete(
     '/stores/:store_id/ordersAdmin/:id',
     authMiddleware,
