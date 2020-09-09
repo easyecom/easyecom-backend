@@ -1,31 +1,39 @@
 exports.up = knex => {
-    return knex.schema.createTable('users', table => {
+    return knex.schema.createTable('carts', table => {
         table
             .increments('id')
             .unsigned()
             .primary()
             .unique();
 
-        table.decimal('value',  6, 2).notNullable();
-        table.string('formOfPay').notNullable();  
-        table.integer('installment').defaultTo(1);
-        table.string('status').notNullable();  
+        table.string('staticalProduct');
+        table.string('amount').defaultTo(1);
 
-        table.integer('address_id');
+        table.json('itemsObj').defaultTo({});
+
+        table.specificType('itemsArray', 'text[]');
+
+        table.integer('product_id');
         table
-            .foreign('address_id')
+            .foreign('product_id')
             .references('id')
-            .inTable('addresses')
+            .inTable('products')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
-        table.specificType('card', 'array[]');
-
-        table.integer('card_id');
+        table.integer('variation_id');
         table
-            .foreign('card_id')
+            .foreign('variation_id')
             .references('id')
-            .inTable('card')
+            .inTable('variations')
+            .onUpdate('CASCADE')
+            .onDelete('SET NULL');
+
+        table.integer('order_id');
+        table
+            .foreign('order_id')
+            .references('id')
+            .inTable('orders')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
@@ -43,5 +51,5 @@ exports.up = knex => {
 };
 
 exports.down = knex => {
-    knex.schema.dropTable('users');
+    knex.schema.dropTable('carts');
 };

@@ -1,34 +1,38 @@
 exports.up = knex => {
-    return knex.schema.createTable('users', table => {
+    return knex.schema.createTable('payments', table => {
         table
             .increments('id')
             .unsigned()
             .primary()
             .unique();
 
-        table.integer('client_id');
+        table.decimal('value', 6, 2).notNullable();
+        table.string('formOfPay').notNullable();
+        table.integer('installment').defaultTo(1);
+        table.string('status').notNullable();
+        table.string('codeGateway')
+
+        table.integer('address_id');
         table
-            .foreign('client_id')
+            .foreign('address_id')
             .references('id')
-            .inTable('client')
+            .inTable('addresses')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
-        table.specificType('card', 'array[]');
-
-        table.integer('payment_id');
+        table.integer('card_id');
         table
-            .foreign('payment_id')
+            .foreign('card_id')
             .references('id')
-            .inTable('payments')
+            .inTable('cards')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
-        table.integer('delivery_id');
+        table.integer('order_id');
         table
-            .foreign('delivery_id')
+            .foreign('order_id')
             .references('id')
-            .inTable('stores')
+            .inTable('orders')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
@@ -40,11 +44,13 @@ exports.up = knex => {
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
+        table.boolean('deliveryAddressEqualBilling').defaultTo(true);
+
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
     });
 };
 
 exports.down = knex => {
-    knex.schema.dropTable('users');
+    knex.schema.dropTable('payments');
 };

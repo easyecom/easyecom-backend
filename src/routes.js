@@ -28,6 +28,12 @@ import CategoryProductController from './app/controllers/catalog/category_produc
 import VariationsController from './app/controllers/catalog/variations/VariationsController';
 import ImagesController from './app/controllers/catalog/images/ImagesController';
 
+// order
+
+import OrdersController from './app/controllers/order/OrdersController';
+
+import DeliveryController from './app/controllers/order/DeliveryController';
+
 const routes = new Router();
 const upload = multer(multerConfig);
 
@@ -266,8 +272,9 @@ routes.delete(
 
 routes.post('/images', upload.single('files'), ImagesController.store);
 
-/*
-/* orders 
-*/
+// orders 
+routes.post('/stores/:store_id/orders', OrdersController.create)
+routes.post('/stores/:store_id/deliveries', DeliveryController.create)
+
 
 export default routes;
