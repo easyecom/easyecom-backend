@@ -30,8 +30,8 @@ import ImagesController from './app/controllers/catalog/images/ImagesController'
 
 // order
 
-import AdminOrdersController from './app/controllers/order/AdminOrdersController';
-import OrdersController from './app/controllers/order/OrdersController';
+import AdminOrdersController from './app/controllers/order/OrdersAdminController';
+import OrdersController from './app/controllers/order/OrdersClientController';
 
 import DeliveryController from './app/controllers/order/DeliveryController';
 
@@ -308,9 +308,10 @@ routes.delete(
 );
 
 // orders
-routes.post('/stores/:store_id/orders', OrdersController.create);
-routes.get('/stores/:store_id/orders/:id', OrdersController.findOne);
-routes.delete('/stores/:store_id/orders/:id', OrdersController.delete);
+routes.post('/stores/:store_id/orders',  authMiddleware, OrdersController.create);
+routes.get('/stores/:store_id/orders/client/:client_id',  authMiddleware, OrdersController.findAll);
+routes.get('/stores/:store_id/orders/:id',  authMiddleware, OrdersController.findOne);
+routes.delete('/stores/:store_id/orders/:id',  authMiddleware, OrdersController.delete);
 
 routes.post('/stores/:store_id/deliveries', DeliveryController.create);
 routes.get('/stores/:store_id/deliveries', DeliveryController.findAll);
