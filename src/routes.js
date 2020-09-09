@@ -30,9 +30,16 @@ import ImagesController from './app/controllers/catalog/images/ImagesController'
 
 // order
 
+import AdminOrdersController from './app/controllers/order/AdminOrdersController';
 import OrdersController from './app/controllers/order/OrdersController';
 
 import DeliveryController from './app/controllers/order/DeliveryController';
+
+import CardsController from './app/controllers/order/CardsController';
+
+import CartsController from './app/controllers/order/CartsController';
+
+import PaymentsController from './app/controllers/order/PaymentsController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -193,6 +200,7 @@ routes.put(
     storeValidation,
     BrandsController.update
 );
+
 routes.delete(
     '/stores/:store_id/brands/:brandId',
     authMiddleware,
@@ -272,9 +280,42 @@ routes.delete(
 
 routes.post('/images', upload.single('files'), ImagesController.store);
 
-// orders 
-routes.post('/stores/:store_id/orders', OrdersController.create)
-routes.post('/stores/:store_id/deliveries', DeliveryController.create)
+// orders admin
 
+routes.get(
+    '/stores/:store_id/ordersAdmin',
+    authMiddleware,
+    storeValidation,
+    AdminOrdersController.findAll
+);
+routes.get(
+    '/stores/:store_id/ordersAdmin/:id',
+    authMiddleware,
+    storeValidation,
+    AdminOrdersController.findOne
+);
+routes.delete(
+    '/stores/:store_id/ordersAdmin/:id',
+    authMiddleware,
+    storeValidation,
+    AdminOrdersController.delete
+);
+
+// orders
+routes.post('/stores/:store_id/orders', OrdersController.create);
+routes.get('/stores/:store_id/orders/:id', OrdersController.findOne);
+routes.delete('/stores/:store_id/orders/:id', OrdersController.delete);
+
+routes.post('/stores/:store_id/deliveries', DeliveryController.create);
+routes.get('/stores/:store_id/deliveries', DeliveryController.findAll);
+
+routes.post('/stores/:store_id/cards', CardsController.create);
+routes.get('/stores/:store_id/cards', CardsController.findAll);
+
+routes.post('/stores/:store_id/carts', CartsController.create);
+routes.get('/stores/:store_id/carts', CartsController.findAll);
+
+routes.post('/stores/:store_id/payments', PaymentsController.create);
+routes.get('/stores/:store_id/payments', PaymentsController.findAll);
 
 export default routes;
