@@ -16,16 +16,30 @@ class OrdersController {
         return res.status(201).json(data);
     }
 
-    async findOne({ params }, res) {
-        const { id } = params;
+    async findAll({ params }, res) {
+        const { store_id, client_id } = params;
 
-        const data = await connection('orders').where('id', id);
+        const data = await connection('orders').where({
+            store_id: store_id,
+            client_id: client_id,
+        });
+
+        return res.status(200).json(data);
+    }
+
+    async findOne({ params }, res) {
+        const { store_id, id } = params;
+
+        const data = await connection('orders').where({
+            store_id: store_id,
+            id: id,
+        });
 
         return res.status(200).json(data);
     }
 
     async delete({ params }, res) {
-        const { id } = params;
+        const { store_id, id } = params;
 
         await connection('orders')
             .where('id', id)

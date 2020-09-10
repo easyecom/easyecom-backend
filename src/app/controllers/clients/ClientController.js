@@ -32,6 +32,13 @@ class ClientController {
         }
     }
 
+    async findOne({ params }, res) {
+        const { client_id } = params;
+        const data = await connection('clients').where({ id: client_id });
+
+        return res.status(200).json(data);
+    }
+
     async update(req, res) {
         const { client_id } = req.params;
         const clients = req.body;

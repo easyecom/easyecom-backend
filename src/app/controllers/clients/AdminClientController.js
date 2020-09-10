@@ -43,7 +43,7 @@ class adminClientController {
                     'users.email',
 
                     'clients.cpf',
-                    'dateOfBirth',
+                    'clients.dateOfBirth',
 
                     'addresses.street',
                     'addresses.number',
