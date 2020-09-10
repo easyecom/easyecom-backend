@@ -102,6 +102,7 @@ routes.delete(
 // clients
 routes.post('/stores/:store_id/clients/:client_id', ClientController.store);
 routes.put('/stores/:store_id/clients/:client_id', ClientController.update);
+routes.get('/stores/:store_id/clients/:client_id', ClientController.findOne);
 routes.delete('/stores/:store_id/clients/:client_id', ClientController.delete);
 
 // admins
@@ -113,21 +114,21 @@ routes.get(
 );
 
 routes.get(
-    '/stores/:store_id/clients/client_id',
+    '/stores/:store_id/clientsAdmin/:client_id',
     authMiddleware,
     storeValidation,
     AdminClientController.getOneClientByStore
 );
 
 routes.put(
-    '/stores/:store_id/clients/client_id',
+    '/stores/:store_id/clients/:client_id',
     authMiddleware,
     storeValidation,
     AdminClientController.updateOneClientByStore
 );
 
 routes.delete(
-    '/stores/:store_id/clients/client_id',
+    '/stores/:store_id/clients/:client_id',
     authMiddleware,
     storeValidation,
     AdminClientController.deleteOneClientByStore
@@ -321,6 +322,7 @@ routes.get('/stores/:store_id/cards', CardsController.findAll);
 
 routes.post('/stores/:store_id/carts', CartsController.create);
 routes.get('/stores/:store_id/carts', CartsController.findAll);
+routes.get('/stores/:store_id/carts/:cart_id', CartsController.findOne);
 
 routes.post('/stores/:store_id/payments', PaymentsController.create);
 routes.get('/stores/:store_id/payments', PaymentsController.findAll);

@@ -30,7 +30,10 @@ class OrdersController {
     async findOne({ params }, res) {
         const { store_id, id } = params;
 
-        const data = await connection('orders').where('id', id);
+        const data = await connection('orders').where({
+            store_id: store_id,
+            id: id,
+        });
 
         return res.status(200).json(data);
     }

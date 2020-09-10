@@ -11,7 +11,7 @@ exports.up = knex => {
 
         table.json('itemsObj').defaultTo({});
 
-        table.specificType('itemsArray', 'text[]');
+        table.specificType('itemsArray', 'jsonb[]');
 
         table.integer('product_id');
         table
