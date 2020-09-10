@@ -14,6 +14,8 @@ exports.up = knex => {
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
+        table.specificType('shoppingCart', 'jsonb[]');
+
         table.integer('delivery_id');
         table
             .foreign('delivery_id')

@@ -5,47 +5,68 @@ class OrdersController {
         const { store_id } = req.params;
         const { client_id, delivery_id } = req.body;
 
-        const data = await connection('orders')
-            .returning('*')
-            .insert({
-                client_id,
-                delivery_id,
-                store_id,
-            });
+        try {
+            const data = await connection('orders')
+                .returning('*')
+                .insert({
+                    client_id,
+                    delivery_id,
+                    store_id,
+                });
 
-        return res.status(201).json(data);
+            return res.status(201).json(data);
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     async findAll({ params }, res) {
         const { store_id, client_id } = params;
 
-        const data = await connection('orders').where({
-            store_id: store_id,
-            client_id: client_id,
-        });
+        try {
+            const data = await connection('orders')
+                .select('*')
+                .where({
+                    'orders.store_id': store_id,
+                    'orders.client_id': client_id,
+                });
 
-        return res.status(200).json(data);
+            return res.status(200).json(data);
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     async findOne({ params }, res) {
         const { store_id, id } = params;
 
-        const data = await connection('orders').where({
-            store_id: store_id,
-            id: id,
-        });
+        try {
+            const data = await connection('orders').where({
+                'orders.store_id': store_id,
+                'orders.id': id,
+            });
 
-        return res.status(200).json(data);
+            return res.status(200).json(data);
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     async delete({ params }, res) {
         const { store_id, id } = params;
 
-        await connection('orders')
-            .where('id', id)
-            .del();
+        try {
+            await connection('orders')
+                .where({
+                    'orders.store_id': store_id,
+                    'orders.id': id,
+                })
+                .del();
 
-        return res.status(200).json({ message: 'order deleted success' });
+            return res.status(200).json({ message: 'order deleted success' });
+        } catch (err) {
+            console.error(err);
+        }
     }
 }
 

@@ -29,15 +29,10 @@ import VariationsController from './app/controllers/catalog/variations/Variation
 import ImagesController from './app/controllers/catalog/images/ImagesController';
 
 // order
-
 import AdminOrdersController from './app/controllers/order/OrdersAdminController';
 import OrdersController from './app/controllers/order/OrdersClientController';
 
 import DeliveryController from './app/controllers/order/DeliveryController';
-
-import CardsController from './app/controllers/order/CardsController';
-
-import CartsController from './app/controllers/order/CartsController';
 
 import PaymentsController from './app/controllers/order/PaymentsController';
 
@@ -67,7 +62,7 @@ routes.get('/avatar', AvatarController.getAll);
 routes.get('/avatar/:id', authMiddleware, AvatarController.getOne);
 routes.delete('/avatar/:id', authMiddleware, AvatarController.delete);
 
-routes.post('/stores', authMiddleware, StoresController.store);
+routes.post('/stores', StoresController.store);
 routes.get('/stores', authMiddleware, StoresController.getAll);
 routes.get('/stores/:store_id', authMiddleware, StoresController.getOne);
 routes.put(
@@ -95,17 +90,13 @@ routes.delete(
     AddressController.delete
 );
 
-/*
-/* clients
-*/
-
 // clients
 routes.post('/stores/:store_id/clients/:client_id', ClientController.store);
 routes.put('/stores/:store_id/clients/:client_id', ClientController.update);
 routes.get('/stores/:store_id/clients/:client_id', ClientController.findOne);
 routes.delete('/stores/:store_id/clients/:client_id', ClientController.delete);
 
-// admins
+// clients admin
 routes.get(
     '/stores/:store_id/clients',
     authMiddleware,
@@ -316,13 +307,6 @@ routes.delete('/stores/:store_id/orders/:id',  authMiddleware, OrdersController.
 
 routes.post('/stores/:store_id/deliveries', DeliveryController.create);
 routes.get('/stores/:store_id/deliveries', DeliveryController.findAll);
-
-routes.post('/stores/:store_id/cards', CardsController.create);
-routes.get('/stores/:store_id/cards', CardsController.findAll);
-
-routes.post('/stores/:store_id/carts', CartsController.create);
-routes.get('/stores/:store_id/carts', CartsController.findAll);
-routes.get('/stores/:store_id/carts/:cart_id', CartsController.findOne);
 
 routes.post('/stores/:store_id/payments', PaymentsController.create);
 routes.get('/stores/:store_id/payments', PaymentsController.findAll);
