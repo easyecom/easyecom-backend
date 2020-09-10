@@ -7,6 +7,7 @@ module.exports = {
         migrations: {
             directory: './src/database/migrations',
         },
+        seeds: { directory: './src/database/seeds' },
         useNullAsDefault: true,
         pool: {
             min: 5,
@@ -25,13 +26,11 @@ module.exports = {
         migrations: {
             directory: './src/database/migrations',
         },
+        seeds: { directory: './src/database/seeds' },
         useNullAsDefault: true,
         pool: {
             min: 0,
             max: 10,
-            // idleTimeoutMillis: 30000,
-            // createTimeoutMillis: 30000,
-            // acquireTimeoutMillis: 30000,
         },
     },
 
@@ -47,12 +46,10 @@ module.exports = {
         migrations: {
             directory: './src/database/migrations',
         },
+        seeds: { directory: './src/database/seeds' },
         pool: {
             min: 2,
             max: 10,
         },
-        //migrations: {
-        //    tableName: 'knex_migrations',
-        //},
     },
 };
