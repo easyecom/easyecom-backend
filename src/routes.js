@@ -45,7 +45,7 @@ routes.get('/recovered', RecoveredController.showCompleteRecovery);
 routes.post('/recovered', RecoveredController.completeRecovery);
 
 routes.post('/users', UsersController.store);
-routes.get('/users', UsersController.getAll);
+routes.get('/', UsersController.getAll);
 routes.get('/users/:id', authMiddleware, UsersController.getOne);
 routes.put('/users/:id', authMiddleware, UsersController.update);
 routes.delete('/users/:id', authMiddleware, UsersController.delete);
@@ -300,15 +300,33 @@ routes.delete(
 );
 
 // orders
-routes.post('/stores/:store_id/orders',  authMiddleware, OrdersController.create);
-routes.get('/stores/:store_id/orders/client/:client_id',  authMiddleware, OrdersController.findAll);
-routes.get('/stores/:store_id/orders/:id',  authMiddleware, OrdersController.findOne);
-routes.delete('/stores/:store_id/orders/:id',  authMiddleware, OrdersController.delete);
+routes.post(
+    '/stores/:store_id/orders',
+    authMiddleware,
+    OrdersController.create
+);
+routes.get(
+    '/stores/:store_id/myOrders/client/:client_id',
+    authMiddleware,
+    OrdersController.findAll
+);
+routes.get(
+    '/stores/:store_id/orders/:id',
+    authMiddleware,
+    OrdersController.findOne
+);
+routes.delete(
+    '/stores/:store_id/orders/:id',
+    authMiddleware,
+    OrdersController.delete
+);
 
 routes.post('/stores/:store_id/deliveries', DeliveryController.create);
 routes.get('/stores/:store_id/deliveries', DeliveryController.findAll);
 
 routes.post('/stores/:store_id/payments', PaymentsController.create);
 routes.get('/stores/:store_id/payments', PaymentsController.findAll);
+
+
 
 export default routes;
