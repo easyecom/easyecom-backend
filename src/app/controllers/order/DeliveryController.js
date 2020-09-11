@@ -31,9 +31,10 @@ class DeliveryController {
         }
     }
 
-    async findAll(req, res){
-        const data = await connection('deliveries')
-        return res.status(200).json(data)
+    async findAll({ params }, res) {
+        const { store_id } = params;
+        const data = await connection('deliveries').where('store_id', store_id);
+        return res.status(200).json(data);
     }
 }
 

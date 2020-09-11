@@ -7,7 +7,14 @@ class AdminOrdersController {
         try {
             const data = await connection('orders')
                 .where('store_id', store_id)
-                .select('id', 'client_id', 'delivery_id', 'store_id', 'cancel');
+                .select(
+                    'id',
+                    'client_id',
+                    'shoppingCart',
+                    'delivery_id',
+                    'store_id',
+                    'cancel'
+                );
 
             return res.status(200).json(data);
         } catch (err) {
@@ -24,7 +31,14 @@ class AdminOrdersController {
                     client_id: client_id,
                     store_id: store_id,
                 })
-                .select('id', 'client_id', 'delivery_id', 'store_id', 'cancel');
+                .select(
+                    'id',
+                    'client_id',
+                    'shoppingCart',
+                    'delivery_id',
+                    'store_id',
+                    'cancel'
+                );
             return res.status(200).json(data);
         } catch (err) {
             console.error(err);
@@ -40,7 +54,14 @@ class AdminOrdersController {
                     id: id,
                     store_id: store_id,
                 })
-                .select('id', 'client_id', 'delivery_id', 'store_id', 'cancel');
+                .select(
+                    'id',
+                    'client_id',
+                    'shoppingCart',
+                    'delivery_id',
+                    'store_id',
+                    'cancel'
+                );
             return res.status(200).json(data);
         } catch (err) {
             console.error(err);

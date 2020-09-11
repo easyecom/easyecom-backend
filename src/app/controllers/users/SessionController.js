@@ -29,18 +29,18 @@ class SessionController {
                 return res.status(404).send({ message: 'user does not exist' });
             }
 
-            const match = await bcrypt.compare(String(password), user.password);
+            const match = await bcrypt.compare(String(password), user.password); //
 
-            if (!match) {
+            if (!match) { //
                 return res
                     .status(401)
                     .send({ message: 'password does not match' });
-            }
+            } //
 
             const { id } = user;
             const { name } = user;
 
-            if (match) {
+            if (match) { //
                 const token = jwt.sign({ id }, authConfig.secret, {
                     expiresIn: authConfig.expiresIn,
                 });
@@ -50,7 +50,7 @@ class SessionController {
                     message: 'authentication success',
                     token,
                 });
-            }
+            } //
 
             return res
                 .status(500)
