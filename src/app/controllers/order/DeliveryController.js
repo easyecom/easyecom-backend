@@ -1,4 +1,4 @@
-import connection from '../../../database/connection';
+const connection = require('../../../database/connection');
 
 class DeliveryController {
     async create(req, res) {
@@ -38,4 +38,4 @@ class DeliveryController {
     }
 }
 
-export default new DeliveryController();
+module.exports = new DeliveryController();

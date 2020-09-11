@@ -1,4 +1,4 @@
-import connection from '../../../../database/connection';
+const connection = require('../../../../database/connection');
 
 class ImagesController {
     async store(req, res) {
@@ -71,4 +71,4 @@ class ImagesController {
     }
 }
 
-export default new ImagesController();
+module.exports = new ImagesController();

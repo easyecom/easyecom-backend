@@ -1,4 +1,4 @@
-import connection from '../../../../database/connection';
+const connection = require('../../../../database/connection');
 
 class VariationsController {
     async store(req, res) {
@@ -155,4 +155,4 @@ class VariationsController {
     }
 }
 
-export default new VariationsController();
+module.exports = new VariationsController();

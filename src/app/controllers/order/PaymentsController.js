@@ -1,4 +1,4 @@
-import connection from '../../../database/connection';
+const connection = require('../../../database/connection');
 
 class PaymentsController {
     async create(req, res) {
@@ -12,7 +12,7 @@ class PaymentsController {
             address_id,
             card_id,
             order_id,
-            deliveryAddressEqualBilling
+            deliveryAddressEqualBilling,
         } = req.body;
 
         try {
@@ -37,10 +37,10 @@ class PaymentsController {
         }
     }
 
-    async findAll(req, res){
-        const data = await connection('payments')
-        return res.status(200).json(data)
+    async findAll(req, res) {
+        const data = await connection('payments');
+        return res.status(200).json(data);
     }
 }
 
-export default new PaymentsController();
+module.exports = new PaymentsController();

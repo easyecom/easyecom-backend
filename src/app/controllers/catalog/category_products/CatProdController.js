@@ -1,4 +1,4 @@
-import connection from '../../../../database/connection';
+const connection = require('../../../../database/connection');
 
 class Category_product_controller {
     async store(req, res) {
@@ -59,4 +59,4 @@ class Category_product_controller {
     }
 }
 
-export default new Category_product_controller();
+module.exports = new Category_product_controller();

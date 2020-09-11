@@ -1,4 +1,4 @@
-import connection from '../../../../database/connection';
+const connection = require('../../../../database/connection');
 
 class ProductsController {
     async store(req, res) {
@@ -183,5 +183,4 @@ class ProductsController {
         }
     }
 }
-
-export default new ProductsController();
+module.exports = new ProductsController();

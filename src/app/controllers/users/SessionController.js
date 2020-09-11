@@ -1,6 +1,6 @@
-import jwt from 'jsonwebtoken';
-import connection from '../../../database/connection';
-import authConfig from '../../../config/auth';
+const jwt = require('jsonwebtoken');
+const connection = require('../../../database/connection');
+const authConfig = require('../../../config/auth');
 
 const bcrypt = require('bcrypt');
 
@@ -31,7 +31,8 @@ class SessionController {
 
             const match = await bcrypt.compare(String(password), user.password); //
 
-            if (!match) { //
+            if (!match) {
+                //
                 return res
                     .status(401)
                     .send({ message: 'password does not match' });
@@ -40,7 +41,8 @@ class SessionController {
             const { id } = user;
             const { name } = user;
 
-            if (match) { //
+            if (match) {
+                //
                 const token = jwt.sign({ id }, authConfig.secret, {
                     expiresIn: authConfig.expiresIn,
                 });
@@ -62,4 +64,4 @@ class SessionController {
     }
 }
 
-export default new SessionController();
+module.exports = new SessionController();

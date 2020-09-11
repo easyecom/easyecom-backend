@@ -1,4 +1,4 @@
-import connection from '../../../../database/connection';
+const connection = require('../../../../database/connection');
 
 class EvaluationsController {
     async store(req, res) {
@@ -102,4 +102,4 @@ class EvaluationsController {
     }
 }
 
-export default new EvaluationsController();
+module.exports = new EvaluationsController();

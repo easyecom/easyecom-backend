@@ -1,4 +1,4 @@
-import connection from '../../../database/connection';
+const connection = require('../../../database/connection');
 
 const bcrypt = require('bcrypt');
 
@@ -148,4 +148,4 @@ class UsersController {
     }
 }
 
-export default new UsersController();
+module.exports = new UsersController();

@@ -1,4 +1,4 @@
-import connection from '../../../../database/connection';
+const connection = require('../../../../database/connection');
 
 class BrandsController {
     async store(req, res) {
@@ -40,7 +40,7 @@ class BrandsController {
 
             return res.status(201).json(data);
         } catch (err) {
-            console.error(err)
+            console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
     }
@@ -110,4 +110,4 @@ class BrandsController {
     }
 }
 
-export default new BrandsController();
+module.exports = new BrandsController();
