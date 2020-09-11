@@ -13,12 +13,12 @@ exports.seed = function(knex) {
                     cellPhone: '73 75684-7089',
                 },
                 {
-                  id: 2,
-                  name: 'pingo de neve',
-                  cnpj: '54.087.398/0001-74',
-                  email: 'contato@pingodeneve.com',
-                  cellPhone: '56 84063-7572',
-              }
+                    id: 2,
+                    name: 'pingo de neve',
+                    cnpj: '54.087.398/0001-74',
+                    email: 'contato@pingodeneve.com',
+                    cellPhone: '56 84063-7572',
+                },
             ]);
         });
 };
