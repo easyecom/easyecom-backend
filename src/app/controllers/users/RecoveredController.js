@@ -1,4 +1,4 @@
-import connection from '../../../database/connection';
+const connection = require ('../../../database/connection');
 
 const bcrypt = require('bcrypt');
 
@@ -77,4 +77,4 @@ class RecoveredController {
     }
 }
 
-export default new RecoveredController();
+module.exports = new RecoveredController();

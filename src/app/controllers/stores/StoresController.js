@@ -1,4 +1,4 @@
-import connection from '../../../database/connection';
+const connection = require('../../../database/connection');
 
 class StoresController {
     async store(req, res) {
@@ -109,4 +109,4 @@ class StoresController {
     }
 }
 
-export default new StoresController();
+module.exports = new StoresController();

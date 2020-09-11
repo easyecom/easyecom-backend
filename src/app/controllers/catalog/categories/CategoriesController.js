@@ -1,4 +1,4 @@
-import connection from '../../../../database/connection';
+const connection = require('../../../../database/connection');
 
 class CategoriesController {
     async store(req, res) {
@@ -23,7 +23,7 @@ class CategoriesController {
                 .insert({
                     category,
                     description,
-                    store_id
+                    store_id,
                 });
 
             return res.status(201).json(data);
@@ -92,4 +92,4 @@ class CategoriesController {
     }
 }
 
-export default new CategoriesController();
+module.exports = new CategoriesController();

@@ -1,40 +1,40 @@
-import { Router } from 'express';
-import multer from 'multer';
-import authMiddleware from './app/middlewares/auth';
-import storeValidation from './app/controllers/validator/storeValidation';
+const { Router } = require('express');
+const multer = require('multer');
+const authMiddleware = require('./app/middlewares/auth');
+const storeValidation = require('./app/controllers/validator/storeValidation');
 
-import multerConfig from './config/multer';
+const multerConfig = require('./config/multer');
 
 // user
-import UsersController from './app/controllers/users/UsersController';
-import SessionController from './app/controllers/users/SessionController';
-import AvatarController from './app/controllers/users/AvatarController';
-import RecoveryController from './app/controllers/users/RecoveryController';
-import RecoveredController from './app/controllers/users/RecoveredController';
+const UsersController = require('./app/controllers/users/UsersController');
+const SessionController = require('./app/controllers/users/SessionController');
+const AvatarController = require('./app/controllers/users/AvatarController');
+const RecoveryController = require('./app/controllers/users/RecoveryController');
+const RecoveredController = require('./app/controllers/users/RecoveredController');
 
 // store
-import StoresController from './app/controllers/stores/StoresController';
-import AddressController from './app/controllers/addresses/AddressesController';
-import ClientController from './app/controllers/clients/ClientController';
-import AdminClientController from './app/controllers/clients/AdminClientController';
+const StoresController = require('./app/controllers/stores/StoresController');
+const AddressController = require('./app/controllers/addresses/AddressesController');
+const ClientController = require('./app/controllers/clients/ClientController');
+const AdminClientController = require('./app/controllers/clients/AdminClientController');
 
 // catalog
-import CategoriesController from './app/controllers/catalog/categories/CategoriesController';
-import InactiveCategoriesController from './app/controllers/catalog/categories/InactiveCategoriesController';
-import BrandsController from './app/controllers/catalog/brands/BrandsController';
-import EvaluationsController from './app/controllers/catalog/evaluations/EvaluationsController';
-import ProductsController from './app/controllers/catalog/products/ProductsController';
-import CategoryProductController from './app/controllers/catalog/category_products/CatProdController';
-import VariationsController from './app/controllers/catalog/variations/VariationsController';
-import ImagesController from './app/controllers/catalog/images/ImagesController';
+const CategoriesController = require('./app/controllers/catalog/categories/CategoriesController');
+const InactiveCategoriesController = require('./app/controllers/catalog/categories/InactiveCategoriesController');
+const BrandsController = require('./app/controllers/catalog/brands/BrandsController');
+const EvaluationsController = require('./app/controllers/catalog/evaluations/EvaluationsController');
+const ProductsController = require('./app/controllers/catalog/products/ProductsController');
+const CategoryProductController = require('./app/controllers/catalog/category_products/CatProdController');
+const VariationsController = require('./app/controllers/catalog/variations/VariationsController');
+const ImagesController = require('./app/controllers/catalog/images/ImagesController');
 
 // order
-import AdminOrdersController from './app/controllers/order/OrdersAdminController';
-import OrdersController from './app/controllers/order/OrdersClientController';
+const AdminOrdersController = require('./app/controllers/order/OrdersAdminController');
+const OrdersController = require('./app/controllers/order/OrdersClientController');
 
-import DeliveryController from './app/controllers/order/DeliveryController';
+const DeliveryController = require('./app/controllers/order/DeliveryController');
 
-import PaymentsController from './app/controllers/order/PaymentsController';
+const PaymentsController = require('./app/controllers/order/PaymentsController');
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -327,6 +327,4 @@ routes.get('/stores/:store_id/deliveries', DeliveryController.findAll);
 routes.post('/stores/:store_id/payments', PaymentsController.create);
 routes.get('/stores/:store_id/payments', PaymentsController.findAll);
 
-
-
-export default routes;
+module.exports = routes;

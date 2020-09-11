@@ -1,4 +1,4 @@
-import connection from '../../../database/connection';
+const connection = require('../../../database/connection');
 
 class AvatarController {
     async store(req, res) {
@@ -67,4 +67,4 @@ class AvatarController {
     }
 }
 
-export default new AvatarController();
+module.exports = new AvatarController();

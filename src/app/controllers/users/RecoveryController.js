@@ -1,5 +1,5 @@
-import connection from '../../../database/connection';
-import emailTemplateRecovery from '../../../../helpers/emailRecovery';
+const connection = require('../../../database/connection');
+const emailTemplateRecovery = require('../../../../helpers/emailRecovery');
 
 const crypto = require('crypto');
 
@@ -59,4 +59,4 @@ class RecoveryController {
     }
 }
 
-export default new RecoveryController();
+module.exports = new RecoveryController();

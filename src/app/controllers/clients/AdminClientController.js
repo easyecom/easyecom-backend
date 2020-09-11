@@ -1,4 +1,4 @@
-import connection from '../../../database/connection';
+const connection = require('../../../database/connection');
 
 class adminClientController {
     async getClientsByStore(req, res) {
@@ -108,4 +108,4 @@ class adminClientController {
     }
 }
 
-export default new adminClientController();
+module.exports = new adminClientController();

@@ -1,4 +1,4 @@
-import connection from '../../../../database/connection';
+const connection = require('../../../../database/connection');
 
 class InactiveCategoriesController {
     async getAll(req, res) {
@@ -48,4 +48,4 @@ class InactiveCategoriesController {
     }
 }
 
-export default new InactiveCategoriesController();
+module.exports = new InactiveCategoriesController();

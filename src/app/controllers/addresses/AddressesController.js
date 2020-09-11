@@ -1,4 +1,4 @@
-import connection, { select, returning } from '../../../database/connection';
+const connection = require('../../../database/connection');
 
 class AddressController {
     async store(req, res) {
@@ -127,4 +127,4 @@ class AddressController {
     }
 }
 
-export default new AddressController();
+module.exports = new AddressController();

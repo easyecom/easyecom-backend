@@ -1,4 +1,4 @@
-import connection from '../../../database/connection';
+const connection = require('../../../database/connection');
 
 class AdminOrdersController {
     async findAll({ params }, res) {
@@ -82,4 +82,4 @@ class AdminOrdersController {
     }
 }
 
-export default new AdminOrdersController();
+module.exports = new AdminOrdersController();

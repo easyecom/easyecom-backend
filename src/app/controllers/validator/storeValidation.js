@@ -1,6 +1,6 @@
 const connection = require('../../../database/connection');
 
-export default async (req, res, next) => {
+module.exports = async (req, res, next) => {
     const { store_id } = req.params;
     const { user_admin } = req.headers;
 
