@@ -93,11 +93,12 @@ class OrdersController {
 
             data.shoppingCart = itemProducts;
             const client = data.client_id
-            const frete = await calculateShipping(
+            let [freight] = await calculateShipping(
                 client ,
                 data.shoppingCart
             );
-            return res.json(frete);
+            data.freightValue = freight
+            //return res.json(frete);
             return res.status(200).json(data);
         } catch (err) {
             console.error(err);

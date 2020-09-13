@@ -313,7 +313,6 @@ routes.get(
 );
 routes.get(
     '/stores/:store_id/orders/:id',
-    authMiddleware,
     OrdersController.findOne
 );
 routes.delete(
