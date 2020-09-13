@@ -18,6 +18,8 @@ exports.up = knex => {
         table.string('packagedWidth').notNullable();
         table.string('weightKg');
 
+        table.specificType('images', 'jsonb[]');
+
         table.boolean('freeShipping').defaultTo(false);
 
         table.string('amount').notNullable();

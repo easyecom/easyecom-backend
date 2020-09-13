@@ -13,6 +13,7 @@ exports.up = knex => {
         table.string('descriptionShort').notNullable();
         table.string('description');
         table.integer('sku')
+        table.specificType('variations', 'jsonb[]');
         table.decimal('costPrice')
         table.decimal('offerPrice')
         table.decimal('salesPrice').notNullable();

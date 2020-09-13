@@ -45,7 +45,7 @@ routes.get('/recovered', RecoveredController.showCompleteRecovery);
 routes.post('/recovered', RecoveredController.completeRecovery);
 
 routes.post('/users', UsersController.store);
-routes.get('/', UsersController.getAll);
+routes.get('/users', UsersController.getAll);
 routes.get('/users/:id', authMiddleware, UsersController.getOne);
 routes.put('/users/:id', authMiddleware, UsersController.update);
 routes.delete('/users/:id', authMiddleware, UsersController.delete);
@@ -91,8 +91,9 @@ routes.delete(
 );
 
 // clients
-routes.post('/stores/:store_id/clients/:client_id', ClientController.store);
+routes.post('/stores/:store_id/clients/', ClientController.store);
 routes.put('/stores/:store_id/clients/:client_id', ClientController.update);
+routes.get('/stores/:store_id/clients', ClientController.findAll);
 routes.get('/stores/:store_id/clients/:client_id', ClientController.findOne);
 routes.delete('/stores/:store_id/clients/:client_id', ClientController.delete);
 

@@ -6,19 +6,20 @@ class adminClientController {
         const { page = 1 } = req.query;
 
         try {
-            const data = await connection('users')
-                .join('stores', 'stores.id', 'users.store_id')
+            const data = await connection('clients')
+                .join('users', 'users.id', 'clients.id')
+                .join('addresses', 'addresses.id', 'clients.id')
                 .limit(20)
                 .offset((page - 1) * 20)
-                .select(
-                    'users.id',
-                    'users.name',
-                    'users.email',
-                    'store_id',
-                    'avatar_id',
-                    'users.permission'
-                )
-                .where({ 'stores.id': store_id });
+                // .select(
+                //     'users.id',
+                //     'users.name',
+                //     'users.email',
+                //     'store_id',
+                //     'avatar_id',
+                //     'users.permission'
+                // )
+                .where({ 'users.store_id': store_id });
 
             return res.status(200).json(data);
         } catch (err) {
@@ -28,41 +29,32 @@ class adminClientController {
     }
 
     async getOneClientByStore(req, res) {
-        const { store_id } = req.params;
-        const { client_id } = req.headers;
+        const { store_id, client_id } = req.params;
+        const { page = 1 } = req.query;
 
         try {
-            const data = await connection('users')
-                .join('stores', 'stores.id', 'users.store_id')
-                .join('addresses', 'users.id', 'addresses.user_id')
-                .join('clients', 'users.id', 'clients.user_id')
-
-                .select(
-                    'users.id',
-                    'users.name',
-                    'users.email',
-
-                    'clients.cpf',
-                    'clients.dateOfBirth',
-
-                    'addresses.street',
-                    'addresses.number',
-                    'addresses.complement',
-                    'addresses.neighborhood',
-                    'addresses.city',
-                    'addresses.state',
-                    'addresses.zipcode',
-
-                    'users.store_id',
-                    'users.avatar_id',
-                    'users.permission'
-                )
+            const data = await connection('clients')
+                .join('users', 'users.id', 'clients.id')
+                .join('addresses', 'addresses.id', 'clients.id')
+                .limit(20)
+                .offset((page - 1) * 20)
+                // .select(
+                //     'users.id',
+                //     'users.name',
+                //     'users.email',
+                //     'store_id',
+                //     'avatar_id',
+                //     'users.permission'
+                // )
                 .where({
-                    'stores.id': store_id,
-                    'users.id': client_id,
+                    'clients.id': client_id,
+                    'users.store_id': store_id,
                     'addresses.user_id': client_id,
-                    'clients.user_id': client_id,
                 });
+
+            if (!data.length) {
+                return res.status(422).json({ message: 'client not exist' });
+            }
 
             return res.status(200).json(data);
         } catch (err) {

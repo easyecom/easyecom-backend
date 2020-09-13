@@ -1,4 +1,5 @@
 const connection = require('../../../database/connection');
+const { calculateShipping } = require('../../integrations/correios');
 
 class OrdersController {
     async create(req, res) {
@@ -43,11 +44,60 @@ class OrdersController {
         const { store_id, id } = params;
 
         try {
-            const data = await connection('orders').where({
-                'orders.store_id': store_id,
-                'orders.id': id,
+            const [data] = await connection('orders').where({
+                store_id: store_id,
+                id: id,
             });
 
+            const { client_id } = data;
+
+            const dataClient = await connection('users')
+                .join('clients', 'users.id', 'clients.user_id')
+                .join('addresses', 'addresses.user_id', 'users.id')
+                .where({ 'clients.id': client_id, 'users.store_id': store_id });
+
+            // return res.json(dataClient);
+
+            [data.client_id] = dataClient;
+
+            let itemProducts = [];
+
+            for (let item of data.shoppingCart) {
+                let variation = await connection('variations')
+                    .join('products', 'products.id', 'variations.product_id')
+                    .join('brands', 'products.id', 'brands.id')
+                    .select(
+                        'variations.id',
+
+                        'brands.brand',
+                        'variations.product_id',
+
+                        'products.name',
+                        'variations.title',
+                        'variations.freeShipping',
+                        'variations.offerPrice',
+                        'variations.salesPrice',
+                        'variations.weightKg',
+                        'variations.packagedLength',
+                        'variations.packagedHeight',
+                        'variations.packagedWidth'
+                    )
+                    .where({
+                        'products.store_id': store_id,
+                        'variations.store_id': store_id,
+                        'variations.id': `${item.variation_id}`,
+                        'brands.store_id': store_id,
+                    });
+                itemProducts.push(...variation);
+            }
+
+            data.shoppingCart = itemProducts;
+            const client = data.client_id
+            const frete = await calculateShipping(
+                client ,
+                data.shoppingCart
+            );
+            return res.json(frete);
             return res.status(200).json(data);
         } catch (err) {
             console.error(err);
