@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 class UsersController {
     async store(req, res) {
-        const { name, email, password } = req.body;
+        const { name, email, password, store_id, permission } = req.body;
 
         let error = [];
 
@@ -39,6 +39,8 @@ class UsersController {
                                 name,
                                 email,
                                 password: hash,
+                                store_id,
+                                permission,
                             })
                     );
                 });
