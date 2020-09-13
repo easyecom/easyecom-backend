@@ -99,7 +99,7 @@ routes.delete('/stores/:store_id/clients/:client_id', ClientController.delete);
 
 // clients admin
 routes.get(
-    '/stores/:store_id/clients',
+    '/stores/:store_id/clientsAdmin',
     authMiddleware,
     storeValidation,
     AdminClientController.getClientsByStore
@@ -313,6 +313,7 @@ routes.get(
 );
 routes.get(
     '/stores/:store_id/orders/:id',
+    authMiddleware,
     OrdersController.findOne
 );
 routes.delete(
