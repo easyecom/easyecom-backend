@@ -54,7 +54,34 @@ class OrdersController {
             const dataClient = await connection('users')
                 .join('clients', 'users.id', 'clients.user_id')
                 .join('addresses', 'addresses.user_id', 'users.id')
-                .where({ 'clients.id': client_id, 'users.store_id': store_id });
+                .where({ 'clients.id': client_id, 'users.store_id': store_id })
+                .select(
+                    'clients.id',
+                    'clients.user_id',
+                    'users.store_id',
+                    'users.avatar_id',
+
+                    'clients.cpf',
+                    'clients.dateOfBirth',
+
+                    'users.name',
+                    'users.email',
+
+                    'addresses.zipcode',
+                    'addresses.street',
+                    'addresses.number',
+                    'addresses.complement',
+                    'addresses.neighborhood',
+                    'addresses.city',
+                    'addresses.state',
+                    'addresses.state_code',
+                    'addresses.country',
+
+                    'users.permission',
+
+                    'clients.created_at',
+                    'clients.updated_at'
+                );
 
             // return res.json(dataClient);
 
@@ -92,13 +119,18 @@ class OrdersController {
             }
 
             data.shoppingCart = itemProducts;
-            const client = data.client_id
-            let [freight] = await calculateShipping(
-                client ,
-                data.shoppingCart
-            );
-            data.freightValue = freight
-            //return res.json(frete);
+
+            const client = data.client_id;
+
+            let [freight] = await calculateShipping(client, data.shoppingCart);
+
+            data.freightValue = {
+                code: freight.Codigo,
+                value: freight.Valor,
+                deliveryTime: freight.PrazoEntrega,
+                deliverySaturday: freight.EntregaSabado,
+            };
+
             return res.status(200).json(data);
         } catch (err) {
             console.error(err);
