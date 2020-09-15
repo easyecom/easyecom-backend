@@ -17,16 +17,20 @@ class AddressController {
             user_id,
         } = req.body;
 
-        let error = [];
-
-        if (!zipcode) error.push('zipcode');
-        if (!street) error.push('street');
-        if (!number) error.push('number');
-        if (!neighborhood) error.push('neighborhood');
-        if (!city) error.push('city');
-        if (!state_code) error.push('state_code');
-        if (!country) error.push('country');
-        if (!user_id && !store_id) error.push('User or Store');
+        const errors = [
+            'zipcode',
+            'street',
+            'number',
+            'neighborhood',
+            'city',
+            'state_code',
+            'country',
+            'user_id',
+            'store_id',
+        ];
+        const error = errors.filter(prop =>
+            !req.body[prop] && !req.params[prop] ? prop : ''
+        );
 
         if (error.length > 0) {
             return res
@@ -76,7 +80,7 @@ class AddressController {
         try {
             const data = await connection('addresses')
                 .select('*')
-                .where({ store_id: store_id, id: address_id });
+                .where({ store_id, id: address_id });
 
             return res.status(200).json(data);
         } catch (err) {
@@ -91,7 +95,7 @@ class AddressController {
         try {
             const data = await connection('addresses')
                 .returning('*')
-                .where({ store_id: store_id, id: address_id })
+                .where({ store_id, id: address_id })
                 .update(address, [
                     'zipcode',
                     'street',
@@ -117,7 +121,7 @@ class AddressController {
         // make role that, if item is equal or less then one, dont permission delete
         try {
             await connection('addresses')
-                .where({ store_id: store_id, id: address_id })
+                .where({ store_id, id: address_id })
                 .del();
 
             return res.status(200).json({ message: 'address delete success' });
