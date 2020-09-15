@@ -83,8 +83,6 @@ class OrdersController {
                     'clients.updated_at'
                 );
 
-            // return res.json(dataClient);
-
             [data.client_id] = dataClient;
 
             let itemProducts = [];
@@ -120,15 +118,28 @@ class OrdersController {
 
             data.shoppingCart = itemProducts;
 
-            const client = data.client_id;
+            let { zipcode } = data.client_id;
 
-            let [freight] = await calculateShipping(client, data.shoppingCart);
+            zipcode = zipcode.replace(/\-/g, '');
+
+            const [address] = await connection('stores')
+                .join('addresses', 'addresses.id', 'stores.id') // need to create new fields for address store id
+                .where({ 'stores.id': store_id });
+
+            const storeZipcode = address.zipcode.replace(/\-/g, '');
+
+            let [freight] = await calculateShipping(
+                data.shoppingCart,
+                zipcode,
+                storeZipcode
+            );
 
             data.freightValue = {
                 code: freight.Codigo,
                 value: freight.Valor,
                 deliveryTime: freight.PrazoEntrega,
                 deliverySaturday: freight.EntregaSabado,
+                messageError: freight.MsgErro,
             };
 
             return res.status(200).json(data);
