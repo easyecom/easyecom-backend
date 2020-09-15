@@ -54,9 +54,34 @@ class OrdersController {
             const dataClient = await connection('users')
                 .join('clients', 'users.id', 'clients.user_id')
                 .join('addresses', 'addresses.user_id', 'users.id')
-                .where({ 'clients.id': client_id, 'users.store_id': store_id });
+                .where({ 'clients.id': client_id, 'users.store_id': store_id })
+                .select(
+                    'clients.id',
+                    'clients.user_id',
+                    'users.store_id',
+                    'users.avatar_id',
 
-            // return res.json(dataClient);
+                    'clients.cpf',
+                    'clients.dateOfBirth',
+
+                    'users.name',
+                    'users.email',
+
+                    'addresses.zipcode',
+                    'addresses.street',
+                    'addresses.number',
+                    'addresses.complement',
+                    'addresses.neighborhood',
+                    'addresses.city',
+                    'addresses.state',
+                    'addresses.state_code',
+                    'addresses.country',
+
+                    'users.permission',
+
+                    'clients.created_at',
+                    'clients.updated_at'
+                );
 
             [data.client_id] = dataClient;
 
@@ -92,13 +117,31 @@ class OrdersController {
             }
 
             data.shoppingCart = itemProducts;
-            const client = data.client_id
+
+            let { zipcode } = data.client_id;
+
+            zipcode = zipcode.replace(/\-/g, '');
+
+            const [address] = await connection('stores')
+                .join('addresses', 'addresses.id', 'stores.id') // need to create new fields for address store id
+                .where({ 'stores.id': store_id });
+
+            const storeZipcode = address.zipcode.replace(/\-/g, '');
+
             let [freight] = await calculateShipping(
-                client ,
-                data.shoppingCart
+                data.shoppingCart,
+                zipcode,
+                storeZipcode
             );
-            data.freightValue = freight
-            //return res.json(frete);
+
+            data.freightValue = {
+                code: freight.Codigo,
+                value: freight.Valor,
+                deliveryTime: freight.PrazoEntrega,
+                deliverySaturday: freight.EntregaSabado,
+                messageError: freight.MsgErro,
+            };
+
             return res.status(200).json(data);
         } catch (err) {
             console.error(err);

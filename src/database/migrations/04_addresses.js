@@ -15,6 +15,7 @@ exports.up = knex => {
         table.string('state').notNullable();
         table.string('state_code');
         table.string('country');
+        table.integer('storeIdToAddress')
 
         table.integer('store_id');
         table

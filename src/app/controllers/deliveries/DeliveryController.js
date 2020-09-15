@@ -1,8 +1,10 @@
 const connection = require('../../../database/connection');
 
 class DeliveryController {
-    async create(req, res) {
-        const { store_id } = req.params;
+    async create({ params }, res) {
+        
+        const { store_id } = params;
+
         const {
             status,
             tracking,
@@ -33,7 +35,9 @@ class DeliveryController {
 
     async findAll({ params }, res) {
         const { store_id } = params;
+
         const data = await connection('deliveries').where('store_id', store_id);
+
         return res.status(200).json(data);
     }
 }
