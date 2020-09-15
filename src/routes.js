@@ -32,7 +32,9 @@ const ImagesController = require('./app/controllers/catalog/images/ImagesControl
 const AdminOrdersController = require('./app/controllers/order/OrdersAdminController');
 const OrdersController = require('./app/controllers/order/OrdersClientController');
 
-const DeliveryController = require('./app/controllers/order/DeliveryController');
+const DeliveryController = require('./app/controllers/deliveries/DeliveryController');
+
+const calculateFreightController = require('./app/controllers/deliveries/CalculateFreightController');
 
 const PaymentsController = require('./app/controllers/order/PaymentsController');
 
@@ -321,6 +323,8 @@ routes.delete(
     authMiddleware,
     OrdersController.delete
 );
+
+routes.post('/stores/:store_id/calculateFreight/productId/:product_id', calculateFreightController.calculate)
 
 routes.post('/stores/:store_id/deliveries', DeliveryController.create);
 routes.get('/stores/:store_id/deliveries', DeliveryController.findAll);
