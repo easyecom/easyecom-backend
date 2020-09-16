@@ -1,4 +1,5 @@
 const connection = require('../../../database/connection');
+const RequestValidator = require('../../../../helpers/error-validator');
 
 class AddressController {
     async store(req, res) {
@@ -28,14 +29,11 @@ class AddressController {
             'user_id',
             'store_id',
         ];
-        const error = errors.filter(prop =>
-            !req.body[prop] && !req.params[prop] ? prop : ''
-        );
+        const requestValidate = new RequestValidator(errors, req);
+        const response = await requestValidate.check();
 
-        if (error.length > 0) {
-            return res
-                .status(422)
-                .json({ error: 'you forgot', required: error });
+        if (response) {
+            return res.status(response.status).json(response.json);
         }
 
         try {
