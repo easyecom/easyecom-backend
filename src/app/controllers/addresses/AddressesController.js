@@ -86,11 +86,20 @@ class AddressController {
 
     async findOne(req, res) {
         const { store_id, address_id } = req.params;
+        const { user_id } = req.headers;
 
         try {
-            const data = await connection('addresses')
-                .select('*')
-                .where({ store_id, id: address_id });
+            const data = await connection('addresses').where({
+                user_id,
+                id: address_id,
+                store_id,
+            });
+
+            if (!data.length) {
+                return res.status(403).json({
+                    message: 'you dont have permission',
+                });
+            }
 
             return res.status(200).json(data);
         } catch (err) {
@@ -100,7 +109,26 @@ class AddressController {
 
     async update(req, res) {
         const { store_id, address_id } = req.params;
+        const { user_id } = req.headers;
         const address = req.body;
+
+        const checkAddress = await connection('addresses').where({
+            id: address_id,
+        });
+
+        if (!checkAddress.length) {
+            return res.status(400).json({ message: 'address does not exist' });
+        }
+
+        const checkUserAddress = await connection('addresses').where({
+            user_id,
+        });
+
+        if (!checkUserAddress.length) {
+            return res.status(403).json({
+                message: 'you dont have permission for update this addres',
+            });
+        }
 
         try {
             const data = await connection('addresses')
@@ -127,8 +155,27 @@ class AddressController {
 
     async delete(req, res) {
         const { store_id, address_id } = req.params;
+        const { user_id } = req.headers;
 
         // make role that, if item is equal or less then one, dont permission delete
+        const checkAddress = await connection('addresses').where({
+            id: address_id,
+        });
+
+        if (!checkAddress.length) {
+            return res.status(400).json({ message: 'address does not exist' });
+        }
+
+        const checkUserAddress = await connection('addresses').where({
+            user_id,
+        });
+
+        if (!checkUserAddress.length) {
+            return res.status(403).json({
+                message: 'you dont have permission for delete this addres',
+            });
+        }
+
         try {
             await connection('addresses')
                 .where({ store_id, id: address_id })
