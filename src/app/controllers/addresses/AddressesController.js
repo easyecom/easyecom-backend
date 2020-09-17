@@ -18,6 +18,18 @@ class AddressController {
             user_id,
         } = req.body;
 
+        const [checkUser] = await connection('users').where('id', user_id);
+
+        if (!checkUser) {
+            return res.status(401).json({ message: 'users does not exist' });
+        }
+
+        const [checkStore] = await connection('stores').where('id', store_id);
+
+        if (!checkStore) {
+            return res.status(401).json({ message: 'store does not exist' });
+        }
+
         const errors = [
             'zipcode',
             'street',

@@ -7,6 +7,37 @@ class OrdersController {
         const { client_id, shoppingCart, delivery_id, cancel } = req.body; // criar delivery no momento do pedido
 
         try {
+            const [checkClient] = await connection('clients').where(
+                'id',
+                client_id
+            );
+
+            if (!checkClient) {
+                return res
+                    .status(402)
+                    .json({ message: 'client does not exist' });
+            }
+
+            const [checkAddress] = await connection('addresses').where(
+                'user_id',
+                checkClient.user_id
+            );
+
+            if (!checkAddress) {
+                return res
+                    .status(400)
+                    .json({ message: 'address does note exist' });
+            }
+
+            const [checkDelivery] = await connection('deliveries').where({
+                id: delivery_id,
+                store_id: store_id,
+            });
+
+            if (!checkDelivery) {
+                return res.status(400).json({ message: 'delivery not exist' });
+            }
+
             const data = await connection('orders')
                 .returning('*')
                 .insert({

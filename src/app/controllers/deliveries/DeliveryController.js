@@ -1,18 +1,20 @@
+const { identity } = require('lodash');
 const connection = require('../../../database/connection');
 
 class DeliveryController {
     async create({ params, body }, res) {
-        
         const { store_id } = params;
 
-        const {
-            status,
-            tracking,
-            type,
-            cost,
-            deliveryTime,
-            address_id,
-        } = body;
+        const { status, tracking, type, cost, deliveryTime, address_id } = body;
+
+        const [checkAddress] = await connection('addresses').where(
+            'id',
+            address_id
+        );
+
+        if (!checkAddress) {
+            return res.status(400).json({ message: 'address does not exist' });
+        }
 
         try {
             const data = await connection('deliveries')

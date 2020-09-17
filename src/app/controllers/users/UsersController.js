@@ -18,6 +18,11 @@ class UsersController {
                 .json({ error: 'thing that you forgot', required: error });
         }
 
+        const checkStore = await connection('stores').where('id', store_id);
+        if (!checkStore.length) {
+            return res.status(422).json({ message: 'store does not exist' });
+        }
+
         const checkEmail = await connection('users')
             .select('*')
             .where('email', email);
@@ -69,6 +74,7 @@ class UsersController {
 
             return res.status(200).json(users);
         } catch (err) {
+            console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
     }

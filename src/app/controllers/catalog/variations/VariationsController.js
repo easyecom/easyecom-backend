@@ -36,6 +36,16 @@ class VariationsController {
                     .json({ error: 'you forgot', required: error });
             }
 
+            const checkProduct = await connection('products')
+                .select('*')
+                .where({ id: product_id });
+
+            if (!checkProduct.length) {
+                return res
+                    .status(402)
+                    .json({ message: 'product does note exist' });
+            }
+
             const checkVariation = await connection('variations')
                 .select('*')
                 .where({ variation: variation, store_id: store_id });

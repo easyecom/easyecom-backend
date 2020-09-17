@@ -1,8 +1,8 @@
 const connection = require('../../../../database/connection');
 
 class ProductsController {
-    async store(req, res) {
-        const { store_id } = req.params;
+    async store({ params, body }, res) {
+        const { store_id } = params;
         const {
             name,
             isActive,
@@ -15,7 +15,7 @@ class ProductsController {
             offerPrice,
             salesPrice,
             brand_id,
-        } = req.body;
+        } = body;
 
         try {
             let error = [];
@@ -30,6 +30,16 @@ class ProductsController {
                 return res
                     .status(402)
                     .json({ error: 'you forgot', required: error });
+            }
+
+            const checkBrand = await connection('brands')
+                .select('*')
+                .where({ id: brand_id });
+
+            if (!checkBrand.length) {
+                return res
+                    .status(402)
+                    .json({ message: 'brands does not exist' });
             }
 
             const checkName = await connection('products')
