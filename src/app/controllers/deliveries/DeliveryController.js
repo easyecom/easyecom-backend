@@ -1,7 +1,7 @@
 const connection = require('../../../database/connection');
 
 class DeliveryController {
-    async create({ params }, res) {
+    async create({ params, body }, res) {
         
         const { store_id } = params;
 
@@ -12,7 +12,7 @@ class DeliveryController {
             cost,
             deliveryTime,
             address_id,
-        } = req.body;
+        } = body;
 
         try {
             const data = await connection('deliveries')
