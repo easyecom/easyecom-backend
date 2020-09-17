@@ -19,9 +19,7 @@ module.exports = async (req, res, next) => {
     }
 
     if (!user[0].permission.includes('admin')) {
-        return res
-            .status(401)
-            .json('user does not have administrator permission');
+        return res.status(401).json('you not have permission');
     }
 
     const store = await connection('stores')

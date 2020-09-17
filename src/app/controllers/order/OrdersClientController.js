@@ -4,7 +4,7 @@ const { calculateShipping } = require('../../integrations/correios');
 class OrdersController {
     async create(req, res) {
         const { store_id } = req.params;
-        const { client_id, shoppingCart, delivery_id, cancel } = req.body;
+        const { client_id, shoppingCart, delivery_id, cancel } = req.body; // criar delivery no momento do pedido
 
         try {
             const data = await connection('orders')

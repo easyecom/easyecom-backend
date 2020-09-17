@@ -6,6 +6,12 @@ class ClientController {
 
         const { dateOfBirth, cpf, user_id } = req.body;
 
+        const checkCpf = await connection('clients').where('cpf', cpf);
+        
+        if (checkCpf.length) {
+            return res.status(400).json({ message: 'client already exist' });
+        }
+
         let error = [];
 
         if (!dateOfBirth) error.push('dateOfBirth');
@@ -73,13 +79,13 @@ class ClientController {
     }
 
     async delete(req, res) {
-        const { id } = req.params;
+        const { client_id } = req.params;
 
         try {
             let deleted = true;
 
             const data = await connection('clients')
-                .where('id', id)
+                .where('id', client_id)
                 .update({ deleted }, 'deleted');
 
             if (!data) {
