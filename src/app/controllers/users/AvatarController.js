@@ -37,7 +37,7 @@ class AvatarController {
                 .select('*');
 
             if (!file.length) {
-                return res.status(204).json({ message: 'user does not exist' });
+                return res.status(404).json({ message: 'user does not exist' });
             }
 
             return res.status(200).json(file);

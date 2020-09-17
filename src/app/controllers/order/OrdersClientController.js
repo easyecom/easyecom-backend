@@ -14,7 +14,7 @@ class OrdersController {
 
             if (!checkClient) {
                 return res
-                    .status(402)
+                    .status(404)
                     .json({ message: 'client does not exist' });
             }
 
@@ -25,7 +25,7 @@ class OrdersController {
 
             if (!checkAddress) {
                 return res
-                    .status(400)
+                    .status(404)
                     .json({ message: 'address does note exist' });
             }
 
@@ -35,7 +35,7 @@ class OrdersController {
             });
 
             if (!checkDelivery) {
-                return res.status(400).json({ message: 'delivery not exist' });
+                return res.status(404).json({ message: 'delivery not exist' });
             }
 
             const data = await connection('orders')

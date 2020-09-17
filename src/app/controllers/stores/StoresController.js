@@ -14,7 +14,7 @@ class StoresController {
 
             if (error.length > 0) {
                 return res
-                    .status(422)
+                    .status(400)
                     .json({ error: 'sorry, you forgot', required: error });
             }
 

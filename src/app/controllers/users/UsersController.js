@@ -14,13 +14,13 @@ class UsersController {
 
         if (error.length > 0) {
             return res
-                .status(422)
+                .status(400)
                 .json({ error: 'thing that you forgot', required: error });
         }
 
         const checkStore = await connection('stores').where('id', store_id);
         if (!checkStore.length) {
-            return res.status(422).json({ message: 'store does not exist' });
+            return res.status(400).json({ message: 'store does not exist' });
         }
 
         const checkEmail = await connection('users')

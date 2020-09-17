@@ -39,7 +39,7 @@ class adminClientController {
             });
 
         if (!data.length) {
-            return res.status(422).json({ message: 'clients not have' });
+            return res.status(404).json({ message: 'client dont find' });
         }
 
         return res.status(200).json(data);
@@ -85,7 +85,7 @@ class adminClientController {
                 });
 
             if (!data.length) {
-                return res.status(422).json({ message: 'client not exist' });
+                return res.status(404).json({ message: 'client not exist' });
             }
 
             return res.status(200).json(data);
