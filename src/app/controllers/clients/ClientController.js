@@ -20,7 +20,7 @@ class ClientController {
         if (error.length > 0) {
             return res
                 .status(400)
-                .json({ error: 'you forgot', required: error });
+                .json({ error: 'missing data', required: error });
         }
 
         try {
@@ -41,7 +41,7 @@ class ClientController {
     async findAll({ params }, res) {
         //const { store_id } = params;
         const data = await connection('clients');
-        return res.json(data);
+        return res.status(200).json(data);
     }
 
     async findOne({ params }, res) {
@@ -92,7 +92,7 @@ class ClientController {
                 return res.status(404).json({ message: 'user does not exist' });
             }
 
-            return res.status(202).json({ deletado: true });
+            return res.status(200).json({ deletado: true });
         } catch (err) {
             console.error(err);
             return res.status(500).json('sorry, something broke...');

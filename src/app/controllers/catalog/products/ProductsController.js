@@ -28,8 +28,8 @@ class ProductsController {
 
             if (error.length > 0) {
                 return res
-                    .status(402)
-                    .json({ error: 'you forgot', required: error });
+                    .status(404)
+                    .json({ error: 'missing data', required: error });
             }
 
             const checkBrand = await connection('brands')
@@ -38,7 +38,7 @@ class ProductsController {
 
             if (!checkBrand.length) {
                 return res
-                    .status(402)
+                    .status(404)
                     .json({ message: 'brands does not exist' });
             }
 
@@ -186,7 +186,7 @@ class ProductsController {
                 .del();
 
             return res
-                .status(201)
+                .status(200)
                 .json({ message: 'product removed successfully' });
         } catch (err) {
             return res.status(500).json('sorry, something broke...');

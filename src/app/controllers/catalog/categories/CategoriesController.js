@@ -14,8 +14,8 @@ class CategoriesController {
 
             if (error.length > 0) {
                 return res
-                    .status(422)
-                    .json({ error: 'you forgot', required: error });
+                    .status(400)
+                    .json({ error: 'missing data', required: error });
             }
 
             const data = await connection('categories')

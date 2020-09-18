@@ -124,7 +124,7 @@ class adminClientController {
                 return res.status(404).json({ message: 'user does not exist' });
             }
 
-            return res.status(202).json({ deletado: true });
+            return res.status(200).json({ deletado: true });
         } catch (err) {
             console.error(err);
             return res.status(500).json('sorry, something broke...');

@@ -20,8 +20,8 @@ class EvaluationsController {
 
         if (error.length > 0) {
             return res
-                .status(402)
-                .json({ error: 'you forgot', required: error });
+                .status(400)
+                .json({ error: 'missing data', required: error });
         }
 
         try {

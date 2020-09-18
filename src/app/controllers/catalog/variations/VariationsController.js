@@ -32,8 +32,8 @@ class VariationsController {
 
             if (error.length > 0) {
                 return res
-                    .status(402)
-                    .json({ error: 'you forgot', required: error });
+                    .status(400)
+                    .json({ error: 'missing data', required: error });
             }
 
             const checkProduct = await connection('products')
@@ -42,7 +42,7 @@ class VariationsController {
 
             if (!checkProduct.length) {
                 return res
-                    .status(402)
+                    .status(404)
                     .json({ message: 'product does note exist' });
             }
 

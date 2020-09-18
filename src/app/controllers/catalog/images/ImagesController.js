@@ -15,7 +15,7 @@ class ImagesController {
                     variation_id,
                     brand_id,
                 });
-            return res.json(data);
+            return res.status(201).json(data);
         } catch (err) {
             console.error(err);
             return res.status(500).json('sorry, something broke...');
@@ -41,7 +41,7 @@ class ImagesController {
                 .select('*');
 
             if (!file.length) {
-                return res.status(204).json({ message: 'user does not exist' });
+                return res.status(404).json({ message: 'user does not exist' });
             }
 
             return res.status(200).json(file);
