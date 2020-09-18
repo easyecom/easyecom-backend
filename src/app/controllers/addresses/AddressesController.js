@@ -4,6 +4,7 @@ const RequestValidator = require('../../../../helpers/error-validator');
 class AddressController {
     async store(req, res) {
         const { store_id } = req.params;
+        const { user_id } = req.headers;
 
         const {
             zipcode,
@@ -15,19 +16,21 @@ class AddressController {
             state,
             state_code,
             country,
-            user_id,
         } = req.body;
-
-        const [checkUser] = await connection('users').where('id', user_id);
-
-        if (!checkUser) {
-            return res.status(401).json({ message: 'users does not exist' });
-        }
 
         const [checkStore] = await connection('stores').where('id', store_id);
 
         if (!checkStore) {
             return res.status(401).json({ message: 'store does not exist' });
+        }
+
+        const [checkUser] = await connection('users').where({
+            id: user_id,
+            store_id: store_id,
+        });
+
+        if (!checkUser) {
+            return res.status(401).json({ message: 'users does not exist' });
         }
 
         const errors = [
@@ -38,7 +41,6 @@ class AddressController {
             'city',
             'state_code',
             'country',
-            'user_id',
             'store_id',
         ];
         const requestValidate = new RequestValidator(errors, req);
@@ -73,10 +75,12 @@ class AddressController {
 
     async findAll(req, res) {
         const { store_id } = req.params;
+        const { user_id } = req.headers;
+
         try {
             const data = await connection('addresses')
                 .select('*')
-                .where('store_id', store_id);
+                .where({ store_id: store_id, user_id });
 
             return res.status(200).json(data);
         } catch (err) {
@@ -121,12 +125,13 @@ class AddressController {
         }
 
         const checkUserAddress = await connection('addresses').where({
+            id: address_id,
             user_id,
         });
 
         if (!checkUserAddress.length) {
             return res.status(403).json({
-                message: 'you dont have permission for update this addres',
+                message: 'not permission',
             });
         }
 
@@ -144,7 +149,6 @@ class AddressController {
                     'state',
                     'state_code',
                     'country',
-                    'user_id',
                 ]);
 
             return res.status(200).json(data);
@@ -157,7 +161,6 @@ class AddressController {
         const { store_id, address_id } = req.params;
         const { user_id } = req.headers;
 
-        // make role that, if item is equal or less then one, dont permission delete
         const checkAddress = await connection('addresses').where({
             id: address_id,
         });
@@ -167,13 +170,24 @@ class AddressController {
         }
 
         const checkUserAddress = await connection('addresses').where({
+            id: address_id,
             user_id,
         });
 
         if (!checkUserAddress.length) {
             return res.status(403).json({
-                message: 'you dont have permission for delete this addres',
+                message: 'not permission',
             });
+        }
+
+        const checkUserAllAddress = await connection('addresses').where({
+            user_id,
+        });
+
+        if (checkUserAllAddress.length < 2) {
+            return res
+                .status(400)
+                .json({ message: 'register other address before' });
         }
 
         try {

@@ -31,11 +31,8 @@ const ImagesController = require('./app/controllers/catalog/images/ImagesControl
 // order
 const AdminOrdersController = require('./app/controllers/order/OrdersAdminController');
 const OrdersController = require('./app/controllers/order/OrdersClientController');
-
 const DeliveryController = require('./app/controllers/deliveries/DeliveryController');
-
 const calculateFreightController = require('./app/controllers/deliveries/CalculateFreightController');
-
 const PaymentsController = require('./app/controllers/order/PaymentsController');
 
 const routes = new Router();
@@ -54,6 +51,7 @@ routes.delete('/users/:id', authMiddleware, UsersController.delete);
 
 routes.post('/session', SessionController.create);
 
+// avatar
 routes.post(
     '/avatar',
     upload.single('file'),
@@ -64,6 +62,7 @@ routes.get('/avatar', AvatarController.getAll);
 routes.get('/avatar/:id', authMiddleware, AvatarController.getOne);
 routes.delete('/avatar/:id', authMiddleware, AvatarController.delete);
 
+// store
 routes.post('/stores', StoresController.store);
 routes.get('/stores', authMiddleware, StoresController.getAll);
 routes.get('/stores/:store_id', authMiddleware, StoresController.getOne);
@@ -80,15 +79,26 @@ routes.delete(
     StoresController.delete
 );
 
-routes.post('/stores/:store_id/addresses', AddressController.store);
+// address
+routes.post(
+    '/stores/:store_id/addresses',
+    authMiddleware,
+    AddressController.store
+);
 routes.get('/stores/:store_id/addresses', AddressController.findAll);
 routes.get(
     '/stores/:store_id/addresses/:address_id',
+    authMiddleware,
     AddressController.findOne
 );
-routes.put('/stores/:store_id/addresses/:address_id', AddressController.update);
+routes.put(
+    '/stores/:store_id/addresses/:address_id',
+    authMiddleware,
+    AddressController.update
+);
 routes.delete(
     '/stores/:store_id/addresses/:address_id',
+    authMiddleware,
     AddressController.delete
 );
 
@@ -99,28 +109,24 @@ routes.get('/stores/:store_id/clients', ClientController.findAll);
 routes.get('/stores/:store_id/clients/:client_id', ClientController.findOne);
 routes.delete('/stores/:store_id/clients/:client_id', ClientController.delete);
 
-// clients admin
 routes.get(
     '/stores/:store_id/clientsAdmin',
     authMiddleware,
     storeValidation,
     AdminClientController.getClientsByStore
 );
-
 routes.get(
     '/stores/:store_id/clientsAdmin/:client_id',
     authMiddleware,
     storeValidation,
     AdminClientController.getOneClientByStore
 );
-
 routes.put(
     '/stores/:store_id/clients/:client_id',
     authMiddleware,
     storeValidation,
     AdminClientController.updateOneClientByStore
 );
-
 routes.delete(
     '/stores/:store_id/clients/:client_id',
     authMiddleware,
@@ -195,7 +201,6 @@ routes.put(
     storeValidation,
     BrandsController.update
 );
-
 routes.delete(
     '/stores/:store_id/brands/:brandId',
     authMiddleware,
@@ -210,18 +215,14 @@ routes.post(
     storeValidation,
     ProductsController.store
 );
-
 routes.get('/stores/:store_id/products', ProductsController.getAll);
-
 routes.get('/stores/:store_id/products/:product_id', ProductsController.getOne);
-
 routes.put(
     '/stores/:store_id/products/:product_id',
     authMiddleware,
     storeValidation,
     ProductsController.update
 );
-
 routes.delete(
     '/stores/:store_id/products/:product_id',
     authMiddleware,
@@ -240,7 +241,6 @@ routes.get('/category_products', CategoryProductController.getAll);
 routes.delete('/category_products/:id', CategoryProductController.delete);
 
 // variations
-
 routes.post('/stores/:store_id/variations', VariationsController.store);
 routes.get('/stores/:store_id/variations', VariationsController.findAll);
 routes.get(
@@ -257,7 +257,6 @@ routes.delete(
 );
 
 // evaluations
-
 routes.post('/stores/:store_id/evaluations', EvaluationsController.store);
 routes.get('/stores/:store_id/evaluations/', EvaluationsController.findAll);
 routes.get(
@@ -276,7 +275,6 @@ routes.delete(
 routes.post('/images', upload.single('files'), ImagesController.store);
 
 // orders admin
-
 routes.get(
     '/stores/:store_id/ordersAdmin',
     authMiddleware,
@@ -324,11 +322,17 @@ routes.delete(
     OrdersController.delete
 );
 
-routes.post('/stores/:store_id/calculateFreight/productId/:product_id', calculateFreightController.calculate)
+// calculate freight
+routes.post(
+    '/stores/:store_id/calculateFreight/productId/:product_id',
+    calculateFreightController.calculate
+);
 
-routes.post('/stores/:store_id/deliveries', DeliveryController.create);
+// delivery
 routes.get('/stores/:store_id/deliveries', DeliveryController.findAll);
+routes.put('/stores/:store_id/deliveries', DeliveryController.create);
 
+// payment
 routes.post('/stores/:store_id/payments', PaymentsController.create);
 routes.get('/stores/:store_id/payments', PaymentsController.findAll);
 
