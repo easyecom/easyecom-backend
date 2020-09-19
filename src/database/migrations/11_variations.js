@@ -8,15 +8,19 @@ exports.up = knex => {
 
         table.string('variationName').notNullable();
         table.boolean('isActive').defaultTo(true);
+        table.boolean('IsVisible').defaultTo(false);
+        table.boolean('soldOut').defaultTo(false);
         table.string('keyWords');
         table.string('title');
         table.string('descriptionShort');
         table.string('description');
+        table.string('ean');
 
         table.string('packagedHeight').notNullable();
         table.string('packagedLength').notNullable();
         table.string('packagedWidth').notNullable();
         table.string('weightKg');
+        table.string('CubicWeight');
 
         table.specificType('images', 'jsonb[]');
 

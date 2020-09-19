@@ -15,7 +15,9 @@ class ProductsController {
             offerPrice,
             salesPrice,
             refId,
-            brand_id,
+            mainCategory,
+            categories,
+            brandId,
         } = body;
 
         try {
@@ -25,7 +27,8 @@ class ProductsController {
             if (!descriptionShort) error.push('descriptionShort');
             if (!sku) error.push('sku');
             if (!salesPrice) error.push('salesPrice');
-            if (!brand_id) error.push('brand_id');
+            if (!categories) error.push('categories');
+            if (!brandId) error.push('brandId');
 
             if (error.length > 0) {
                 return res
@@ -33,9 +36,28 @@ class ProductsController {
                     .json({ error: 'missing data', required: error });
             }
 
+            // get each category id and put in arrayCategoryId
+            let arrayCategoryId = [];
+
+            for (let category of categories) {
+                const checkCategory = await connection('categories').where(
+                    'categoryId',
+                    category
+                );
+
+                if (!arrayCategoryId.length) {
+                    return res
+                        .status(404)
+                        .json({ message: 'category does not exist' });
+                }
+
+                arrayCategoryId.push(category);
+            }
+            //
+
             const checkBrand = await connection('brands')
                 .select('*')
-                .where({ brandId: brand_id });
+                .where({ brandId: brandId });
 
             if (!checkBrand.length) {
                 return res
@@ -69,9 +91,16 @@ class ProductsController {
                     offerPrice,
                     salesPrice,
                     refId,
+                    mainCategory,
                     store_id,
-                    brand_id,
+                    brandId,
                 });
+
+            const data = await connection('categories')
+                .where('categoryId', category_id)
+                .update({ products }, [products]); // push
+
+            console.log(data);
 
             return res.status(201).json(data);
         } catch (err) {
@@ -143,7 +172,7 @@ class ProductsController {
             offerPrice,
             salesPrice,
             refId,
-            brand_id,
+            brandId,
         } = req.body;
 
         try {
@@ -162,7 +191,7 @@ class ProductsController {
                         offerPrice,
                         salesPrice,
                         refId,
-                        brand_id,
+                        brandId,
                     },
                     [
                         'productName',
@@ -176,7 +205,7 @@ class ProductsController {
                         'offerPrice',
                         'salesPrice',
                         'refId',
-                        'brand_id',
+                        'brandId',
                     ]
                 );
 

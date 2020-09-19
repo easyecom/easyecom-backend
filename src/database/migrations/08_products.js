@@ -8,6 +8,8 @@ exports.up = knex => {
 
         table.string('productName').notNullable();
         table.boolean('isActive').defaultTo(true);
+        table.boolean('IsVisible').defaultTo(false);
+        table.boolean('soldOut').defaultTo(false);
         table.string('keyWords');
         table.string('title');
         table.string('descriptionShort').notNullable();
@@ -15,6 +17,7 @@ exports.up = knex => {
         table.integer('sku')
         table.specificType('variations', 'jsonb[]');
         table.specificType('images', 'jsonb[]');
+        table.integer('mainCategory');
         table.decimal('costPrice')
         table.decimal('offerPrice')
         table.decimal('salesPrice').notNullable();

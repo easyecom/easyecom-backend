@@ -58,7 +58,7 @@ routes.post(
     authMiddleware,
     AvatarController.store
 );
-routes.get('/avatar', AvatarController.getAll);
+routes.get('/avatar', AvatarController.getAll); // for dev
 routes.get('/avatar/:id', authMiddleware, AvatarController.getOne);
 routes.delete('/avatar/:id', authMiddleware, AvatarController.delete);
 
@@ -138,6 +138,22 @@ routes.delete(
 /* catalog 
 */
 
+routes.post(
+    '/images',
+    upload.array('files', 6),
+    authMiddleware,
+    storeValidation,
+    AvatarController.store
+);
+
+routes.put(
+    '/images',
+    upload.array('files', 6),
+    authMiddleware,
+    storeValidation,
+    AvatarController.store
+);
+
 // active category
 routes.post(
     '/stores/:store_id/categories',
@@ -158,32 +174,6 @@ routes.delete(
     authMiddleware,
     storeValidation,
     CategoriesController.delete
-);
-
-// inactive category (just admin)
-routes.get(
-    '/stores/:store_id/inactive-categories',
-    authMiddleware,
-    storeValidation,
-    InactiveCategoriesController.getAll
-);
-routes.get(
-    '/stores/:store_id/inactive-categories/:inactive_categoriesId',
-    authMiddleware,
-    storeValidation,
-    InactiveCategoriesController.getOne
-);
-routes.put(
-    '/stores/:store_id/inactive-categories/:inactive_categoriesId',
-    authMiddleware,
-    storeValidation,
-    InactiveCategoriesController.update
-);
-routes.delete(
-    '/stores/:store_id/inactive-categories/:inactive_categoriesId',
-    authMiddleware,
-    storeValidation,
-    InactiveCategoriesController.delete
 );
 
 // brands
@@ -230,7 +220,12 @@ routes.delete(
     ProductsController.delete
 );
 
-// category product
+routes.get(
+    '/stores/:store_id/products/search/:search',
+    searchProductsController.search
+);
+
+// category product for dev
 routes.post(
     '/stores/:store_id/category_products',
     authMiddleware,
@@ -241,7 +236,12 @@ routes.get('/category_products', CategoryProductController.getAll);
 routes.delete('/category_products/:id', CategoryProductController.delete);
 
 // variations
-routes.post('/stores/:store_id/variations', VariationsController.store);
+routes.post(
+    '/stores/:store_id/variations',
+    authMiddleware,
+    storeValidation,
+    VariationsController.store
+);
 routes.get('/stores/:store_id/variations', VariationsController.findAll);
 routes.get(
     '/stores/:store_id/variations/:variation_id',
@@ -249,10 +249,14 @@ routes.get(
 );
 routes.put(
     '/stores/:store_id/variations/:variation_id',
+    authMiddleware,
+    storeValidation,
     VariationsController.update
 );
 routes.delete(
     '/stores/:store_id/variations/:variation_id',
+    authMiddleware,
+    storeValidation,
     VariationsController.delete
 );
 

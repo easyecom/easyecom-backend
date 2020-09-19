@@ -8,7 +8,6 @@ exports.up = knex => {
 
         table.string('name').notNullable();
         table.string('path').notNullable();
-        table.string('refId');
 
         table.integer('product_id');
         table
@@ -26,11 +25,27 @@ exports.up = knex => {
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
+        table.integer('category_id');
+        table
+            .foreign('category_id')
+            .references('categoryId')
+            .inTable('categories')
+            .onUpdate('CASCADE')
+            .onDelete('SET NULL');
+
         table.integer('brand_id');
         table
             .foreign('brand_id')
             .references('brandId')
             .inTable('brands')
+            .onUpdate('CASCADE')
+            .onDelete('SET NULL');
+
+        table.integer('store_id');
+        table
+            .foreign('store_id')
+            .references('storeId')
+            .inTable('stores')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
