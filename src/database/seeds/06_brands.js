@@ -6,29 +6,29 @@ exports.seed = function(knex) {
             // Inserts seed entries
             return knex('brands').insert([
                 {
-                    id: 1,
-                    brand: 'nike',
+                    brandId: 1,
+                    brandName: 'nike',
                     isActive: true,
                     description: 'lindinhos',
                     store_id: 1,
                 },
                 {
-                    id: 2,
-                    brand: 'adidas',
+                    brandId: 2,
+                    brandName: 'adidas',
                     isActive: true,
                     description: 'lindinhos',
                     store_id: 1,
                 },
                 {
-                    id: 3,
-                    brand: 'morena rosa',
+                    brandId: 3,
+                    brandName: 'morena rosa',
                     isActive: true,
                     description: 'lindinhos',
                     store_id: 2,
                 },
                 {
-                    id: 4,
-                    brand: 'bad girls',
+                    brandId: 4,
+                    brandName: 'bad girls',
                     isActive: true,
                     description: 'lindinhos',
                     store_id: 2,

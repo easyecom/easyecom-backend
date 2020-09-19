@@ -15,10 +15,10 @@ module.exports = async (req, res, next) => {
 
     const user = await connection('users')
         .select('*')
-        .where('id', user_admin);
+        .where('userId', user_admin);
 
     if (!user.length) {
-        return res.status(400).json('user does not exist');
+        return res.status(404).json('user does not exist');
     }
 
     if (!user[0].permission.includes('admin')) {
@@ -27,10 +27,10 @@ module.exports = async (req, res, next) => {
 
     const store = await connection('stores')
         .select('*')
-        .where('id', store_id);
+        .where('storeId', store_id);
 
     if (!store.length) {
-        return res.status(400).json('store does not exist');
+        return res.status(404).json('store does not exist');
     }
 
     if (user[0].store_id.toString() !== store_id) {

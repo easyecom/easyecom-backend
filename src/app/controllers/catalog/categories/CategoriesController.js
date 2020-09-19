@@ -3,12 +3,12 @@ const connection = require('../../../../database/connection');
 class CategoriesController {
     async store(req, res) {
         const { store_id } = req.params;
-        const { category, isActive, description } = req.body;
+        const { categoryName, description, refId, products } = req.body;
 
         try {
             let error = [];
 
-            if (!category) error.push('category');
+            if (!categoryName) error.push('categoryName');
             if (!store_id) error.push('params store_id');
             if (!description) error.push('description');
 
@@ -18,11 +18,24 @@ class CategoriesController {
                     .json({ error: 'missing data', required: error });
             }
 
+            const checkStore = await connection('stores').where(
+                'storeid',
+                store_id
+            );
+            
+            if (!checkStore) {
+                return res
+                    .status(404)
+                    .json({ message: 'store does not exist' });
+            }
+
             const data = await connection('categories')
                 .returning('*')
                 .insert({
-                    category,
+                    categoryName,
                     description,
+                    refId,
+                    products,
                     store_id,
                 });
 
@@ -52,7 +65,7 @@ class CategoriesController {
         try {
             const data = await connection('categories')
                 .select('*')
-                .where('id', category_id);
+                .where('categoryId', category_id);
             return res.status(200).json(data);
         } catch (err) {
             return res.status(500).json('sorry, something broke...');
@@ -61,17 +74,35 @@ class CategoriesController {
 
     async update(req, res) {
         const { category_id, store_id } = req.params;
-        const { category, isActive, description } = req.body;
+        const {
+            categoryName,
+            isActive,
+            description,
+            products,
+            refId,
+        } = req.body;
 
         try {
             const data = await connection('categories')
-                .where('id', category_id)
-                .update({ category, isActive, store_id, description }, [
-                    'category',
-                    'isActive',
-                    'store_id',
-                    'description',
-                ]);
+                .where('categoryId', category_id)
+                .update(
+                    {
+                        categoryName,
+                        isActive,
+                        description,
+                        products,
+                        store_id,
+                        refId,
+                    },
+                    [
+                        'categoryName',
+                        'isActive',
+                        'description',
+                        'products',
+                        'store_id',
+                        'refId',
+                    ]
+                );
             return res.status(200).json(data);
         } catch (err) {
             return res.status(500).json('sorry, something broke...');
@@ -84,7 +115,7 @@ class CategoriesController {
         try {
             await connection('categories')
                 .del()
-                .where('id', category_id);
+                .where('categoryId', category_id);
             return res.status(200).json('category deleted successfully');
         } catch (err) {
             return res.status(500).json('sorry, something broke...');

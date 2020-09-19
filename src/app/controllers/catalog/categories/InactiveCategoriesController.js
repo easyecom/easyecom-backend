@@ -16,7 +16,7 @@ class InactiveCategoriesController {
         const data = await connection('categories')
             .select('*')
             .where({
-                id: inactive_categoriesId,
+                categoryId: inactive_categoriesId,
                 isActive: false,
                 store_id: store_id,
             });
@@ -25,12 +25,12 @@ class InactiveCategoriesController {
 
     async update(req, res) {
         const { inactive_categoriesId, store_id } = req.params;
-        const { name, isActive, description } = req.body;
+        const { categoryName, isActive, description } = req.body;
 
         const data = await connection('categories')
-            .where('id', inactive_categoriesId)
-            .update({ name, isActive, store_id, description }, [
-                'name',
+            .where('categoryId', inactive_categoriesId)
+            .update({ categoryName, isActive, store_id, description }, [
+                'categoryName',
                 'isActive',
                 'store_id',
                 'description',

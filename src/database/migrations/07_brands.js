@@ -1,19 +1,20 @@
 exports.up = knex => {
     return knex.schema.createTable('brands', table => {
         table
-            .increments('id')
+            .increments('brandId')
             .unsigned()
             .primary()
             .unique();
 
-        table.string('brand').notNullable();
+        table.string('brandName').notNullable();
         table.string('description')
         table.boolean('isActive').defaultTo(true);
+        table.string('refId');
 
         table.integer('store_id')
         table
             .foreign('store_id')
-            .references('id')
+            .references('storeId')
             .inTable('stores')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');

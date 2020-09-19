@@ -3,12 +3,12 @@ const connection = require('../../../../database/connection');
 class BrandsController {
     async store(req, res) {
         const { store_id } = req.params;
-        const { brand, description, isActive } = req.body;
+        const { brandName, description, isActive } = req.body;
 
         try {
             let error = [];
 
-            if (!brand) error.push('brand');
+            if (!brandName) error.push('brandName');
             if (!store_id) error.push('store_id');
             if (!description) error.push('description');
 
@@ -19,7 +19,7 @@ class BrandsController {
             }
 
             const checkBrand = await connection('brands')
-                .where('brand', brand)
+                .where('brandName', brandName)
                 .select('*');
 
             if (checkBrand.length) {
@@ -32,7 +32,7 @@ class BrandsController {
             const data = await connection('brands')
                 .returning('*')
                 .insert({
-                    brand,
+                    brandName,
                     description,
                     isActive,
                     store_id,
@@ -49,7 +49,7 @@ class BrandsController {
 
         try {
             const data = await connection('brands')
-                .select('id', 'brand', 'description')
+                .select('brandId', 'brand', 'description')
                 .where('store_id', store_id);
 
             return res.status(200).json(data);
@@ -63,10 +63,10 @@ class BrandsController {
     }
     async getOne(req, res) {
         try {
-            const { brandId } = req.params;
+            const { brand_id } = req.params;
 
             const data = await connection('brands')
-                .where('id', brandId)
+                .where('brandId', brand_id)
                 .select('*');
 
             return res.status(200).json(data);
@@ -76,13 +76,13 @@ class BrandsController {
     }
     async update(req, res) {
         try {
-            const { brandId } = req.params;
-            const { brand, description, isActive, store_id } = req.body;
+            const { brand_id } = req.params;
+            const { brandName, description, isActive, store_id } = req.body;
 
             const data = await connection('brands')
-                .where('id', brandId)
-                .update({ brand, description, isActive, store_id }, [
-                    'brand',
+                .where('brandId', brand_id)
+                .update({ brandName, description, isActive, store_id }, [
+                    'brandName',
                     'description',
                     'isActive',
                     'store_id',
@@ -95,10 +95,10 @@ class BrandsController {
     }
     async delete(req, res) {
         try {
-            const { brandId } = req.params;
+            const { brand_id } = req.params;
 
             await connection('brands')
-                .where('id', brandId)
+                .where('brandId', brand_id)
                 .del();
 
             return res

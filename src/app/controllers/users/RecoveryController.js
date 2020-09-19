@@ -38,7 +38,7 @@ class RecoveryController {
         date.setHours(date.getHours() + 24);
 
         const data = await connection('users')
-            .where('id', user.id)
+            .where('userId', user.id)
             .update({ recoveryToken: token, recoveryExpireToken: date }, [
                 'recoveryToken',
                 'recoveryExpireToken',

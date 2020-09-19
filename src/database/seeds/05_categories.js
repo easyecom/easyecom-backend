@@ -6,26 +6,26 @@ exports.seed = function(knex) {
             // Inserts seed entries
             return knex('categories').insert([
                 {
-                    id: 1,
-                    category: 'calcados',
+                    categoryId: 1,
+                    categoryName: 'calcados',
                     description: 'just be',
                     store_id: 1,
                 },
                 {
-                    id: 2,
-                    category: 'camisetas',
+                    categoryId: 2,
+                    categoryName: 'camisetas',
                     description: 'just be',
                     store_id: 1,
                 },
                 {
-                    id: 3,
-                    category: 'bermudas',
+                    categoryId: 3,
+                    categoryName: 'bermudas',
                     description: 'just be',
                     store_id: 2,
                 },
                 {
-                    id: 4,
-                    category: 'sapatos',
+                    categoryId: 4,
+                    categoryName: 'sapatos',
                     description: 'just be',
                     store_id: 2,
                 },

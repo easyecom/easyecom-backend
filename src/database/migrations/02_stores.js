@@ -1,12 +1,12 @@
 exports.up = knex => {
     return knex.schema.createTable('stores', table => {
         table
-            .increments('id')
+            .increments('storeId')
             .unsigned()
             .primary()
             .unique();
 
-        table.string('name').notNullable();
+        table.string('storeName').notNullable();
         table.string('cnpj').notNullable().unique();
         table.string('email').notNullable()
         table.string('businessPhone')

@@ -25,8 +25,8 @@ class AddressController {
         }
 
         const [checkUser] = await connection('users').where({
-            id: user_id,
-            store_id: store_id,
+            addressId: user_id,
+            store_id,
         });
 
         if (!checkUser) {
@@ -80,7 +80,7 @@ class AddressController {
         try {
             const data = await connection('addresses')
                 .select('*')
-                .where({ store_id: store_id, user_id });
+                .where({ store_id, user_id });
 
             return res.status(200).json(data);
         } catch (err) {
@@ -95,13 +95,13 @@ class AddressController {
         try {
             const data = await connection('addresses').where({
                 user_id,
-                id: address_id,
+                addressId: address_id,
                 store_id,
             });
 
             if (!data.length) {
                 return res.status(403).json({
-                    message: 'you dont have permission',
+                    message: 'you not have permission',
                 });
             }
 
@@ -117,7 +117,7 @@ class AddressController {
         const address = req.body;
 
         const checkAddress = await connection('addresses').where({
-            id: address_id,
+            addressId: address_id,
         });
 
         if (!checkAddress.length) {
@@ -125,7 +125,7 @@ class AddressController {
         }
 
         const checkUserAddress = await connection('addresses').where({
-            id: address_id,
+            addressId: address_id,
             user_id,
         });
 
@@ -138,7 +138,7 @@ class AddressController {
         try {
             const data = await connection('addresses')
                 .returning('*')
-                .where({ store_id, id: address_id })
+                .where({ store_id, addressId: address_id })
                 .update(address, [
                     'zipcode',
                     'street',
@@ -162,7 +162,7 @@ class AddressController {
         const { user_id } = req.headers;
 
         const checkAddress = await connection('addresses').where({
-            id: address_id,
+            addressId: address_id,
         });
 
         if (!checkAddress.length) {
@@ -170,7 +170,7 @@ class AddressController {
         }
 
         const checkUserAddress = await connection('addresses').where({
-            id: address_id,
+            addressId: address_id,
             user_id,
         });
 
@@ -192,7 +192,7 @@ class AddressController {
 
         try {
             await connection('addresses')
-                .where({ store_id, id: address_id })
+                .where({ store_id, addressId: address_id })
                 .del();
 
             return res.status(200).json({ message: 'address delete success' });

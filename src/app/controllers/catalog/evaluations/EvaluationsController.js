@@ -4,7 +4,7 @@ class EvaluationsController {
     async store(req, res) {
         const { store_id } = req.params;
         const {
-            evaluation,
+            clientName,
             evaluationText,
             evaluationScore,
             product_id,
@@ -12,7 +12,7 @@ class EvaluationsController {
 
         let error = [];
 
-        if (!evaluation) error.push('evaluation');
+        if (!clientName) error.push('clientName');
         if (!evaluationText) error.push('evaluationText');
         if (!evaluationScore) error.push('evaluationScore');
         if (!store_id) error.push('store_id');
@@ -28,7 +28,7 @@ class EvaluationsController {
             const data = await connection('evaluations')
                 .returning('*')
                 .insert({
-                    evaluation,
+                    clientName,
                     evaluationText,
                     evaluationScore,
                     store_id,
@@ -64,7 +64,7 @@ class EvaluationsController {
         try {
             const data = await connection('evaluations')
                 .select('*')
-                .where({ store_id: store_id, id: evaluation_id });
+                .where({ store_id: store_id, evaluationId: evaluation_id });
 
             return res.status(200).json(data);
         } catch (err) {
@@ -74,13 +74,13 @@ class EvaluationsController {
 
     async update(req, res) {
         const { store_id, evaluation_id } = req.params;
-        const evaluation = req.body;
+        const clientName = req.body;
 
         try {
             const data = await connection('evaluations')
-                .where({ store_id: store_id, id: evaluation_id })
-                .update(evaluation, [
-                    'evaluation',
+                .where({ store_id: store_id, evaluationId: evaluation_id })
+                .update(clientName, [
+                    'clientName',
                     'evaluationText',
                     'evaluationScore',
                     'product_id',
@@ -95,7 +95,7 @@ class EvaluationsController {
     async remove(req, res) {
         const { store_id, evaluation_id } = req.params;
         await connection('evaluations')
-            .where({ store_id: store_id, id: evaluation_id })
+            .where({ store_id: store_id, clientName: evaluation_id })
             .del();
 
         return res.status(200).json({ message: 'evaluation deleted success' });

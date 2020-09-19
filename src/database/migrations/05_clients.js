@@ -1,7 +1,7 @@
 exports.up = knex => {
     return knex.schema.createTable('clients', table => {
         table
-            .increments('id')
+            .increments('clientId')
             .unsigned()
             .primary()
             .unique();
@@ -10,10 +10,18 @@ exports.up = knex => {
         table.string('cpf').notNullable();
         table.boolean('deleted').defaultTo(false);
 
-        table.integer('user_id')
+        table.integer('store_id');
+        table
+            .foreign('store_id')
+            .references('storeId')
+            .inTable('stores')
+            .onUpdate('CASCADE')
+            .onDelete('SET NULL');
+
+        table.integer('user_id');
         table
             .foreign('user_id')
-            .references('id')
+            .references('storeId')
             .inTable('users')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');

@@ -45,9 +45,9 @@ routes.post('/recovered', RecoveredController.completeRecovery);
 
 routes.post('/users', UsersController.store);
 routes.get('/users', UsersController.getAll);
-routes.get('/users/:id', authMiddleware, UsersController.getOne);
-routes.put('/users/:id', authMiddleware, UsersController.update);
-routes.delete('/users/:id', authMiddleware, UsersController.delete);
+routes.get('/users/:user_id', authMiddleware, UsersController.getOne);
+routes.put('/users/:user_id', authMiddleware, UsersController.update);
+routes.delete('/users/:user_id', authMiddleware, UsersController.delete);
 
 routes.post('/session', SessionController.create);
 
@@ -194,15 +194,15 @@ routes.post(
     BrandsController.store
 );
 routes.get('/stores/:store_id/brands', BrandsController.getAll);
-routes.get('/stores/:store_id/brands/:brandId', BrandsController.getOne);
+routes.get('/stores/:store_id/brands/:brand_id', BrandsController.getOne);
 routes.put(
-    '/stores/:store_id/brands/:brandId',
+    '/stores/:store_id/brands/:brand_id',
     authMiddleware,
     storeValidation,
     BrandsController.update
 );
 routes.delete(
-    '/stores/:store_id/brands/:brandId',
+    '/stores/:store_id/brands/:brand_id',
     authMiddleware,
     storeValidation,
     BrandsController.delete
@@ -312,12 +312,12 @@ routes.get(
     OrdersController.findAll
 );
 routes.get(
-    '/stores/:store_id/orders/:id',
+    '/stores/:store_id/orders/:order_id',
     authMiddleware,
     OrdersController.findOne
 );
 routes.delete(
-    '/stores/:store_id/orders/:id',
+    '/stores/:store_id/orders/:order_id',
     authMiddleware,
     OrdersController.delete
 );

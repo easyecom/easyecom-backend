@@ -8,7 +8,7 @@ class AdminOrdersController {
             const data = await connection('orders')
                 .where('store_id', store_id)
                 .select(
-                    'id',
+                    'orderId',
                     'client_id',
                     'shoppingCart',
                     'delivery_id',
@@ -32,7 +32,7 @@ class AdminOrdersController {
                     store_id: store_id,
                 })
                 .select(
-                    'id',
+                    'orderId',
                     'client_id',
                     'shoppingCart',
                     'delivery_id',
@@ -46,16 +46,16 @@ class AdminOrdersController {
     }
 
     async findOne({ params }, res) {
-        const { store_id, id } = params;
+        const { store_id, order_id } = params;
 
         try {
             const data = await connection('orders')
                 .where({
-                    id: id,
+                    order_id: order_id,
                     store_id: store_id,
                 })
                 .select(
-                    'id',
+                    'orderId',
                     'client_id',
                     'shoppingCart',
                     'delivery_id',
@@ -69,11 +69,11 @@ class AdminOrdersController {
     }
 
     async delete({ params }, res) {
-        const { store_id, id } = params;
+        const { store_id, order_id } = params;
 
         try {
             await connection('orders')
-                .where({ id: id, store_id: store_id })
+                .where({ order_id: order_id, store_id: store_id })
                 .del();
             return res.status(200).json({ message: 'order deleted success' });
         } catch (err) {

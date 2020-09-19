@@ -1,19 +1,21 @@
 exports.up = knex => {
     return knex.schema.createTable('categories', table => {
         table
-            .increments('id')
+            .increments('categoryId')
             .unsigned()
             .primary()
             .unique();
 
-        table.string('category').notNullable();
-        table.string('description')
+        table.string('categoryName').notNullable();
+        table.string('description');
         table.boolean('isActive').defaultTo(true);
+        table.string('refId');
+        table.specificType('products', 'jsonb[]');
 
         table.integer('store_id');
         table
             .foreign('store_id')
-            .references('id')
+            .references('storeId')
             .inTable('stores')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');

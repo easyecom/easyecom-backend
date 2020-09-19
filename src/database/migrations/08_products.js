@@ -1,12 +1,12 @@
 exports.up = knex => {
     return knex.schema.createTable('products', table => {
         table
-            .increments('id')
+            .increments('productId')
             .unsigned()
             .primary()
             .unique();
 
-        table.string('name').notNullable();
+        table.string('productName').notNullable();
         table.boolean('isActive').defaultTo(true);
         table.string('keyWords');
         table.string('title');
@@ -14,14 +14,16 @@ exports.up = knex => {
         table.string('description');
         table.integer('sku')
         table.specificType('variations', 'jsonb[]');
+        table.specificType('images', 'jsonb[]');
         table.decimal('costPrice')
         table.decimal('offerPrice')
         table.decimal('salesPrice').notNullable();
+        table.string('refId');
 
         table.integer('store_id');
         table
             .foreign('store_id')
-            .references('id')
+            .references('storeId')
             .inTable('stores')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
@@ -29,7 +31,7 @@ exports.up = knex => {
         table.integer('brand_id');
         table
             .foreign('brand_id')
-            .references('id')
+            .references('brandId')
             .inTable('brands')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');

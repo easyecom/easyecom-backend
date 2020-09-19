@@ -9,7 +9,7 @@ class OrdersController {
 
         try {
             const [checkClient] = await connection('clients').where(
-                'id',
+                'clientId',
                 client_id
             );
 
@@ -31,7 +31,7 @@ class OrdersController {
             }
 
             const [checkDelivery] = await connection('deliveries').where({
-                id: delivery_id,
+                deliveryId: delivery_id,
                 store_id: store_id,
             });
 
@@ -73,22 +73,22 @@ class OrdersController {
     }
 
     async findOne({ params }, res) {
-        const { store_id, id } = params;
+        const { store_id, order_id } = params;
 
         try {
             const [data] = await connection('orders').where({
                 store_id: store_id,
-                id: id,
+                order_id: order_id,
             });
 
             const { client_id } = data;
 
             const dataClient = await connection('users')
-                .join('clients', 'users.id', 'clients.user_id')
-                .join('addresses', 'addresses.user_id', 'users.id')
-                .where({ 'clients.id': client_id, 'users.store_id': store_id })
+                .join('clients', 'users.userId', 'clients.user_id')
+                .join('addresses', 'addresses.user_id', 'users.userId')
+                .where({ 'clients.clientId': client_id, 'users.store_id': store_id })
                 .select(
-                    'clients.id',
+                    'clients.clientId',
                     'clients.user_id',
                     'users.store_id',
                     'users.avatar_id',
@@ -96,7 +96,7 @@ class OrdersController {
                     'clients.cpf',
                     'clients.dateOfBirth',
 
-                    'users.name',
+                    'users.userName',
                     'users.email',
 
                     'addresses.zipcode',
@@ -121,15 +121,15 @@ class OrdersController {
 
             for (let item of data.shoppingCart) {
                 let variation = await connection('variations')
-                    .join('products', 'products.id', 'variations.product_id')
-                    .join('brands', 'products.id', 'brands.id')
+                    .join('products', 'products.productId', 'variations.product_id')
+                    .join('brands', 'products.productId', 'brands.brandId')
                     .select(
-                        'variations.id',
+                        'variations.variationId',
 
-                        'brands.brand',
+                        'brands.brandName',
                         'variations.product_id',
 
-                        'products.name',
+                        'products.productName',
                         'variations.title',
                         'variations.freeShipping',
                         'variations.offerPrice',
@@ -142,7 +142,7 @@ class OrdersController {
                     .where({
                         'products.store_id': store_id,
                         'variations.store_id': store_id,
-                        'variations.id': `${item.variation_id}`,
+                        'variations.variationId': `${item.variation_id}`,
                         'brands.store_id': store_id,
                     });
                 itemProducts.push(...variation);
@@ -155,8 +155,8 @@ class OrdersController {
             zipcode = zipcode.replace(/\-/g, '');
 
             const [address] = await connection('stores')
-                .join('addresses', 'addresses.id', 'stores.id') // need to create new fields for address store id
-                .where({ 'stores.id': store_id });
+                .join('addresses', 'addresses.addressId', 'stores.storeId') // need to create new fields for address store id
+                .where({ 'stores.storeId': store_id });
 
             const storeZipcode = address.zipcode.replace(/\-/g, '');
 
@@ -181,13 +181,13 @@ class OrdersController {
     }
 
     async delete({ params }, res) {
-        const { store_id, id } = params;
+        const { store_id, order_id } = params;
 
         try {
             await connection('orders')
                 .where({
                     'orders.store_id': store_id,
-                    'orders.id': id,
+                    'orders.orderId': order_id,
                 })
                 .del();
 

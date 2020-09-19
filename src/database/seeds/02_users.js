@@ -6,16 +6,16 @@ exports.seed = function(knex) {
             // Inserts seed entries
             return knex('users').insert([
                 {
-                    id: 1,
-                    name: 'thiago',
+                    userId: 1,
+                    userName: 'thiago',
                     email: 'thiago@gmail.com',
                     password: 12345,
                     store_id: 1,
                     permission: ['client', 'admin'],
                 },
                 {
-                    id: 2,
-                    name: 'dariane',
+                    userId: 2,
+                    userName: 'dariane',
                     email: 'dariane@gmail.com',
                     password: 12345,
                     store_id: 2,

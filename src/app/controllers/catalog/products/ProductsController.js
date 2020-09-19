@@ -4,7 +4,7 @@ class ProductsController {
     async store({ params, body }, res) {
         const { store_id } = params;
         const {
-            name,
+            productName,
             isActive,
             keyWords,
             title,
@@ -14,13 +14,14 @@ class ProductsController {
             costPrice,
             offerPrice,
             salesPrice,
+            refId,
             brand_id,
         } = body;
 
         try {
             let error = [];
 
-            if (!name) error.push('name');
+            if (!productName) error.push('productName');
             if (!descriptionShort) error.push('descriptionShort');
             if (!sku) error.push('sku');
             if (!salesPrice) error.push('salesPrice');
@@ -34,7 +35,7 @@ class ProductsController {
 
             const checkBrand = await connection('brands')
                 .select('*')
-                .where({ id: brand_id });
+                .where({ brandId: brand_id });
 
             if (!checkBrand.length) {
                 return res
@@ -43,7 +44,7 @@ class ProductsController {
             }
 
             const checkName = await connection('products')
-                .where('name', name)
+                .where('productName', productName)
                 .select('*');
 
             const checkStore = await connection('products')
@@ -57,7 +58,7 @@ class ProductsController {
             const data = await connection('products')
                 .returning('*')
                 .insert({
-                    name,
+                    productName,
                     isActive,
                     keyWords,
                     title,
@@ -67,6 +68,7 @@ class ProductsController {
                     costPrice,
                     offerPrice,
                     salesPrice,
+                    refId,
                     store_id,
                     brand_id,
                 });
@@ -83,18 +85,22 @@ class ProductsController {
             const { page = 1 } = req.query;
 
             const data = await connection('products')
-                .join('categories', 'products.id', 'categories.id')
-                .join('brands', 'products.id', 'brands.id')
+                .join(
+                    'categories',
+                    'products.productId',
+                    'categories.categoryId'
+                )
+                .join('brands', 'products.productId', 'brands.brandId')
                 .limit(20)
                 .offset((page - 1) * 20)
                 .select(
-                    'products.id',
-                    'products.name',
+                    'products.productId',
+                    'products.productName',
                     'products.descriptionShort',
                     'products.salesPrice',
                     'products.offerPrice',
-                    'brands.brand',
-                    'categories.category'
+                    'brands.brandName',
+                    'categories.categoryName'
                 )
                 .where({
                     'products.store_id': store_id,
@@ -113,7 +119,7 @@ class ProductsController {
 
         try {
             const data = await connection('products')
-                .where('id', product_id)
+                .where('productId', product_id)
                 .select('*');
 
             return res.status(200).json(data);
@@ -126,7 +132,7 @@ class ProductsController {
     async update(req, res) {
         const { product_id } = req.params;
         const {
-            name,
+            productName,
             isActive,
             keyWords,
             title,
@@ -136,15 +142,16 @@ class ProductsController {
             costPrice,
             offerPrice,
             salesPrice,
+            refId,
             brand_id,
         } = req.body;
 
         try {
             const data = await connection('products')
-                .where('id', product_id)
+                .where('productId', product_id)
                 .update(
                     {
-                        name,
+                        productName,
                         isActive,
                         keyWords,
                         title,
@@ -154,10 +161,11 @@ class ProductsController {
                         costPrice,
                         offerPrice,
                         salesPrice,
+                        refId,
                         brand_id,
                     },
                     [
-                        'name',
+                        'productName',
                         'isActive',
                         'keyWords',
                         'title',
@@ -167,6 +175,7 @@ class ProductsController {
                         'costPrice',
                         'offerPrice',
                         'salesPrice',
+                        'refId',
                         'brand_id',
                     ]
                 );
@@ -182,7 +191,7 @@ class ProductsController {
 
         try {
             await connection('products')
-                .where('id', product_id)
+                .where('productId', product_id)
                 .del();
 
             return res

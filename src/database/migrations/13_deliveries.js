@@ -1,7 +1,7 @@
 exports.up = knex => {
     return knex.schema.createTable('deliveries', table => {
         table
-            .increments('id')
+            .increments('deliveryId')
             .unsigned()
             .primary()
             .unique();
@@ -11,11 +11,12 @@ exports.up = knex => {
         table.string('type').notNullable();
         table.decimal('cost').notNullable();
         table.string('deliveryTime').notNullable();
+        table.string('refId');
 
         table.integer('address_id');
         table
             .foreign('address_id')
-            .references('id')
+            .references('addressId')
             .inTable('addresses')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
@@ -23,7 +24,7 @@ exports.up = knex => {
         table.integer('store_id');
         table
             .foreign('store_id')
-            .references('id')
+            .references('storeId')
             .inTable('stores')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');

@@ -1,19 +1,19 @@
 exports.up = knex => {
     return knex.schema.createTable('evaluations', table => {
         table
-            .increments('id')
+            .increments('evaluationId')
             .unsigned()
             .primary()
             .unique();
 
-        table.string('evaluation').notNullable();
+        table.string('clientName').notNullable();
         table.string('evaluationText').notNullable();
         table.integer('evaluationScore').defaultTo(1);
 
         table.integer('store_id');
         table
             .foreign('store_id')
-            .references('id')
+            .references('storeId')
             .inTable('stores')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
@@ -21,7 +21,7 @@ exports.up = knex => {
         table.integer('product_id');
         table
             .foreign('product_id')
-            .references('id')
+            .references('productId')
             .inTable('products')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');

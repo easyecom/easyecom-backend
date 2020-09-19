@@ -3,11 +3,17 @@ const connection = require('../../../database/connection');
 class StoresController {
     async store(req, res) {
         try {
-            const { name, cnpj, email, businessPhone, cellPhone } = req.body;
+            const {
+                storeName,
+                cnpj,
+                email,
+                businessPhone,
+                cellPhone,
+            } = req.body;
 
             let error = [];
 
-            if (!name) error.push('name');
+            if (!storeName) error.push('storeName');
             if (!cnpj) error.push('cnpj');
             if (!email) error.push('email');
             if (!businessPhone && !cellPhone) error.push('phone');
@@ -29,14 +35,14 @@ class StoresController {
             const data = await connection('stores')
                 .returning('*')
                 .insert({
-                    name,
+                    storeName,
                     cnpj,
                     email,
                     businessPhone,
                     cellPhone,
                 });
 
-            return res.status(200).json(data);
+            return res.status(201).json(data);
         } catch (err) {
             console.error(err);
             return res.status(500).json('sorry, something broke...');
@@ -59,7 +65,7 @@ class StoresController {
             const { store_id } = req.params;
 
             const data = await connection('stores')
-                .where('id', store_id)
+                .where('storeId', store_id)
                 .select('*');
 
             if (!data.length) {
@@ -78,12 +84,18 @@ class StoresController {
     async update(req, res) {
         try {
             const { store_id } = req.params;
-            const { name, cnpj, email, businessPhone, cellPhone } = req.body;
+            const {
+                storeName,
+                cnpj,
+                email,
+                businessPhone,
+                cellPhone,
+            } = req.body;
 
             const data = await connection('stores')
                 .returning('*')
-                .where('id', store_id)
-                .update({ name, cnpj, email, businessPhone, cellPhone });
+                .where('storeId', store_id)
+                .update({ storeName, cnpj, email, businessPhone, cellPhone });
 
             return res.status(200).json(data);
         } catch (err) {
@@ -98,7 +110,7 @@ class StoresController {
             const { store_id } = req.params;
 
             await connection('stores')
-                .where('id', store_id)
+                .where('storeId', store_id)
                 .del();
 
             return res.status(202).json({ message: 'deleted success' });

@@ -7,7 +7,7 @@ class ImagesController {
             const { filename: name, originalname: path } = await req.file;
 
             const data = await connection('images')
-                .returning('id')
+                .returning('*')
                 .insert({
                     name,
                     path,

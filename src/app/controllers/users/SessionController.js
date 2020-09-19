@@ -17,7 +17,7 @@ class SessionController {
             if (error.length > 0) {
                 return res
                     .status(400)
-                    .json({ error: 'you forgot', required: error });
+                    .json({ error: 'missing data', required: error });
             }
 
             const user = await connection('users')
@@ -38,16 +38,16 @@ class SessionController {
                     .send({ message: 'password does not match' });
             } //
 
-            const { id } = user;
+            const { userId } = user;
             const { name } = user;
 
             if (match) {
                 //
-                const token = jwt.sign({ id }, authConfig.secret, {
+                const token = jwt.sign({ userId }, authConfig.secret, {
                     expiresIn: authConfig.expiresIn,
                 });
                 return res.status(200).json({
-                    id,
+                    userId,
                     name,
                     message: 'authentication success',
                     token,

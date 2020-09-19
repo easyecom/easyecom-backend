@@ -5,7 +5,7 @@ class VariationsController {
         const { store_id } = req.params;
 
         const {
-            variation,
+            variationName,
             isActive,
             keyWords,
             title,
@@ -20,13 +20,14 @@ class VariationsController {
             costPrice,
             offerPrice,
             salesPrice,
+            refId,
             product_id,
         } = req.body;
 
         try {
             let error = [];
 
-            if (!variation) error.push('variation');
+            if (!variationName) error.push('variationName');
             if (!descriptionShort) error.push('descriptionShort');
             if (!salesPrice) error.push('salesPrice');
 
@@ -38,28 +39,28 @@ class VariationsController {
 
             const checkProduct = await connection('products')
                 .select('*')
-                .where({ id: product_id });
+                .where({ productId: product_id });
 
             if (!checkProduct.length) {
                 return res
                     .status(404)
-                    .json({ message: 'product does note exist' });
+                    .json({ message: 'product does not exist' });
             }
 
             const checkVariation = await connection('variations')
                 .select('*')
-                .where({ variation: variation, store_id: store_id });
+                .where({ variationName: variationName, store_id: store_id });
 
             if (checkVariation.length) {
                 return res.status(400).json({
-                    message: 'variation already exist with this name',
+                    message: 'variation already exist',
                 });
             }
 
             await connection('variations')
                 .returning('*')
                 .insert({
-                    variation,
+                    variationName,
                     isActive,
                     keyWords,
                     title,
@@ -74,6 +75,7 @@ class VariationsController {
                     costPrice,
                     offerPrice,
                     salesPrice,
+                    refId,
                     store_id,
                     product_id,
                 });
@@ -104,7 +106,7 @@ class VariationsController {
         try {
             const data = await connection('variations')
                 .select('*')
-                .where({ store_id: store_id, id: variation_id });
+                .where({ store_id: store_id, variationId: variation_id });
 
             return res.status(200).json(data);
         } catch (err) {
@@ -114,14 +116,14 @@ class VariationsController {
 
     async update(req, res) {
         const { store_id, variation_id } = req.params;
-        const variation = req.body;
+        const variationData = req.body;
 
         try {
             const data = await connection('variations')
                 .returning('*')
-                .where({ store_id: store_id, id: variation_id })
-                .update(variation, [
-                    'variation',
+                .where({ store_id: store_id, variationId: variation_id })
+                .update(variationData, [
+                    'variationName',
                     'isActive',
                     'keyWords',
                     'title',
@@ -153,7 +155,7 @@ class VariationsController {
 
         try {
             await connection('variations')
-                .where({ store_id: store_id, id: variation_id })
+                .where({ store_id: store_id, variationId: variation_id })
                 .del();
 
             return res

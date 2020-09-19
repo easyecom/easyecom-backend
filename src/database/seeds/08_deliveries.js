@@ -6,7 +6,7 @@ exports.seed = function(knex) {
             // Inserts seed entries
             return knex('deliveries').insert([
                 {
-                    id: 1,
+                    deliveryId: 1,
                     status: 'objeto em transito',
                     tracking: '24568767',
                     type: 'pac',
@@ -16,7 +16,7 @@ exports.seed = function(knex) {
                     store_id: 1,
                 },
                 {
-                    id: 2,
+                    deliveryId: 2,
                     status: 'objeto em transito',
                     tracking: '24568767',
                     type: 'pac',
@@ -26,7 +26,7 @@ exports.seed = function(knex) {
                     store_id: 1,
                 },
                 {
-                    id: 3,
+                    deliveryId: 3,
                     status: 'objeto em transito',
                     tracking: '24568767',
                     type: 'pac',
@@ -36,7 +36,7 @@ exports.seed = function(knex) {
                     store_id: 2,
                 },
                 {
-                    id: 4,
+                    deliveryId: 4,
                     status: 'objeto em transito',
                     tracking: '24568767',
                     type: 'pac',

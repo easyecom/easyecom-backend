@@ -36,7 +36,7 @@ class RecoveredController {
 
     async completeRecovery(req, res) {
    
-        const { id } = await connection('users')
+        const { userId } = await connection('users')
         .where('recoveryToken', req.query.token)
         .select('*')
         .first();
@@ -51,7 +51,7 @@ class RecoveredController {
                     }
                     return resolve(
                         connection('users')
-                            .where('id', id)
+                            .where('userId', userId)
                             .update({   password: hash,}, [
                                 'password',
                             ])

@@ -4,11 +4,11 @@ const bcrypt = require('bcrypt');
 
 class UsersController {
     async store(req, res) {
-        const { name, email, password, store_id, permission } = req.body;
+        const { userName, email, password, store_id, permission } = req.body;
 
         let error = [];
 
-        if (!name) error.push('name');
+        if (!userName) error.push('userName');
         if (!email) error.push('email');
         if (!password) error.push('password');
 
@@ -18,7 +18,7 @@ class UsersController {
                 .json({ error: 'thing that you forgot', required: error });
         }
 
-        const checkStore = await connection('stores').where('id', store_id);
+        const checkStore = await connection('stores').where('userId', store_id);
         if (!checkStore.length) {
             return res.status(400).json({ message: 'store does not exist' });
         }
@@ -41,7 +41,7 @@ class UsersController {
                         connection('users')
                             .returning('*')
                             .insert({
-                                name,
+                                userName,
                                 email,
                                 password: hash,
                                 store_id,
@@ -81,11 +81,11 @@ class UsersController {
 
     async getOne(req, res) {
         try {
-            const { id } = req.params;
+            const { user_id } = req.params;
 
             const data = await connection('users')
                 .select('*')
-                .where('id', id);
+                .where('user_id', user_id);
 
             if (!data.length) {
                 return res.status(404).json({ message: 'user does not exist' });
@@ -99,10 +99,10 @@ class UsersController {
 
     async update(req, res) {
         try {
-            const { id } = req.params;
+            const { userId } = req.params;
 
             const {
-                name,
+                userName,
                 email,
                 avatar_id,
                 store_id,
@@ -110,7 +110,7 @@ class UsersController {
             } = await req.body;
 
             const checkStore = await connection('stores')
-                .where('id', store_id)
+                .where('storeId', store_id)
                 .select('*');
 
             if (!checkStore.length) {
@@ -118,9 +118,9 @@ class UsersController {
             }
 
             const data = await connection('users')
-                .where('id', id)
-                .update({ name, email, avatar_id, store_id, permission }, [
-                    'name',
+                .where('userId', userId)
+                .update({ userName, email, avatar_id, store_id, permission }, [
+                    'userName',
                     'email',
                     'avatar_id',
                     'store_id',
@@ -139,10 +139,10 @@ class UsersController {
 
     async delete(req, res) {
         try {
-            const { id } = req.params;
+            const { userId } = req.params;
 
             const data = await connection('users')
-                .where('id', id)
+                .where('userId', userId)
                 .del();
 
             if (!data) {

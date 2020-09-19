@@ -6,7 +6,7 @@ exports.seed = function(knex) {
             // Inserts seed entries
             return knex('addresses').insert([
                 {
-                    id: 1,
+                    addressId: 1,
                     zipcode: '015598-491',
                     street: 'francisco rodrigues filho',
                     number: '222',
@@ -20,7 +20,7 @@ exports.seed = function(knex) {
                     store_id: 1,
                 },
                 {
-                    id: 2,
+                    addressId: 2,
                     zipcode: '015598-491',
                     street: 'francisco rodrigues filho',
                     number: '222',
@@ -34,7 +34,7 @@ exports.seed = function(knex) {
                     store_id: 1,
                 },
                 {
-                    id: 3,
+                    addressId: 3,
                     zipcode: '015598-491',
                     street: 'Rua Hebe Ackel',
                     number: '222',
@@ -48,7 +48,7 @@ exports.seed = function(knex) {
                     store_id: 1,
                 },
                 {
-                    id: 4,
+                    addressId: 4,
                     zipcode: '015598-491',
                     street: 'Rua do Pedroso',
                     number: '222',
@@ -62,7 +62,7 @@ exports.seed = function(knex) {
                     store_id: 1,
                 },
                 {
-                    id: 5,
+                    addressId: 5,
                     zipcode: '015598-491',
                     street: 'Rua Diomar Ackel',
                     number: '222',
@@ -76,7 +76,7 @@ exports.seed = function(knex) {
                     store_id: 2,
                 },
                 {
-                    id: 6,
+                    addressId: 6,
                     zipcode: '014698-491',
                     street: 'Rua Miguel Ackel',
                     number: '222',
@@ -90,7 +90,7 @@ exports.seed = function(knex) {
                     store_id: 2,
                 },
                 {
-                    id: 7,
+                    addressId: 7,
                     zipcode: '015598-491',
                     street: 'Rua Diomar Ackel',
                     number: '222',
@@ -104,7 +104,7 @@ exports.seed = function(knex) {
                     store_id: 2,
                 },
                 {
-                    id: 8,
+                    addressId: 8,
                     zipcode: '018938-491',
                     street: 'Rua Diomar Ackel',
                     number: '222',

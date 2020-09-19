@@ -9,14 +9,15 @@ class CalculateFreightController {
         zipcode = zipcode.replace(/\-/g, '');
 
         try {
+            // validar se produto existe no carrinho para relizar calculo
             const product = await connection('variations').where({
-                id: product_id,
+                variationId: product_id,
                 store_id: store_id,
             });
 
             const [address] = await connection('stores')
-                .join('addresses', 'addresses.id', 'stores.id') // need to create new fields for address store id
-                .where({ 'stores.id': store_id });
+                .join('addresses', 'addresses.addressId', 'stores.id') // need to create new fields for address store id
+                .where({ 'stores.storeId': store_id });
 
             const storeZipcode = address.zipcode.replace(/\-/g, '');
 

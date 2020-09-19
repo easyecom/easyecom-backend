@@ -6,8 +6,8 @@ exports.seed = function(knex) {
             // Inserts seed entries
             return knex('products').insert([
                 {
-                    id: 1,
-                    name: 'bermuda nike',
+                    productId: 1,
+                    productName: 'bermuda nike',
                     isActive: true,
                     keyWords:
                         "calcados, sapatos, tenis, skate, camiseta, 'relogios'",
@@ -22,8 +22,8 @@ exports.seed = function(knex) {
                     store_id: 1,
                 },
                 {
-                    id: 2,
-                    name: 'calça adidas',
+                    productId: 2,
+                    productName: 'calça adidas',
                     isActive: true,
                     keyWords:
                         "calcados, sapatos, tenis, skate, camiseta, 'relogios'",
@@ -38,8 +38,8 @@ exports.seed = function(knex) {
                     store_id: 1,
                 },
                 {
-                    id: 3,
-                    name: 'bolsa morena rosa',
+                    productId: 3,
+                    productName: 'bolsa morena rosa',
                     isActive: true,
                     keyWords:
                         "calcados, sapatos, tenis, skate, camiseta, 'relogios'",
@@ -54,8 +54,8 @@ exports.seed = function(knex) {
                     store_id: 2,
                 },
                 {
-                    id: 4,
-                    name: 'blusa bad girls',
+                    productId: 4,
+                    productName: 'blusa bad girls',
                     isActive: true,
                     keyWords:
                         "calcados, sapatos, tenis, skate, camiseta, 'relogios'",

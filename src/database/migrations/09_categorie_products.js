@@ -9,7 +9,7 @@ exports.up = knex => {
         table.integer('category_id');
         table
             .foreign('category_id')
-            .references('id')
+            .references('categoryId')
             .inTable('categories')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
@@ -17,7 +17,7 @@ exports.up = knex => {
         table.integer('product_id');
         table
             .foreign('product_id')
-            .references('id')
+            .references('productId')
             .inTable('products')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');

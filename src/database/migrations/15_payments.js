@@ -1,7 +1,7 @@
 exports.up = knex => {
     return knex.schema.createTable('payments', table => {
         table
-            .increments('id')
+            .increments('paymentId')
             .unsigned()
             .primary()
             .unique();
@@ -17,7 +17,7 @@ exports.up = knex => {
         table.integer('address_id');
         table
             .foreign('address_id')
-            .references('id')
+            .references('addressId')
             .inTable('addresses')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
@@ -25,7 +25,7 @@ exports.up = knex => {
         table.integer('order_id');
         table
             .foreign('order_id')
-            .references('id')
+            .references('orderId')
             .inTable('orders')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
@@ -33,7 +33,7 @@ exports.up = knex => {
         table.integer('store_id');
         table
             .foreign('store_id')
-            .references('id')
+            .references('storeId')
             .inTable('stores')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');

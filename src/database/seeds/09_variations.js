@@ -6,8 +6,8 @@ exports.seed = function(knex) {
             // Inserts seed entries
             return knex('variations').insert([
                 {
-                    id: 1,
-                    variation: 'bermuda nike cinza',
+                    variationId: 1,
+                    variationName: 'bermuda nike cinza',
                     isActive: true,
                     keyWords: 'calcados, sapatos, tenis, skate',
                     title: 'bermuda muito legal',
@@ -26,8 +26,8 @@ exports.seed = function(knex) {
                     store_id: 1,
                 },
                 {
-                    id: 2,
-                    variation: 'calça adidas verde',
+                    variationId: 2,
+                    variationName: 'calça adidas verde',
                     isActive: true,
                     keyWords: 'calcados, sapatos, tenis, skate',
                     title: 'calça muito legal',
@@ -46,8 +46,8 @@ exports.seed = function(knex) {
                     store_id: 1,
                 },
                 {
-                    id: 3,
-                    variation: 'bolsa morena rosa marrom',
+                    variationId: 3,
+                    variationName: 'bolsa morena rosa marrom',
                     isActive: true,
                     keyWords: 'calcados, sapatos, tenis, skate, bolsas',
                     title: 'bolsa muito legal',
@@ -66,8 +66,8 @@ exports.seed = function(knex) {
                     store_id: 2,
                 },
                 {
-                    id: 4,
-                    variation: 'blusa bad girls azul',
+                    variationId: 4,
+                    variationName: 'blusa bad girls azul',
                     isActive: true,
                     keyWords: 'calcados, sapatos, tenis, skate',
                     title: 'blusa muito legal',

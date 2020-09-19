@@ -7,7 +7,7 @@ class ClientController {
         const { dateOfBirth, cpf, user_id } = req.body;
 
         const checkCpf = await connection('clients').where('cpf', cpf);
-        
+
         if (checkCpf.length) {
             return res.status(400).json({ message: 'client already exist' });
         }
@@ -16,6 +16,7 @@ class ClientController {
 
         if (!dateOfBirth) error.push('dateOfBirth');
         if (!cpf) error.push('cpf');
+        if (!store_id) error.push('store_id');
 
         if (error.length > 0) {
             return res
@@ -30,6 +31,7 @@ class ClientController {
                     dateOfBirth,
                     cpf,
                     user_id,
+                    store_id,
                 });
             return res.status(201).json(data);
         } catch (err) {
@@ -39,8 +41,8 @@ class ClientController {
     }
 
     async findAll({ params }, res) {
-        //const { store_id } = params;
-        const data = await connection('clients');
+        const { store_id } = params;
+        const data = await connection('clients').where({ store_id: store_id });
         return res.status(200).json(data);
     }
 
@@ -49,10 +51,10 @@ class ClientController {
         const { store_id, client_id } = params;
         try {
             const data = await connection('clients')
-                .join('users', 'users.id', 'clients.user_id')
-                .join('addresses', 'addresses.user_id', 'users.id')
+                .join('users', 'users.userId', 'clients.user_id')
+                .join('addresses', 'addresses.user_id', 'users.userId')
                 .where({
-                    'clients.id': client_id,
+                    'clients.clientId': client_id,
                     'users.store_id': store_id,
                     'addresses.store_id': store_id,
                 });
@@ -69,7 +71,7 @@ class ClientController {
 
         try {
             const data = await connection('clients')
-                .where({ id: client_id })
+                .where({ clientId: client_id })
                 .update(clients, ['dateOfBirth', 'cpf']);
 
             return res.status(200).json(data);
@@ -85,7 +87,7 @@ class ClientController {
             let deleted = true;
 
             const data = await connection('clients')
-                .where('id', client_id)
+                .where('clientId', client_id)
                 .update({ deleted }, 'deleted');
 
             if (!data) {

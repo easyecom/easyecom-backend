@@ -8,12 +8,12 @@ class DeliveryController {
         const { status, tracking, type, cost, deliveryTime, address_id } = body;
 
         const [checkAddress] = await connection('addresses').where(
-            'id',
+            'addressId',
             address_id
         );
 
         if (!checkAddress) {
-            return res.status(400).json({ message: 'address does not exist' });
+            return res.status(404).json({ message: 'address does not exist' });
         }
 
         try {

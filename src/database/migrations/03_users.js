@@ -1,12 +1,12 @@
 exports.up = knex => {
     return knex.schema.createTable('users', table => {
         table
-            .increments('id')
+            .increments('userId')
             .unsigned()
             .primary()
             .unique();
 
-        table.string('name', 50).notNullable();
+        table.string('userName', 50).notNullable();
 
         table
             .string('email', 30)
@@ -20,11 +20,13 @@ exports.up = knex => {
         table.string('recoveryToken');
 
         table.specificType('recoveryExpireToken', 'date');
+        
+        table.string('refId');
 
         table.integer('store_id')
         table
             .foreign('store_id')
-            .references('id')
+            .references('storeId')
             .inTable('stores')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
