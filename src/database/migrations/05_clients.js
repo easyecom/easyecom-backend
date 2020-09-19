@@ -21,7 +21,7 @@ exports.up = knex => {
         table.integer('user_id');
         table
             .foreign('user_id')
-            .references('storeId')
+            .references('userId')
             .inTable('users')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');

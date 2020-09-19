@@ -20,10 +20,10 @@ const AdminClientController = require('./app/controllers/clients/AdminClientCont
 
 // catalog
 const CategoriesController = require('./app/controllers/catalog/categories/CategoriesController');
-const InactiveCategoriesController = require('./app/controllers/catalog/categories/InactiveCategoriesController');
 const BrandsController = require('./app/controllers/catalog/brands/BrandsController');
 const EvaluationsController = require('./app/controllers/catalog/evaluations/EvaluationsController');
 const ProductsController = require('./app/controllers/catalog/products/ProductsController');
+const SearchProductsController = require('./app/controllers/catalog/products/searchProductsController');
 const CategoryProductController = require('./app/controllers/catalog/category_products/CatProdController');
 const VariationsController = require('./app/controllers/catalog/variations/VariationsController');
 const ImagesController = require('./app/controllers/catalog/images/ImagesController');
@@ -222,7 +222,7 @@ routes.delete(
 
 routes.get(
     '/stores/:store_id/products/search/:search',
-    searchProductsController.search
+    SearchProductsController.search
 );
 
 // category product for dev

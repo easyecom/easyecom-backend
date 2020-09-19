@@ -36,7 +36,6 @@ class ProductsController {
                     .json({ error: 'missing data', required: error });
             }
 
-            // get each category id and put in arrayCategoryId
             let arrayCategoryId = [];
 
             for (let category of categories) {
@@ -53,7 +52,6 @@ class ProductsController {
 
                 arrayCategoryId.push(category);
             }
-            //
 
             const checkBrand = await connection('brands')
                 .select('*')
@@ -96,9 +94,8 @@ class ProductsController {
                     brandId,
                 });
 
-            const data = await connection('categories')
-                .where('categoryId', category_id)
-                .update({ products }, [products]); // push
+            await connection('categories').where('categoryId', category_id);
+            data.products.push(data[0].productId);
 
             console.log(data);
 

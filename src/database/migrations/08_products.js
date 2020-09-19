@@ -17,6 +17,7 @@ exports.up = knex => {
         table.integer('sku')
         table.specificType('variations', 'jsonb[]');
         table.specificType('images', 'jsonb[]');
+        table.specificType('evaluations', 'jsonb[]');
         table.integer('mainCategory');
         table.decimal('costPrice')
         table.decimal('offerPrice')
