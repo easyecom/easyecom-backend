@@ -8,7 +8,7 @@ exports.up = knex => {
 
         table.string('clientName').notNullable();
         table.string('evaluationText').notNullable();
-        table.integer('evaluationScore').defaultTo(1);
+        table.integer('evaluationScore').defaultTo(0);
 
         table.integer('store_id');
         table

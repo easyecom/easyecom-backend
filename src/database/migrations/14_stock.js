@@ -1,14 +1,15 @@
 exports.up = knex => {
-    return knex.schema.createTable('clients', table => {
+    return knex.schema.createTable('stocks', table => {
         table
-            .increments('clientId')
+            .increments('stockId')
             .unsigned()
             .primary()
             .unique();
 
-        table.string('dateOfBirth').notNullable();
-        table.string('cpf').notNullable();
-        table.boolean('deleted').defaultTo(false);
+        table.integer('amountSku').notNullable();
+        table.boolean('unlimitedAmount');
+        table.integer('minimumAmount').notNullable();
+        table.integer('maximumAmount').notNullable();
 
         table.integer('store_id');
         table
@@ -18,11 +19,11 @@ exports.up = knex => {
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
-        table.integer('user_id');
+        table.integer('variation_id');
         table
-            .foreign('user_id')
-            .references('userId')
-            .inTable('users')
+            .foreign('variation_id')
+            .references('variationId')
+            .inTable('variations')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
@@ -32,5 +33,5 @@ exports.up = knex => {
 };
 
 exports.down = knex => {
-    knex.schema.dropTable('clients');
+    knex.schema.dropTable('stocks');
 };

@@ -1,14 +1,16 @@
 exports.up = knex => {
-    return knex.schema.createTable('clients', table => {
+    return knex.schema.createTable('prices', table => {
         table
-            .increments('clientId')
+            .increments('priceId')
             .unsigned()
             .primary()
             .unique();
 
-        table.string('dateOfBirth').notNullable();
-        table.string('cpf').notNullable();
-        table.boolean('deleted').defaultTo(false);
+        table.decimal('costPriceSku');
+        table.integer('profitMargin');
+        table.decimal('offerPriceSku');
+        table.decimal('salesPriceSku').notNullable();
+        table.specificType('promotion', 'jsonb[]');
 
         table.integer('store_id');
         table
@@ -18,11 +20,11 @@ exports.up = knex => {
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
-        table.integer('user_id');
+        table.integer('variation_id');
         table
-            .foreign('user_id')
-            .references('userId')
-            .inTable('users')
+            .foreign('variation_id')
+            .references('variationId')
+            .inTable('variations')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
@@ -32,5 +34,5 @@ exports.up = knex => {
 };
 
 exports.down = knex => {
-    knex.schema.dropTable('clients');
+    knex.schema.dropTable('prices');
 };
