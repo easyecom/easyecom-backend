@@ -66,16 +66,17 @@ class ClientController {
     }
 
     async update(req, res) {
-        const { client_id } = req.params;
+        const { store_id, client_id } = req.params;
         const clients = req.body;
 
         try {
             const data = await connection('clients')
-                .where({ clientId: client_id })
+                .where({ clientId: client_id, store_id })
                 .update(clients, ['dateOfBirth', 'cpf']);
 
             return res.status(200).json(data);
         } catch (err) {
+            console.error(err);
             return console.error({ stack: err.stack });
         }
     }

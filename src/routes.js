@@ -122,13 +122,13 @@ routes.get(
     AdminClientController.getOneClientByStore
 );
 routes.put(
-    '/stores/:store_id/clients/:client_id',
+    '/stores/:store_id/clientsAdmin/:client_id',
     authMiddleware,
     storeValidation,
     AdminClientController.updateOneClientByStore
 );
 routes.delete(
-    '/stores/:store_id/clients/:client_id',
+    '/stores/:store_id/clientsAdmin/:client_id',
     authMiddleware,
     storeValidation,
     AdminClientController.deleteOneClientByStore
