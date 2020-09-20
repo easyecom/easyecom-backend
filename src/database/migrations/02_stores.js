@@ -6,11 +6,19 @@ exports.up = knex => {
             .primary()
             .unique();
 
+        table
+            .string('uuid')
+            .notNullable()
+            .unique();
+
         table.string('storeName').notNullable();
-        table.string('cnpj').notNullable().unique();
-        table.string('email').notNullable()
-        table.string('businessPhone')
-        table.string('cellPhone')        
+        table
+            .string('cnpj')
+            .notNullable()
+            .unique();
+        table.string('email').notNullable();
+        table.string('businessPhone');
+        table.string('cellPhone');
 
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
