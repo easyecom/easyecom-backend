@@ -122,13 +122,13 @@ routes.get(
     AdminClientController.getOneClientByStore
 );
 routes.put(
-    '/stores/:store_id/clients/:client_id',
+    '/stores/:store_id/clientsAdmin/:client_id',
     authMiddleware,
     storeValidation,
     AdminClientController.updateOneClientByStore
 );
 routes.delete(
-    '/stores/:store_id/clients/:client_id',
+    '/stores/:store_id/clientsAdmin/:client_id',
     authMiddleware,
     storeValidation,
     AdminClientController.deleteOneClientByStore
@@ -154,7 +154,7 @@ routes.put(
     AvatarController.store
 );
 
-// active category
+// category
 routes.post(
     '/stores/:store_id/categories',
     authMiddleware,
@@ -162,7 +162,7 @@ routes.post(
     CategoriesController.store
 );
 routes.get('/stores/:store_id/categories', CategoriesController.getAll);
-routes.get('/categories/:category_id', CategoriesController.getOne);
+routes.get('/stores/:store_id/categories/:category_id', CategoriesController.getOne);
 routes.put(
     '/stores/:store_id/categories/:category_id',
     authMiddleware,

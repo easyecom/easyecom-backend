@@ -60,7 +60,7 @@ class adminClientController {
                 .join('users', 'users.userId', 'clients.user_id')
                 .join('addresses', 'addresses.user_id', 'users.userId')
                 .select(
-                    'clients.userId',
+                    'clients.clientId',
                     'clients.user_id',
                     'users.store_id',
                     'users.avatar_id',
@@ -101,15 +101,16 @@ class adminClientController {
 
     async updateOneClientByStore(req, res) {
         const { store_id, client_id } = req.params;
-        const clients = req.body;
+        const { dateOfBirth, cpf } = req.body;
 
         try {
             const data = await connection('clients')
                 .where({ clientId: client_id, store_id })
-                .update(clients, ['dateOfBirth', 'cpf']);
+                .update({ dateOfBirth, cpf }, ['dateOfBirth', 'cpf']);
 
             return res.status(200).json(data);
         } catch (err) {
+            console.error(err);
             return console.error({ stack: err.stack });
         }
     }

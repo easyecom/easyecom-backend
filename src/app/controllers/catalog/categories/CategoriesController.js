@@ -3,7 +3,13 @@ const connection = require('../../../../database/connection');
 class CategoriesController {
     async store(req, res) {
         const { store_id } = req.params;
-        const { categoryName, description, refId, products } = req.body;
+        const {
+            categoryName,
+            description,
+            refId,
+            isActive,
+            products,
+        } = req.body;
 
         try {
             let error = [];
@@ -19,10 +25,10 @@ class CategoriesController {
             }
 
             const checkStore = await connection('stores').where(
-                'storeid',
+                'storeId',
                 store_id
             );
-            
+
             if (!checkStore) {
                 return res
                     .status(404)
@@ -35,12 +41,14 @@ class CategoriesController {
                     categoryName,
                     description,
                     refId,
+                    isActive,
                     products,
                     store_id,
                 });
 
             return res.status(201).json(data);
         } catch (err) {
+            console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
     }
@@ -51,23 +59,34 @@ class CategoriesController {
 
             const data = await connection('categories')
                 .select('*')
-                .where({ isActive: true, store_id: store_id });
+                .where({ isActive: true, store_id });
+
+            if (!data.length) {
+                return res.status(404).json({ warn: 'without category' });
+            }
 
             return res.status(200).json(data);
         } catch (err) {
+            console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
     }
 
     async getOne(req, res) {
-        const { category_id } = req.params;
+        const { store_id, category_id } = req.params;
 
         try {
             const data = await connection('categories')
                 .select('*')
-                .where('categoryId', category_id);
+                .where({'categoryId': category_id, store_id});
+
+            if (!data.length) {
+                return res.status(404).json({ warn: 'without category' });
+            }
+
             return res.status(200).json(data);
         } catch (err) {
+            console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
     }
@@ -103,6 +122,13 @@ class CategoriesController {
                         'refId',
                     ]
                 );
+
+            if (!data.length) {
+                return res
+                    .status(404)
+                    .json({ warn: 'category does not exist' });
+            }
+
             return res.status(200).json(data);
         } catch (err) {
             return res.status(500).json('sorry, something broke...');
@@ -113,6 +139,16 @@ class CategoriesController {
         const { category_id } = req.params;
 
         try {
+            const checkCategory = await connection('categories')
+                .select('*')
+                .where('categoryId', category_id);
+
+            if (!checkCategory.length) {
+                return res
+                    .status(404)
+                    .json({ warn: 'category does not exist' });
+            }
+
             await connection('categories')
                 .del()
                 .where('categoryId', category_id);

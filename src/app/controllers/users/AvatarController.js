@@ -32,7 +32,7 @@ class AvatarController {
         try {
             const { id } = req.params;
 
-            const file = await connection('avatar')
+            const file = await connection('avatars')
                 .where('id', id)
                 .select('*');
 
@@ -51,7 +51,7 @@ class AvatarController {
         try {
             const { id } = req.params;
 
-            const file = await connection('avatar')
+            const file = await connection('avatars')
                 .where('id', id)
                 .del();
 
@@ -59,7 +59,7 @@ class AvatarController {
                 return res.status(404).json({ message: 'file does not exist' });
             }
 
-            return res.status(202).json({ message: 'deleted success' });
+            return res.status(202).json({ message: 'avatar deleted successfully' });
         } catch (err) {
             console.error(err);
             return res.status(500).json('sorry, something broke...');

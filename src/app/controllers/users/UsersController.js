@@ -4,7 +4,14 @@ const bcrypt = require('bcrypt');
 
 class UsersController {
     async store(req, res) {
-        const { userName, email, password, store_id, permission } = req.body;
+        const {
+            userName,
+            email,
+            password,
+            store_id,
+            refId,
+            permission,
+        } = req.body;
 
         let error = [];
 
@@ -18,7 +25,10 @@ class UsersController {
                 .json({ error: 'thing that you forgot', required: error });
         }
 
-        const checkStore = await connection('stores').where('userId', store_id);
+        const checkStore = await connection('stores').where(
+            'storeId',
+            store_id
+        );
         if (!checkStore.length) {
             return res.status(400).json({ message: 'store does not exist' });
         }
@@ -45,11 +55,14 @@ class UsersController {
                                 email,
                                 password: hash,
                                 store_id,
+                                refId,
                                 permission,
                             })
                     );
                 });
-                return res.status(201).json('create success');
+                return res
+                    .status(201)
+                    .json({ message: 'user created sucessfully' });
             } catch (err) {
                 return res.status(500).json('sorry, something broke...');
             }
@@ -85,7 +98,7 @@ class UsersController {
 
             const data = await connection('users')
                 .select('*')
-                .where('user_id', user_id);
+                .where('userId', user_id);
 
             if (!data.length) {
                 return res.status(404).json({ message: 'user does not exist' });
@@ -93,13 +106,14 @@ class UsersController {
 
             return res.status(200).json(data);
         } catch (err) {
+            console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
     }
 
     async update(req, res) {
         try {
-            const { userId } = req.params;
+            const { user_id } = req.params;
 
             const {
                 userName,
@@ -118,7 +132,7 @@ class UsersController {
             }
 
             const data = await connection('users')
-                .where('userId', userId)
+                .where('userId', user_id)
                 .update({ userName, email, avatar_id, store_id, permission }, [
                     'userName',
                     'email',
@@ -133,24 +147,26 @@ class UsersController {
 
             return res.status(200).json(data);
         } catch (err) {
+            console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
     }
 
     async delete(req, res) {
         try {
-            const { userId } = req.params;
+            const { user_id } = req.params;
 
             const data = await connection('users')
-                .where('userId', userId)
+                .where('userId', user_id)
                 .del();
 
             if (!data) {
                 return res.status(404).json({ message: 'user does not exist' });
             }
 
-            return res.status(202).json({ message: 'deleted success' });
+            return res.status(202).json({ message: 'user deleted successfully' });
         } catch (err) {
+            console.error(err)
             return res.status(500).json('sorry, something broke...');
         }
     }

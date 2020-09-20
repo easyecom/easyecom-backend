@@ -18,14 +18,14 @@ class AddressController {
             country,
         } = req.body;
 
-        const [checkStore] = await connection('stores').where('id', store_id);
+        const [checkStore] = await connection('stores').where('storeId', store_id);
 
         if (!checkStore) {
             return res.status(401).json({ message: 'store does not exist' });
         }
 
         const [checkUser] = await connection('users').where({
-            addressId: user_id,
+            userId: user_id,
             store_id,
         });
 
