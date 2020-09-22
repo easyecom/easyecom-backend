@@ -24,8 +24,18 @@ class EvaluationsController {
                 .json({ error: 'missing data', required: error });
         }
 
+        const checkStore = await connection('stores').where({
+            storeId: store_id,
+        });
+
+        if (!checkStore.length) {
+            return res
+                .status(404)
+                .json({ error: { message: 'store does not exist' } });
+        }
+
         try {
-            const data = await connection('evaluations')
+            const [data] = await connection('evaluations')
                 .returning('*')
                 .insert({
                     clientName,
@@ -34,6 +44,20 @@ class EvaluationsController {
                     store_id,
                     product_id,
                 });
+
+            let evaluations = [];
+
+            const [product] = await connection('products').where({
+                productId: product_id,
+                store_id,
+            });
+
+            evaluations.push(...product.evaluations, data.evaluationId);
+
+            const [newProductArray] = await connection('products')
+                .where({ productId: product_id, store_id })
+                .update({ evaluations }, [evaluations]);
+            console.table(newProductArray);
 
             return res.status(201).json(data);
         } catch (err) {
@@ -95,7 +119,7 @@ class EvaluationsController {
     async remove(req, res) {
         const { store_id, evaluation_id } = req.params;
         await connection('evaluations')
-            .where({ store_id: store_id, clientName: evaluation_id })
+            .where({ store_id: store_id, evaluationId: evaluation_id })
             .del();
 
         return res.status(200).json({ message: 'evaluation deleted success' });
