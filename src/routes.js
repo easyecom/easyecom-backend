@@ -162,7 +162,10 @@ routes.post(
     CategoriesController.store
 );
 routes.get('/stores/:store_id/categories', CategoriesController.getAll);
-routes.get('/stores/:store_id/categories/:category_id', CategoriesController.getOne);
+routes.get(
+    '/stores/:store_id/categories/:category_id',
+    CategoriesController.getOne
+);
 routes.put(
     '/stores/:store_id/categories/:category_id',
     authMiddleware,
@@ -261,7 +264,11 @@ routes.delete(
 );
 
 // evaluations
-routes.post('/stores/:store_id/evaluations', EvaluationsController.store);
+routes.post(
+    '/stores/:store_id/evaluations',
+    authMiddleware,
+    EvaluationsController.store
+);
 routes.get('/stores/:store_id/evaluations/', EvaluationsController.findAll);
 routes.get(
     '/stores/:store_id/evaluations/:evaluation_id',
@@ -269,10 +276,12 @@ routes.get(
 );
 routes.put(
     '/stores/:store_id/evaluations/:evaluation_id',
+    authMiddleware,
     EvaluationsController.update
 );
 routes.delete(
     '/stores/:store_id/evaluations/:evaluation_id',
+    authMiddleware,
     EvaluationsController.remove
 );
 
