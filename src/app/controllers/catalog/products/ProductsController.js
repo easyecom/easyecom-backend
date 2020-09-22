@@ -164,7 +164,8 @@ class ProductsController {
                     'products.salesPrice',
                     'products.offerPrice',
                     'brands.brandName',
-                    'categories.categoryName'
+                    'categories.categoryName',
+                    'products.variations'
                 )
                 .where({
                     'products.store_id': store_id,

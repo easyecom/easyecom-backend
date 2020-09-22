@@ -29,7 +29,7 @@ class VariationsController {
 
             if (!variationName) error.push('variationName');
             if (!descriptionShort) error.push('descriptionShort');
-            if (!salesPrice) error.push('salesPrice');
+            if (!product_id) error.push('product_id');
 
             if (error.length > 0) {
                 return res
@@ -57,7 +57,7 @@ class VariationsController {
                 });
             }
 
-            await connection('variations')
+            const [data] = await connection('variations')
                 .returning('*')
                 .insert({
                     variationName,
@@ -80,7 +80,21 @@ class VariationsController {
                     product_id,
                 });
 
-            return res.status(201).json('variations performed successfully');
+            let variations = [];
+
+            const [product] = await connection('products').where({
+                productId: product_id,
+                store_id,
+            });
+
+            variations.push(...product.variations, data.variationId);
+
+            const [newProductArray] = await connection('products')
+                .where({ productId: product_id, store_id })
+                .update({ variations }, [variations]);
+            console.table(newProductArray);
+
+            return res.status(201).json(data);
         } catch (err) {
             console.error(err);
         }
