@@ -3,26 +3,28 @@ const connection = require('../../../../database/connection');
 class ImagesController {
     async store(req, res) {
         try {
-            const {
-                filename: name,
-                category_id,
-                brand_id,
-                product_id,
-                variation_id,
-            } = await req.files;
+            const { category_id, product_id, variation_id } = req.body;
 
-            return res.json(filename);
+            const { filename: name, originalname: path } = req.file;
 
-            const data = await connection('images')
+            const [data] = await connection('images')
                 .returning('*')
                 .insert({
                     name,
+                    path,
                     category_id,
-                    brand_id,
                     product_id,
                     variation_id,
                 });
-            return res.status(201).json(data);
+
+            return res.status(201).json({
+                category_id: data.category_id,
+                brand_id: data.brand_id,
+                product_id: data.product_id,
+                variation_id: data.variation_id,
+                id: data.id,
+                path: `http://localhost:3777/images/${data.name}`,
+            });
         } catch (err) {
             console.error(err);
             return res.status(500).json('sorry, something broke...');
@@ -31,8 +33,20 @@ class ImagesController {
 
     async getAll(req, res) {
         try {
-            const file = await connection('images').select('*');
-            return res.json(file);
+            let data = await connection('images').select('*');
+
+            data = data.map(item => {
+                return {
+                    category_id: item.category_id,
+                    brand_id: item.brand_id,
+                    product_id: item.product_id,
+                    variation_id: item.variation_id,
+                    id: item.id,
+                    path: `http://localhost:3777/images/${item.name}`,
+                };
+            });
+
+            return res.status(400).json(data);
         } catch (err) {
             console.error(err);
             return res.status(500).json('sorry, something broke...');
@@ -43,15 +57,24 @@ class ImagesController {
         try {
             const { id } = req.params;
 
-            const file = await connection('avatar')
+            const [data] = await connection('images')
                 .where('id', id)
                 .select('*');
 
-            if (!file.length) {
-                return res.status(404).json({ message: 'user does not exist' });
+            if (!data) {
+                return res
+                    .status(404)
+                    .json({ message: 'images does not exist' });
             }
 
-            return res.status(200).json(file);
+            return res.status(200).json({
+                category_id: data.category_id,
+                brand_id: data.brand_id,
+                product_id: data.product_id,
+                variation_id: data.variation_id,
+                id: data.id,
+                path: `http://localhost:3777/images/${data.name}`,
+            });
         } catch (err) {
             console.error(err);
             return res.status(500).json('sorry, something broke...');
@@ -62,7 +85,7 @@ class ImagesController {
         try {
             const { id } = req.params;
 
-            const file = await connection('avatar')
+            const file = await connection('images')
                 .where('id', id)
                 .del();
 

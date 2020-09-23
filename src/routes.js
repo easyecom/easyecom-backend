@@ -51,14 +51,6 @@ routes.delete('/users/:user_id', authMiddleware, UsersController.delete);
 
 routes.post('/session', SessionController.create);
 
-routes.post(
-    '/stores/:store_id/images',
-    upload.array('files', 6),
-    authMiddleware,
-    storeValidation,
-    ImagesController.store
-);
-
 // avatar
 routes.post(
     '/stores/:store_id/avatar',
@@ -262,6 +254,19 @@ routes.delete(
     storeValidation,
     VariationsController.delete
 );
+
+// images
+
+routes.post(
+    '/stores/:store_id/images',
+    upload.single('file'),
+    authMiddleware,
+    storeValidation,
+    ImagesController.store
+);
+routes.get('/stores/:store_id/images', ImagesController.getAll);
+routes.get('/stores/:store_id/images/:id', ImagesController.getOne);
+routes.delete('/stores/:store_id/images/:id', ImagesController.delete);
 
 // evaluations
 routes.post(
