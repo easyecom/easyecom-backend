@@ -3,17 +3,24 @@ const connection = require('../../../../database/connection');
 class ImagesController {
     async store(req, res) {
         try {
-            const { product_id, variation_id, brand_id } = req.body;
-            const { filename: name, originalname: path } = await req.file;
+            const {
+                filename: name,
+                category_id,
+                brand_id,
+                product_id,
+                variation_id,
+            } = await req.files;
+
+            return res.json(filename);
 
             const data = await connection('images')
                 .returning('*')
                 .insert({
                     name,
-                    path,
+                    category_id,
+                    brand_id,
                     product_id,
                     variation_id,
-                    brand_id,
                 });
             return res.status(201).json(data);
         } catch (err) {
