@@ -94,8 +94,8 @@ class UsersController {
 
     async getOne(req, res) {
         try {
-            const { user_id } = req.params;
-
+            const { userId: user_id } = req;
+            //return res.json(userId);
             const data = await connection('users')
                 .select('*')
                 .where('userId', user_id);
@@ -164,9 +164,11 @@ class UsersController {
                 return res.status(404).json({ message: 'user does not exist' });
             }
 
-            return res.status(202).json({ message: 'user deleted successfully' });
+            return res
+                .status(202)
+                .json({ message: 'user deleted successfully' });
         } catch (err) {
-            console.error(err)
+            console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
     }

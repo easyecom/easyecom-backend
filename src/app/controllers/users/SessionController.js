@@ -20,7 +20,7 @@ class SessionController {
                     .json({ error: 'missing data', required: error });
             }
 
-            const user = await connection('users')
+            let user = await connection('users')
                 .where({ email })
                 .select('*')
                 .first();
@@ -32,26 +32,20 @@ class SessionController {
             const match = await bcrypt.compare(String(password), user.password); //
 
             if (!match) {
-                //
                 return res
                     .status(401)
                     .send({ message: 'password does not match' });
-            } //
-
-            const { userId } = user;
-            const { name } = user;
+            }
 
             if (match) {
-                //
-                const token = jwt.sign({ userId }, authConfig.secret, {
+                const token = jwt.sign({ id: user.userId }, authConfig.secret, {
                     expiresIn: authConfig.expiresIn,
                 });
-                return res.status(200).json({
-                    userId,
-                    name,
-                    message: 'authentication success',
-                    token,
-                });
+
+                user.password = undefined;
+                user.permission = undefined;
+
+                return res.status(200).json({ user, token });
             } //
 
             return res
