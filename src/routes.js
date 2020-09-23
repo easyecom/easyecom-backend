@@ -53,14 +53,22 @@ routes.post('/session', SessionController.create);
 
 // avatar
 routes.post(
-    '/avatar',
+    '/stores/:store_id/avatar',
     upload.single('file'),
     authMiddleware,
     AvatarController.store
 );
-routes.get('/avatar', AvatarController.getAll); // for dev
-routes.get('/avatar/:id', authMiddleware, AvatarController.getOne);
-routes.delete('/avatar/:id', authMiddleware, AvatarController.delete);
+routes.get('/stores/:store_id/avatar', AvatarController.getAll); // for dev
+routes.get(
+    '/stores/:store_id/avatar/:id',
+    authMiddleware,
+    AvatarController.getOne
+);
+routes.delete(
+    '/stores/:store_id/avatar/:id',
+    authMiddleware,
+    AvatarController.delete
+);
 
 // store
 routes.post('/stores', StoresController.store);
@@ -137,22 +145,6 @@ routes.delete(
 /*
 /* catalog 
 */
-
-routes.post(
-    '/images',
-    upload.array('files', 6),
-    authMiddleware,
-    storeValidation,
-    AvatarController.store
-);
-
-routes.put(
-    '/images',
-    upload.array('files', 6),
-    authMiddleware,
-    storeValidation,
-    AvatarController.store
-);
 
 // category
 routes.post(
@@ -263,6 +255,19 @@ routes.delete(
     VariationsController.delete
 );
 
+// images
+
+routes.post(
+    '/stores/:store_id/images',
+    upload.single('file'),
+    authMiddleware,
+    storeValidation,
+    ImagesController.store
+);
+routes.get('/stores/:store_id/images', ImagesController.getAll);
+routes.get('/stores/:store_id/images/:id', ImagesController.getOne);
+routes.delete('/stores/:store_id/images/:id', ImagesController.delete);
+
 // evaluations
 routes.post(
     '/stores/:store_id/evaluations',
@@ -285,7 +290,18 @@ routes.delete(
     EvaluationsController.remove
 );
 
-routes.post('/images', upload.single('files'), ImagesController.store);
+// routes.post('/stores/:store_id/images', upload.single('files'), ImagesController.store);
+// routes.get('/images', ImagesController.getAll);
+
+// routes.post(
+//     '/images',
+//     upload.array('files', 6),
+//     authMiddleware,
+//     storeValidation,
+//     AvatarController.store
+// );
+
+// images
 
 // orders admin
 routes.get(

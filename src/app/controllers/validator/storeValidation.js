@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
             .status(400)
             .json({ message: 'include a valid administrator' });
 
-    if (!store_id.length) {
+    if (!store_id || !store_id.length) {
         return res.status(400).json({ message: 'missing store' });
     }
 
