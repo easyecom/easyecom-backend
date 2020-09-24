@@ -2,7 +2,7 @@ const connection = require('../../../database/connection');
 
 module.exports = async (req, res, next) => {
     const { store_id } = req.params;
-    const { user_admin } = req.headers;
+    const { userId: user_admin } = req;
 
     if (!user_admin)
         return res

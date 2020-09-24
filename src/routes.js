@@ -44,8 +44,8 @@ routes.get('/recovered', RecoveredController.showCompleteRecovery);
 routes.post('/recovered', RecoveredController.completeRecovery);
 
 routes.post('/users', UsersController.store);
-routes.get('/users', UsersController.getAll);
-routes.get('/users/:user_id', authMiddleware, UsersController.getOne);
+routes.get('/users/dev', UsersController.getAll);
+routes.get('/users', authMiddleware, UsersController.getOne);
 routes.put('/users/:user_id', authMiddleware, UsersController.update);
 routes.delete('/users/:user_id', authMiddleware, UsersController.delete);
 
@@ -93,7 +93,11 @@ routes.post(
     authMiddleware,
     AddressController.store
 );
-routes.get('/stores/:store_id/addresses', AddressController.findAll);
+routes.get(
+    '/stores/:store_id/addresses',
+    authMiddleware,
+    AddressController.findAll
+);
 routes.get(
     '/stores/:store_id/addresses/:address_id',
     authMiddleware,

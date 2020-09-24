@@ -10,7 +10,13 @@ module.exports = async (req, res, next) => {
         return res.status(401).json({ error: 'Token not provider' });
     }
 
-    const [, token] = authHeader.split(' ');
+    const [scheme, token] = authHeader.split(' ');
+
+    if (!/^Bearer$/i.test(scheme)) {
+        return res
+            .status(401)
+            .json({ error: { message: 'token malformatted' } });
+    }
 
     try {
         const decoded = await promisify(jwt.verify)(token, authConfig.secret);

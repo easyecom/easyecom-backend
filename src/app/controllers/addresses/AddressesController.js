@@ -4,7 +4,7 @@ const RequestValidator = require('../../../../helpers/error-validator');
 class AddressController {
     async store(req, res) {
         const { store_id } = req.params;
-        const { user_id } = req.headers;
+        const { userId: user_id } = req;
 
         const {
             zipcode,
@@ -18,7 +18,10 @@ class AddressController {
             country,
         } = req.body;
 
-        const [checkStore] = await connection('stores').where('storeId', store_id);
+        const [checkStore] = await connection('stores').where(
+            'storeId',
+            store_id
+        );
 
         if (!checkStore) {
             return res.status(401).json({ message: 'store does not exist' });
@@ -75,12 +78,12 @@ class AddressController {
 
     async findAll(req, res) {
         const { store_id } = req.params;
-        const { user_id } = req.headers;
+        const { userId: user_id } = req;
 
         try {
             const data = await connection('addresses')
                 .select('*')
-                .where({ store_id, user_id });
+                .where({ user_id, store_id });
 
             return res.status(200).json(data);
         } catch (err) {
@@ -90,7 +93,7 @@ class AddressController {
 
     async findOne(req, res) {
         const { store_id, address_id } = req.params;
-        const { user_id } = req.headers;
+        const { userId: user_id } = req;
 
         try {
             const data = await connection('addresses').where({
@@ -113,7 +116,7 @@ class AddressController {
 
     async update(req, res) {
         const { store_id, address_id } = req.params;
-        const { user_id } = req.headers;
+        const { userId: user_id } = req;
         const address = req.body;
 
         const checkAddress = await connection('addresses').where({
@@ -159,7 +162,7 @@ class AddressController {
 
     async delete(req, res) {
         const { store_id, address_id } = req.params;
-        const { user_id } = req.headers;
+        const { userId: user_id } = req;
 
         const checkAddress = await connection('addresses').where({
             addressId: address_id,
