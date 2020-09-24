@@ -93,7 +93,11 @@ routes.post(
     authMiddleware,
     AddressController.store
 );
-routes.get('/stores/:store_id/addresses', AddressController.findAll);
+routes.get(
+    '/stores/:store_id/addresses',
+    authMiddleware,
+    AddressController.findAll
+);
 routes.get(
     '/stores/:store_id/addresses/:address_id',
     authMiddleware,

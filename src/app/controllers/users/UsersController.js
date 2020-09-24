@@ -95,7 +95,7 @@ class UsersController {
     async getOne(req, res) {
         try {
             const { userId: user_id } = req;
-            //return res.json(userId);
+
             const data = await connection('users')
                 .select('*')
                 .where('userId', user_id);
@@ -154,7 +154,7 @@ class UsersController {
 
     async delete(req, res) {
         try {
-            const { user_id } = req.params;
+            const { userId: user_id } = req;
 
             const data = await connection('users')
                 .where('userId', user_id)
