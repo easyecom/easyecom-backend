@@ -47,7 +47,7 @@ class UsersController {
                     if (err) {
                         return reject(err);
                     }
-                    return resolve(
+                    resolve(
                         connection('users')
                             .returning('*')
                             .insert({
@@ -60,16 +60,13 @@ class UsersController {
                             })
                     );
                 });
-                return res
-                    .status(201)
-                    .json({ message: 'user created sucessfully' });
             } catch (err) {
                 return res.status(500).json('sorry, something broke...');
             }
         });
 
         user.then(result => {
-            console.log(result);
+            return res.status(201).json(result);
         }).catch(err => {
             console.error(err);
             return res.status(500).json('sorry, something broke...');
@@ -82,7 +79,7 @@ class UsersController {
             const users = await connection('users').select('*');
 
             if (!users.length) {
-                return res.status(404).json({ message: 'without users' });
+                return res.status(200).json({ message: 'without users' });
             }
 
             return res.status(200).json(users);
@@ -93,15 +90,15 @@ class UsersController {
     }
 
     async getOne(req, res) {
-        try {
-            const { userId: user_id } = req;
+        const { userId: user_id } = req;
 
+        try {
             const data = await connection('users')
                 .select('*')
                 .where('userId', user_id);
 
             if (!data.length) {
-                return res.status(404).json({ message: 'user does not exist' });
+                return res.status(400).json({ message: 'user does not exist' });
             }
 
             return res.status(200).json(data);
@@ -142,7 +139,7 @@ class UsersController {
                 ]);
 
             if (!data.length) {
-                return res.status(404).json({ message: 'user does not exist' });
+                return res.status(400).json({ message: 'user does not exist' });
             }
 
             return res.status(200).json(data);
@@ -161,7 +158,7 @@ class UsersController {
                 .del();
 
             if (!data) {
-                return res.status(404).json({ message: 'user does not exist' });
+                return res.status(400).json({ message: 'user does not exist' });
             }
 
             return res
