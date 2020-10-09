@@ -5,18 +5,49 @@ class AdminOrdersController {
         const { store_id } = params;
 
         try {
-            const data = await connection('orders')
-                .where('store_id', store_id)
-                .select(
-                    'orderId',
-                    'client_id',
-                    'shoppingCart',
-                    'delivery_id',
-                    'store_id',
-                    'cancel'
-                );
+            // .join('users', 'users.userId', 'clients.user_id')
+            // .join('addresses', 'addresses.user_id', 'users.userId')
 
-            return res.status(200).send({orders: data});
+            let data = await connection('orders')
+                .join('clients', 'clients.clientId', 'orders.client_id')
+                .join('users', 'clients.user_id', 'users.userId')
+                .join('addresses', 'addresses.user_id', 'users.userId')
+                .where('orders.store_id', store_id)
+                .select('*');
+
+            data = data.map(item => {
+                return {
+                    Id: item.orderId,
+                    store_id: item.store_id,
+                    delivery_id: item.delivery_id,
+
+                    customer: {
+                        user_id: item.user_id,
+                        cpf: item.cpf,
+                        userName: item.userName,
+                        email: item.email,
+                        dateOfBirth: item.dateOfBirth,
+                        addresses: {
+                            addressId: item.addressId,
+                            zipcode: item.zipcode,
+                            street: item.street,
+                            number: item.number,
+                            complement: item.complement,
+                            neighborhood: item.neighborhood,
+                            city: item.city,
+                            state: item.state,
+                            state_code: item.state_code,
+                            country: item.country,
+                            storeIdToAddress: item.storeIdToAddress,
+                        },
+                    },
+                    items: item.shoppingCart,
+                    deleted: item.deleted,
+                    created_at: item.created_at,
+                    updated_at: item.updated_at,
+                };
+            });
+            return res.status(200).send({ orders: data });
         } catch (err) {
             console.error(err);
         }
@@ -37,7 +68,8 @@ class AdminOrdersController {
                     'shoppingCart',
                     'delivery_id',
                     'store_id',
-                    'cancel'
+                    'cancel',
+                    'created_at'
                 );
             return res.status(200).json(data);
         } catch (err) {
