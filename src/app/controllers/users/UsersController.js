@@ -110,7 +110,7 @@ class UsersController {
 
     async update(req, res) {
         try {
-            const { user_id } = req.params;
+            const { userId: user_id } = req;
 
             const {
                 userName,
@@ -139,6 +139,7 @@ class UsersController {
                 ]);
 
             if (!data.length) {
+                console.log('user does not exist');
                 return res.status(400).json({ message: 'user does not exist' });
             }
 

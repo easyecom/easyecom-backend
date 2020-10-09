@@ -3,13 +3,41 @@ const connection = require('../../../database/connection');
 class ClientController {
     async store(req, res) {
         const { store_id } = req.params;
+        const { userId: user_id } = req;
 
-        const { dateOfBirth, cpf, user_id } = req.body;
+        const { dateOfBirth, cpf } = req.body;
 
-        const checkCpf = await connection('clients').where('cpf', cpf);
+        const checkUser = await connection('clients').where({
+            user_id: user_id,
+        });
+
+        if (checkUser.length) {
+            return res.status(400).json({ message: 'userClient already exist' });
+        }
+
+        const checkCpf = await connection('clients').where({
+            cpf: cpf,
+        });
 
         if (checkCpf.length) {
             return res.status(400).json({ message: 'client already exist' });
+        }
+
+        const checkStore = await connection('stores').where({
+            storeId: store_id,
+        });
+
+        if (!checkStore.length) {
+            return res.status(400).json({ message: 'store does not exist' });
+        }
+
+        const checkUserOnStore = await connection('users').where({
+            userId: user_id,
+            store_id,
+        });
+
+        if (!checkUserOnStore.length) {
+            return res.status(400).json({ message: 'userStore does not exist' });
         }
 
         let error = [];

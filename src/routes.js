@@ -48,8 +48,8 @@ routes.post('/recovered', RecoveredController.completeRecovery);
 routes.post('/users', UsersController.store);
 routes.get('/users/dev', UsersController.getAll);
 routes.get('/users', authMiddleware, UsersController.getOne);
-routes.put('/users/:user_id', authMiddleware, UsersController.update);
-routes.delete('/users/:user_id', authMiddleware, UsersController.delete);
+routes.put('/users', authMiddleware, UsersController.update);
+routes.delete('/users', authMiddleware, UsersController.delete);
 
 // session
 routes.post('/session', SessionController.create);
@@ -118,11 +118,27 @@ routes.delete(
 );
 
 // clients
-routes.post('/stores/:store_id/clients/', ClientController.store);
-routes.put('/stores/:store_id/clients/:client_id', ClientController.update);
+routes.post(
+    '/stores/:store_id/clients/',
+    authMiddleware,
+    ClientController.store
+);
+routes.put(
+    '/stores/:store_id/clients/:client_id',
+    authMiddleware,
+    ClientController.update
+);
 routes.get('/stores/:store_id/clients', ClientController.findAll);
-routes.get('/stores/:store_id/clients/:client_id', ClientController.findOne);
-routes.delete('/stores/:store_id/clients/:client_id', ClientController.delete);
+routes.get(
+    '/stores/:store_id/clients/:client_id',
+    authMiddleware,
+    ClientController.findOne
+);
+routes.delete(
+    '/stores/:store_id/clients/:client_id',
+    authMiddleware,
+    ClientController.delete
+);
 
 routes.get(
     '/stores/:store_id/clientsAdmin',
@@ -318,7 +334,7 @@ routes.get(
     AdminOrdersController.findAll
 );
 routes.get(
-    '/stores/:store_id/ordersAdmin/:id',
+    '/stores/:store_id/ordersAdmin/:order_id',
     authMiddleware,
     storeValidation,
     AdminOrdersController.findOne
