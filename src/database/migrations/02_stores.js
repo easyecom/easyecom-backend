@@ -8,7 +8,6 @@ exports.up = knex => {
 
         table
             .string('uuid')
-            .notNullable()
             .unique();
 
         table.string('storeName').notNullable();

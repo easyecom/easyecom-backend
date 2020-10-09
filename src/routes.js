@@ -38,17 +38,20 @@ const PaymentsController = require('./app/controllers/order/PaymentsController')
 const routes = new Router();
 const upload = multer(multerConfig);
 
+// recovery
 routes.get('/recovery', RecoveryController.showRecovery);
 routes.post('/recovery', RecoveryController.createRecovery);
 routes.get('/recovered', RecoveredController.showCompleteRecovery);
 routes.post('/recovered', RecoveredController.completeRecovery);
 
+// users
 routes.post('/users', UsersController.store);
 routes.get('/users/dev', UsersController.getAll);
 routes.get('/users', authMiddleware, UsersController.getOne);
 routes.put('/users/:user_id', authMiddleware, UsersController.update);
 routes.delete('/users/:user_id', authMiddleware, UsersController.delete);
 
+// session
 routes.post('/session', SessionController.create);
 
 // avatar

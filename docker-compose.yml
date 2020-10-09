@@ -5,7 +5,7 @@ services:
     build: .
     container_name: "api-sid"
     command: sh -c "npm run
-     migrate && npm run seed && npm run dev"
+     migrate && npm run dev"
     ports:
       - 3777:3777
     volumes:
