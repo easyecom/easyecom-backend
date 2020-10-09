@@ -16,7 +16,7 @@ class AdminOrdersController {
                     'cancel'
                 );
 
-            return res.status(200).json(data);
+            return res.status(200).send({orders: data});
         } catch (err) {
             console.error(err);
         }
