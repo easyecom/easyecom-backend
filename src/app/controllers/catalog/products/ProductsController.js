@@ -100,7 +100,7 @@ class ProductsController {
                 });
 
             for (let categoryId of arrayCategoryId) {
-                const categoryProduct = await connection('categorie_products')
+                const categoryProduct = await connection('category_products')
                     .returning('*')
                     .insert({
                         category_id: categoryId,

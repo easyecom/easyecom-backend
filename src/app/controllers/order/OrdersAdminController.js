@@ -47,11 +47,12 @@ class AdminOrdersController {
 
     async findOne({ params }, res) {
         const { store_id, order_id } = params;
+        // const { user_admin } = req.headers;
 
         try {
             const data = await connection('orders')
                 .where({
-                    order_id: order_id,
+                    orderId: order_id,
                     store_id: store_id,
                 })
                 .select(
@@ -60,7 +61,8 @@ class AdminOrdersController {
                     'shoppingCart',
                     'delivery_id',
                     'store_id',
-                    'cancel'
+                    'cancel',
+                    'updated_at'
                 );
             return res.status(200).json(data);
         } catch (err) {

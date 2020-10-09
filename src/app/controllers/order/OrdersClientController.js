@@ -4,8 +4,8 @@ const { calculateShipping } = require('../../integrations/correios');
 class OrdersController {
     async create(req, res) {
         const { store_id } = req.params;
-        const { shoppingCart, delivery_id, cancel } = req.body; // criar delivery no momento do pedido
-        const { client_id } = req.headers;
+        const { shoppingCart, delivery_id, cancel, client_id } = req.body; // criar delivery no momento do pedido
+        // const { client_id } = req.headers;
 
         try {
             const [checkClient] = await connection('clients').where(
@@ -35,9 +35,9 @@ class OrdersController {
                 store_id: store_id,
             });
 
-            if (!checkDelivery) {
-                return res.status(404).json({ message: 'delivery not exist' });
-            }
+            // if (!checkDelivery) {
+            //     return res.status(404).json({ message: 'delivery not exist' });
+            // }
 
             const data = await connection('orders')
                 .returning('*')
