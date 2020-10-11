@@ -142,14 +142,14 @@ routes.delete(
 
 routes.get(
     '/stores/:store_id/clientsAdmin',
-    authMiddleware,
-    storeValidation,
+    // authMiddleware,
+    // storeValidation,
     AdminClientController.getClientsByStore
 );
 routes.get(
     '/stores/:store_id/clientsAdmin/:client_id',
-    authMiddleware,
-    storeValidation,
+    // authMiddleware,
+    // storeValidation,
     AdminClientController.getOneClientByStore
 );
 routes.put(
@@ -329,14 +329,14 @@ routes.delete(
 // orders admin
 routes.get(
     '/stores/:store_id/ordersAdmin',
-    authMiddleware,
-    storeValidation,
+    // authMiddleware,
+    // storeValidation,
     AdminOrdersController.findAll
 );
 routes.get(
     '/stores/:store_id/ordersAdmin/:order_id',
-    authMiddleware,
-    storeValidation,
+    // authMiddleware,
+    // storeValidation,
     AdminOrdersController.findOne
 );
 routes.get(
