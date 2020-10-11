@@ -1,17 +1,19 @@
 const connection = require('../../../database/connection');
 const { calculateShipping } = require('../../integrations/correios');
+const util = require('util');
 
 class OrdersController {
     async create(req, res) {
         const { store_id } = req.params;
-        const { shoppingCart, delivery_id, cancel, client_id } = req.body; // criar delivery no momento do pedido
-        // const { client_id } = req.headers;
+        const { shoppingCart, delivery_id, cancel } = req.body; // criar delivery no momento do pedido
+        const { userId: user_id } = req;
 
         try {
-            const [checkClient] = await connection('clients').where(
-                'clientId',
-                client_id
-            );
+            const [checkClient] = await connection('clients')
+                .join('users', 'clients.user_id', 'users.userId')
+                .where({ user_id });
+
+            const { clientId: client_id } = checkClient;
 
             if (!checkClient) {
                 return res
@@ -39,7 +41,7 @@ class OrdersController {
             //     return res.status(404).json({ message: 'delivery not exist' });
             // }
 
-            const data = await connection('orders')
+            let data = await connection('orders')
                 .returning('*')
                 .insert({
                     client_id,
@@ -86,7 +88,10 @@ class OrdersController {
             const dataClient = await connection('users')
                 .join('clients', 'users.userId', 'clients.user_id')
                 .join('addresses', 'addresses.user_id', 'users.userId')
-                .where({ 'clients.clientId': client_id, 'users.store_id': store_id })
+                .where({
+                    'clients.clientId': client_id,
+                    'users.store_id': store_id,
+                })
                 .select(
                     'clients.clientId',
                     'clients.user_id',
@@ -121,7 +126,11 @@ class OrdersController {
 
             for (let item of data.shoppingCart) {
                 let variation = await connection('variations')
-                    .join('products', 'products.productId', 'variations.product_id')
+                    .join(
+                        'products',
+                        'products.productId',
+                        'variations.product_id'
+                    )
                     .join('brands', 'products.productId', 'brands.brandId')
                     .select(
                         'variations.variationId',

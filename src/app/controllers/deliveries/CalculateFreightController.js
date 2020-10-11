@@ -16,7 +16,7 @@ class CalculateFreightController {
             });
 
             const [address] = await connection('stores')
-                .join('addresses', 'addresses.addressId', 'stores.id') // need to create new fields for address store id
+                .join('addresses', 'addresses.addressId', 'stores.storeId') // need to create new fields for address store id
                 .where({ 'stores.storeId': store_id });
 
             const storeZipcode = address.zipcode.replace(/\-/g, '');
