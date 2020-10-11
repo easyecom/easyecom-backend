@@ -38,12 +38,23 @@ class SessionController {
             }
 
             if (match) {
-                const token = jwt.sign({ id: user.userId }, authConfig.secret, {
-                    expiresIn: authConfig.expiresIn,
-                });
+                const token = jwt.sign(
+                    {
+                        payload: {
+                            id: user.userId,
+                            userName: user.userName,
+                            role: user.permission,
+                            store_id: user.store_id,
+                        },
+                    },
+                    authConfig.secret,
+                    {
+                        expiresIn: authConfig.expiresIn,
+                    }
+                );
 
+                user.permission = undefined;
                 user.password = undefined;
-
                 user.token = token;
 
                 return res.status(200).send({ user });
