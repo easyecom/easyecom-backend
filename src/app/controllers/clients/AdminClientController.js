@@ -6,34 +6,12 @@ class adminClientController {
         const { page = 1 } = req.query;
 
         try {
-            const data = await connection('clients')
+            let data = await connection('clients')
                 .join('users', 'users.userId', 'clients.user_id')
                 .join('addresses', 'addresses.user_id', 'users.userId')
                 .limit(20)
                 .offset((page - 1) * 20)
-                .select(
-                    'clients.clientId',
-                    'clients.user_id',
-                    'users.store_id',
-                    'users.avatar_id',
-
-                    'users.userName',
-                    'users.email',
-                    'clients.dateOfBirth',
-                    'clients.cpf',
-
-                    'addresses.zipcode',
-                    'addresses.street',
-                    'addresses.number',
-                    'addresses.complement',
-                    'addresses.neighborhood',
-                    'addresses.city',
-                    'addresses.state',
-                    'addresses.state_code',
-                    'addresses.country',
-
-                    'users.permission'
-                )
+                .select('*')
                 .where({
                     'users.store_id': store_id,
                     'clients.store_id': store_id,
@@ -45,7 +23,38 @@ class adminClientController {
                     .json({ message: 'client does not exist' });
             }
 
-            return res.status(200).json(data);
+            data = data.map(item => {
+                return {
+                    Id: item.clientId,
+                    user_id: item.userId,
+                    userName: item.userName,
+                    email: item.email,
+                    cpf: item.cpf,
+                    dateOfBirth: item.dateOfBirth,
+                    address: {
+                        address_id: item.addressId,
+                        zipcode: item.zipcode,
+                        street: item.street,
+                        number: item.number,
+                        complement: item.complement,
+                        neighborhood: item.neighborhood,
+                        city: item.city,
+                        state: item.state,
+                        state_code: item.state_code,
+                        country: item.country,
+                        storeIdToAddress: item.storeIdToAddress,
+                    },
+                    refId: item.refId,
+                    store_id: item.store_id,
+                    deleted: item.deleted,
+                    created_at: item.created_at,
+                    updated_at: item.updated_at,
+                };
+            });
+
+            const total = data.length;
+
+            return res.status(200).json({ clients: data, total });
         } catch (err) {
             console.error(err);
             return res.status(500).json('sorry, something broke...');
