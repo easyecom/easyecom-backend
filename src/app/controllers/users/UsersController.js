@@ -91,7 +91,6 @@ class UsersController {
 
     async getOne(req, res) {
         const { userId: user_id } = req;
-
         try {
             const data = await connection('users')
                 .select('*')

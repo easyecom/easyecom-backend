@@ -1,17 +1,17 @@
 const connection = require('../../../database/connection');
 
 class AdminOrdersController {
-    async findAll({ params }, res) {
+    async findAll({ params, query }, res) {
         const { store_id } = params;
+        const { page = 1, limit } = query;
 
         try {
-            // .join('users', 'users.userId', 'clients.user_id')
-            // .join('addresses', 'addresses.user_id', 'users.userId')
-
             let data = await connection('orders')
                 .join('clients', 'clients.clientId', 'orders.client_id')
                 .join('users', 'clients.user_id', 'users.userId')
                 .join('addresses', 'addresses.user_id', 'users.userId')
+                .limit(limit)
+                .offset((page) * limit)
                 .where('orders.store_id', store_id)
                 .select('*');
 
@@ -22,12 +22,12 @@ class AdminOrdersController {
                     delivery_id: item.delivery_id,
 
                     customer: {
-                        user_id: item.user_id,
+                        userId: item.user_id,
                         cpf: item.cpf,
                         userName: item.userName,
                         email: item.email,
                         dateOfBirth: item.dateOfBirth,
-                        addresses: {
+                        address: {
                             addressId: item.addressId,
                             zipcode: item.zipcode,
                             street: item.street,
@@ -41,13 +41,19 @@ class AdminOrdersController {
                             storeIdToAddress: item.storeIdToAddress,
                         },
                     },
+                    payment: '', // make join
+                    shipping: '', // make join
+                    is_completed: '', // create database collumn for this field
                     items: item.shoppingCart,
                     deleted: item.deleted,
                     created_at: item.created_at,
                     updated_at: item.updated_at,
                 };
             });
-            return res.status(200).send({ orders: data });
+
+            const total = data.length;
+
+            return res.status(200).send({ orders: data, total });
         } catch (err) {
             console.error(err);
         }

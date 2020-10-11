@@ -5,7 +5,7 @@ const authConfig = require('../../config/auth');
 
 module.exports = async (req, res, next) => {
     const authHeader = req.headers.authorization;
-
+    // return console.log(authHeader);
     if (!authHeader) {
         return res.status(401).json({ error: 'Token not provider' });
     }
@@ -20,8 +20,8 @@ module.exports = async (req, res, next) => {
 
     try {
         const decoded = await promisify(jwt.verify)(token, authConfig.secret);
-
-        req.userId = decoded.id;
+        
+        req.userId = decoded.payload.id;
 
         return next();
     } catch (err) {
