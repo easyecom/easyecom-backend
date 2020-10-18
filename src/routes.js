@@ -328,15 +328,15 @@ routes.delete(
 
 // orders admin
 routes.get(
-    '/stores/:store_id/ordersAdmin',
-    // authMiddleware,
-    // storeValidation,
+    '/stores/:store_id/orders/admin',
+    authMiddleware,
+    storeValidation,
     AdminOrdersController.findAll
 );
 routes.get(
-    '/stores/:store_id/ordersAdmin/:order_id',
-    // authMiddleware,
-    // storeValidation,
+    '/stores/:store_id/orders/:order_id/admin',
+    authMiddleware,
+    storeValidation,
     AdminOrdersController.findOne
 );
 routes.get(
@@ -382,7 +382,7 @@ routes.post(
 
 // delivery
 routes.get('/stores/:store_id/deliveries', DeliveryController.findAll);
-routes.put('/stores/:store_id/deliveries', DeliveryController.create);
+routes.put('/stores/:store_id/deliveries', DeliveryController.update);
 
 // payment
 routes.post('/stores/:store_id/payments', PaymentsController.create);

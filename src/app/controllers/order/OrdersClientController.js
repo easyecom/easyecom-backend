@@ -8,6 +8,8 @@ class OrdersController {
         const { shoppingCart, delivery_id, cancel } = req.body; // criar delivery no momento do pedido
         const { userId: user_id } = req;
 
+        return res.json(shoppingCart);
+
         try {
             const [checkClient] = await connection('clients')
                 .join('users', 'clients.user_id', 'users.userId')
