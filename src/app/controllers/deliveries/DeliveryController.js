@@ -1,8 +1,8 @@
-const { identity } = require('lodash');
+const _ = require('lodash');
 const connection = require('../../../database/connection');
 
 class DeliveryController {
-    async create({ params, body }, res) {
+    async update({ params, body }, res) {
         const { store_id } = params;
 
         const { status, tracking, type, cost, deliveryTime, address_id } = body;

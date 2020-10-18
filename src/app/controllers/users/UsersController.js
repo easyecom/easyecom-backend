@@ -37,6 +37,9 @@ class UsersController {
             .select('*')
             .where('email', email);
 
+        // if (checkEmail.length && checkEmail[0].store_id === store_id) {
+        //     return res.status(400).json('email alredy exist');
+        // }
         if (checkEmail.length) {
             return res.status(400).json('email alredy exist');
         }

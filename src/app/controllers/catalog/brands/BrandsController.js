@@ -50,7 +50,7 @@ class BrandsController {
         const { store_id } = req.params;
 
         try {
-            const data = await connection('brands')
+            let data = await connection('brands')
                 .select('*')
                 .where('store_id', store_id);
 
@@ -58,7 +58,7 @@ class BrandsController {
                 return res.json({ message: 'without brands' });
             }
 
-            return res.status(200).json(data);
+            return res.status(200).json({brands: data});
         } catch (err) {
             console.error({
                 message: err.message,

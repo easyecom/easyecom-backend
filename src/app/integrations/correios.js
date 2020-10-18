@@ -1,8 +1,6 @@
 const Correios = require('node-correios');
 let correios = new Correios();
 
-const correiosConfig = require('../../config/correios');
-
 const calculateShipping = async (shoppingCart, zipCode, storeZipcode) => {
     const _variation = await shoppingCart.map(item => {
         return {
@@ -17,9 +15,9 @@ const calculateShipping = async (shoppingCart, zipCode, storeZipcode) => {
 
     try {
         const result = await correios.calcPrecoPrazo({
-            nCdServico: '40010', //correiosConfig.nCdServico,
+            nCdServico: '40010', 
             sCepOrigem: storeZipcode,
-            sCepDestino: zipCode, // clientData.zipcode,
+            sCepDestino: zipCode, 
             nVlPeso: '1', //_variation.weightKg,
             nCdFormato: 1,
             nVlComprimento: _variation[0].packagedLength,
