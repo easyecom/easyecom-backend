@@ -21,6 +21,14 @@ exports.up = knex => {
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
+        table.integer('order_id');
+        table
+            .foreign('order_id')
+            .references('orderId')
+            .inTable('orders')
+            .onUpdate('CASCADE')
+            .onDelete('SET NULL');
+
         table.integer('store_id');
         table
             .foreign('store_id')

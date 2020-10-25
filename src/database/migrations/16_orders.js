@@ -16,14 +16,6 @@ exports.up = knex => {
 
         table.specificType('shoppingCart', 'jsonb[]');
 
-        table.integer('delivery_id');
-        table
-            .foreign('delivery_id')
-            .references('deliveryId')
-            .inTable('deliveries')
-            .onUpdate('CASCADE')
-            .onDelete('SET NULL');
-
         table.integer('store_id');
         table
             .foreign('store_id')
@@ -33,6 +25,7 @@ exports.up = knex => {
             .onDelete('SET NULL');
 
         table.boolean('cancel').defaultTo(false);
+        table.boolean('is_completed').defaultTo(false);
 
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());

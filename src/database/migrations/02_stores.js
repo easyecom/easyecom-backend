@@ -15,6 +15,7 @@ exports.up = knex => {
             .string('cnpj')
             .notNullable()
             .unique();
+            
         table.string('email').notNullable();
         table.string('businessPhone');
         table.string('cellPhone');
