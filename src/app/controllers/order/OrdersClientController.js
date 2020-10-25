@@ -6,7 +6,7 @@ const util = require('util');
 class OrdersController {
     async create(req, res) {
         const { store_id } = req.params;
-        const { shoppingCart, deliveryData, PaymentData, cancel } = req.body; // criar delivery no momento do pedido
+        const { shoppingCart, deliveryData, paymentData, cancel } = req.body; // criar delivery no momento do pedido
         const { userId: user_id } = req;
 
         // return res.json(shoppingCart);
@@ -44,31 +44,54 @@ class OrdersController {
                     .json({ message: 'address does note exist' });
             }
 
-            // if (!checkDelivery) {
-            //     return res.status(404).json({ message: 'delivery not exist' });
-            // }
-
-            // const [checkDelivery] = await connection('deliveries').where({
-            //     deliveryId: delivery_id,
-            //     store_id: store_id,
-            // });
-
-            // const [checkPayment] = await connection('payments').where({
-            //     paymentId: payment_id,
-            //     store_id: store_id,
-            // });
-
-            // if (!checkPayment) {
-            //     return res.status(404).json({ message: 'payment not exist' });
-            // }
-
-            let data = await connection('orders')
+            let [data] = await connection('orders')
                 .returning('*')
                 .insert({
                     client_id,
                     shoppingCart,
                     cancel,
                     store_id,
+                });
+
+            // delivery
+            if (!deliveryData) {
+                return res.status(404).json({ message: 'delivery not exist' });
+            }
+
+            const { cost, deliveryTime, type } = deliveryData;
+
+            await connection('deliveries')
+                .returning('*')
+                .insert({
+                    status: 'aguardando aprovação',
+                    tracking: '',
+                    type,
+                    cost,
+                    deliveryTime,
+                    address_id: checkAddress.addressId,
+                    store_id,
+                    order_id: data.orderId,
+                });
+
+            // payment
+            if (!paymentData) {
+                return res.status(404).json({ message: 'payment not exist' });
+            }
+
+            const { value, paymentForm, installment } = paymentData;
+
+            await connection('payments')
+                .returning('*')
+                .insert({
+                    status: 'aguardando pagamento',
+                    value,
+                    paymentForm,
+                    installment,
+                    address_id: checkAddress.addressId,
+                    cards: {},
+                    store_id,
+                    order_id: data.orderId,
+                    deliveryAddressEqualBilling: true,
                 });
 
             return res.status(201).json(data);

@@ -6,8 +6,8 @@ exports.up = knex => {
             .primary()
             .unique();
 
-        table.decimal('value', 6, 2).notNullable();
-        table.string('formOfPay').notNullable();
+        table.decimal('value').notNullable();
+        table.string('paymentForm').notNullable();
         table.integer('installment').defaultTo(1);
         table.string('status').notNullable();
         table.string('codeGateway');

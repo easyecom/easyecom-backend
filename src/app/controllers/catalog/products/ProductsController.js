@@ -14,9 +14,6 @@ class ProductsController {
             variations,
             images,
             evaluations,
-            costPrice,
-            offerPrice,
-            salesPrice,
             refId,
             mainCategory,
             categoryId,
@@ -29,7 +26,6 @@ class ProductsController {
             if (!productName) error.push('productName');
             if (!descriptionShort) error.push('descriptionShort');
             if (!sku) error.push('sku');
-            if (!salesPrice) error.push('salesPrice');
             if (!brand_id) error.push('brand_id');
             if (!categoryId) error.push('categoryId');
 
@@ -90,9 +86,6 @@ class ProductsController {
                     variations,
                     images,
                     evaluations,
-                    costPrice,
-                    offerPrice,
-                    salesPrice,
                     refId,
                     mainCategory,
                     store_id,
@@ -161,8 +154,6 @@ class ProductsController {
                     'products.productId',
                     'products.productName',
                     'products.descriptionShort',
-                    'products.salesPrice',
-                    'products.offerPrice',
                     'brands.brandName',
                     'categories.categoryName',
                     'products.variations',
@@ -203,12 +194,14 @@ class ProductsController {
 
     async update(req, res) {
         const { store_id, product_id } = req.params;
-        const productData = req.body;
+        let productData = req.body;
 
         try {
-            const checkProduct = await connection('products')
+            let checkProduct = await connection('products')
                 .where({ productId: product_id, store_id })
                 .select('*');
+
+            productData.categoryId = undefined;
 
             if (!checkProduct.length) {
                 return res
@@ -229,9 +222,6 @@ class ProductsController {
                     'variations',
                     'images',
                     'evaluations',
-                    'costPrice',
-                    'offerPrice',
-                    'salesPrice',
                     'refId',
                     'mainCategory',
                     'store_id',

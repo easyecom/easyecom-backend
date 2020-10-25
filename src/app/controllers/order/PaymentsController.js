@@ -5,12 +5,12 @@ class PaymentsController {
         const { store_id } = req.params;
         const {
             value,
-            formOfPay,
+            paymentForm,
             installment,
             status,
             codeGateway,
             address_id,
-            card_id,
+            cards,
             order_id,
             deliveryAddressEqualBilling,
         } = req.body;
@@ -20,12 +20,12 @@ class PaymentsController {
                 .returning('*')
                 .insert({
                     value,
-                    formOfPay,
+                    paymentForm,
                     installment,
                     status,
                     codeGateway,
                     address_id,
-                    card_id,
+                    cards,
                     order_id,
                     deliveryAddressEqualBilling,
                     store_id,
