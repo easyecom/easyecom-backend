@@ -10,7 +10,7 @@ exports.up = knex => {
         table.string('formOfPay').notNullable();
         table.integer('installment').defaultTo(1);
         table.string('status').notNullable();
-        table.string('codeGateway')
+        table.string('codeGateway');
 
         table.specificType('cards', 'jsonb[]');
 
@@ -22,7 +22,7 @@ exports.up = knex => {
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
-        table.integer('order_id');
+        table.integer('order_id'); // one order can have more of the one payment type
         table
             .foreign('order_id')
             .references('orderId')

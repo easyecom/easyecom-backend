@@ -19,9 +19,9 @@ exports.up = knex => {
         table.specificType('images', 'jsonb[]');
         table.specificType('evaluations', 'jsonb[]');
         table.integer('mainCategory');
-        table.decimal('costPrice')
-        table.decimal('offerPrice')
-        table.decimal('salesPrice').notNullable();
+        // table.decimal('costPrice') // retirar da tabela
+        // table.decimal('offerPrice') // retirar da tabela
+        // table.decimal('salesPrice').notNullable(); // retirar da tabela
         table.string('refId');
 
         table.integer('store_id');

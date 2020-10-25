@@ -346,7 +346,7 @@ routes.get(
     AdminOrdersController.listOrdersByClient
 );
 routes.delete(
-    '/stores/:store_id/ordersAdmin/:id',
+    '/stores/:store_id/ordersAdmin/:order_id',
     authMiddleware,
     storeValidation,
     AdminOrdersController.delete
@@ -359,17 +359,17 @@ routes.post(
     OrdersController.create
 );
 routes.get(
-    '/stores/:store_id/myOrders/client/:client_id',
+    '/stores/:store_id/orders/me',
     authMiddleware,
     OrdersController.findAll
 );
 routes.get(
-    '/stores/:store_id/orders/:order_id',
+    '/stores/:store_id/orders/me/:order_id',
     authMiddleware,
     OrdersController.findOne
 );
 routes.delete(
-    '/stores/:store_id/orders/:order_id',
+    '/stores/:store_id/orders/me/:order_id',
     authMiddleware,
     OrdersController.delete
 );
@@ -381,8 +381,10 @@ routes.post(
 );
 
 // delivery
-routes.get('/stores/:store_id/deliveries', DeliveryController.findAll);
-routes.put('/stores/:store_id/deliveries', DeliveryController.update);
+routes.get('/stores/:store_id/deliveries/:delivery_id', DeliveryController.getById);
+routes.get('/stores/:store_id/deliveries', DeliveryController.list);
+routes.put('/stores/:store_id/deliveries/:delivery_id', DeliveryController.update);
+routes.post('/stores/:store_id/deliveries/', DeliveryController.create);
 
 // payment
 routes.post('/stores/:store_id/payments', PaymentsController.create);
