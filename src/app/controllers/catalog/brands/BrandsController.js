@@ -3,7 +3,7 @@ const connection = require('../../../../database/connection');
 class BrandsController {
     async store(req, res) {
         const { store_id } = req.params;
-        const { brandName, description, isActive, refId } = req.body;
+        const { brandName, description, isActive, refId, products } = req.body;
 
         try {
             let error = [];
@@ -37,6 +37,7 @@ class BrandsController {
                     description,
                     isActive,
                     refId,
+                    products,
                     store_id,
                 });
 
@@ -58,7 +59,7 @@ class BrandsController {
                 return res.json({ message: 'without brands' });
             }
 
-            return res.status(200).json({brands: data});
+            return res.status(200).json({ brands: data });
         } catch (err) {
             console.error({
                 message: err.message,
@@ -112,14 +113,14 @@ class BrandsController {
             } = req.body;
 
             const data = await connection('brands')
-                .where('brandId', brand_id)
+                .where({ brandId: brand_id, store_id })
                 .update(
                     {
                         brandName,
                         description,
                         isActive,
                         refId,
-                        //products,
+                        products,
                         store_id,
                     },
                     [
@@ -127,7 +128,7 @@ class BrandsController {
                         'description',
                         'isActive',
                         'refId',
-                        // 'products',
+                        'products',
                         'store_id',
                     ]
                 );
@@ -147,7 +148,8 @@ class BrandsController {
             const { store_id, brand_id } = req.params;
 
             const data = await connection('brands').where({
-                'brandId': brand_id, store_id
+                brandId: brand_id,
+                store_id,
             });
 
             if (!data.length) {
