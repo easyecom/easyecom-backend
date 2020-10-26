@@ -51,11 +51,11 @@ class ProductsController {
                 arrayCategoryId.push(category);
             }
 
-            const checkBrand = await connection('brands')
+            const [checkBrand] = await connection('brands')
                 .select('*')
                 .where({ brandId: brand_id });
 
-            if (!checkBrand.length) {
+            if (!checkBrand) {
                 return res
                     .status(404)
                     .json({ error: { message: 'brands does not exist' } });
@@ -92,24 +92,30 @@ class ProductsController {
                     brand_id,
                 });
 
+            let products = [];
+            products.push(data.productId, ...checkBrand.products);
+            await connection('brands')
+                .where({ brandId: brand_id, store_id })
+                .update({ products }, ['products']);
+
             for (let categoryId of arrayCategoryId) {
-                const categoryProduct = await connection('category_products')
+                await connection('category_products')
                     .returning('*')
                     .insert({
                         category_id: categoryId,
                         product_id: data.productId,
                     });
-                console.table(categoryProduct);
 
                 let products = [];
 
-                products.push(data.productId);
+                // products.push();
 
                 const [category] = await connection('categories').where({
                     categoryId,
                     store_id,
                 });
-                products.push(...category.products);
+
+                products.push(data.productId, ...category.products);
 
                 let [newProductArray] = await connection('categories')
                     .where({
@@ -117,7 +123,6 @@ class ProductsController {
                         store_id,
                     })
                     .update({ products }, ['products']);
-                console.table(newProductArray);
             }
 
             return res.status(201).json(data);
@@ -142,11 +147,11 @@ class ProductsController {
             }
 
             const data = await connection('products')
-                .join(
-                    'categories',
-                    'products.productId',
-                    'categories.categoryId'
-                )
+                // .join(
+                //     'categories',
+                //     'products.productId',
+                //     'categories.categoryId'
+                // )
                 .join('brands', 'products.brand_id', 'brands.brandId')
                 // .limit(20)
                 // .offset((page - 1) * 20)
@@ -155,7 +160,7 @@ class ProductsController {
                     'products.productName',
                     'products.descriptionShort',
                     'brands.brandName',
-                    'categories.categoryName',
+                    // 'categories.categoryName',
                     'products.variations',
                     'products.evaluations'
                 )
