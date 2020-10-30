@@ -135,6 +135,10 @@ class OrdersController {
 
             return res.status(200).json(data);
         } catch (err) {
+            const message = error.message;
+            if (message.includes(" property 'clientId' of checkClient")) {
+                return res.status(400).json({ error: 'client not exist' });
+            }
             console.error(err);
         }
     }

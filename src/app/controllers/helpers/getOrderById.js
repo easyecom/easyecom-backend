@@ -1,9 +1,10 @@
-module.exports = async ({res, connection, store_id, order_id }) => {
+module.exports = async ({ res, connection, store_id, order_id }) => {
     try {
         let data = await connection('orders')
             .join('clients', 'clients.clientId', 'orders.client_id')
             .join('users', 'clients.user_id', 'users.userId')
             .join('addresses', 'addresses.user_id', 'users.userId')
+            .join('deliveries', 'deliveries.order_id', 'orders.orderId')
             .where({
                 'orders.orderId': order_id,
                 'orders.store_id': store_id,
@@ -11,9 +12,7 @@ module.exports = async ({res, connection, store_id, order_id }) => {
             .select('*');
 
         if (!data.length) {
-            return res
-                .status(400)
-                .json({ message: 'order does not exist' });
+            return res.status(400).json({ message: 'order does not exist' });
         }
 
         const { shoppingCart } = data[0];
@@ -29,6 +28,7 @@ module.exports = async ({res, connection, store_id, order_id }) => {
                 'variationId',
                 item.variation_id
             );
+
             const data = {
                 name: variation.variationName,
                 amount: variation.amount,
@@ -65,24 +65,33 @@ module.exports = async ({res, connection, store_id, order_id }) => {
                     userName: item.userName,
                     email: item.email,
                     dateOfBirth: item.dateOfBirth,
-                    address: {
-                        addressId: item.addressId,
-                        zipcode: item.zipcode,
-                        street: item.street,
-                        number: item.number,
-                        complement: item.complement,
-                        neighborhood: item.neighborhood,
-                        city: item.city,
-                        state: item.state,
-                        state_code: item.state_code,
-                        country: item.country,
-                        storeIdToAddress: item.storeIdToAddress,
-                    },
+                },
+                address: {
+                    addressId: item.addressId,
+                    zipcode: item.zipcode,
+                    street: item.street,
+                    number: item.number,
+                    complement: item.complement,
+                    neighborhood: item.neighborhood,
+                    city: item.city,
+                    state: item.state,
+                    state_code: item.state_code,
+                    country: item.country,
+                    storeIdToAddress: item.storeIdToAddress,
+                },
+                shipping: {
+                    deliveryId: item.deliveryId,
+                    cost: item.cost,
+                    status: item.status,
+                    time: item.deliveryTime,
+                    trackingNumber: item.tracking,
+                    type: item.type,
+                    address_id: item.address_id
+
                 },
                 payment: '', // make join
-                shipping: '', // make join
-                is_completed: '', // create database collumn for this field
                 items: items,
+                is_completed: '', // create database collumn for this field
                 deleted: item.deleted,
                 created_at: item.created_at,
                 updated_at: item.updated_at,

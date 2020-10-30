@@ -48,6 +48,7 @@ class UsersController {
             try {
                 bcrypt.hash(String(password), 7, (err, hash) => {
                     if (err) {
+                        console.error(err)
                         return reject(err);
                     }
                     resolve(
@@ -64,12 +65,13 @@ class UsersController {
                     );
                 });
             } catch (err) {
+                console.error(err);
                 return res.status(500).json('sorry, something broke...');
             }
         });
 
         user.then(result => {
-            return res.status(201).json(result);
+            return res.status(201).send(result);
         }).catch(err => {
             console.error(err);
             return res.status(500).json('sorry, something broke...');
