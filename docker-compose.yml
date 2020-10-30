@@ -3,7 +3,7 @@ version: '3'
 services:
   app:
     build: .
-    container_name: "api-sid"
+    container_name: "api-easyecom"
     command: sh -c "npm run
      migrate && npm run dev"
     ports:
@@ -21,7 +21,7 @@ services:
       DB_NAME: ${DATABASE_NAME}
   db:
     image: postgres:alpine
-    container_name: db-sid
+    container_name: db-easyecom
     ports:
       - "5432:5432"
     environment:
