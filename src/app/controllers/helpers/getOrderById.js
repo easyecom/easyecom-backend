@@ -7,7 +7,7 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
             .join('deliveries', 'deliveries.order_id', 'orders.orderId')
             .where({
                 'orders.orderId': order_id,
-                'orders.store_id': store_id,
+                'orders.store_id': parseInt(store_id),
             })
             .select('*');
 
@@ -18,6 +18,7 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
         const { shoppingCart } = data[0];
 
         let items = [];
+        let totalValue = [];
 
         for (let item of shoppingCart) {
             const [product] = await connection('products').where(
@@ -33,11 +34,10 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
                 name: variation.variationName,
                 amount: variation.amount,
                 freeShipping: variation.freeShipping,
-                costPrice: variation.costPrice,
-                offerPrice: variation.offerPrice,
-                salesPrice: variation.salesPrice,
+                costPrice: parseInt(variation.costPrice),
+                offerPrice: parseInt(variation.offerPrice),
+                salesPrice: parseInt(variation.salesPrice),
                 refId: variation.refId,
-
                 color: 'vermelho', // create on migration
                 measures: 'P', // create on migration
 
@@ -51,8 +51,13 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
                 product_id: variation.product_id,
             };
             items.push(data);
+            totalValue.push(data.offerPrice || data.salesPrice);
         }
 
+        let value = 0;
+        for (let i = 0; i < totalValue.length; i++) {
+            value = value += totalValue[i];
+        }
         const [result] = data.map(item => {
             return {
                 Id: item.orderId,
@@ -86,12 +91,22 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
                     time: item.deliveryTime,
                     trackingNumber: item.tracking,
                     type: item.type,
-                    address_id: item.address_id
-
+                    address_id: item.address_id,
                 },
-                payment: '', // make join
                 items: items,
-                is_completed: '', // create database collumn for this field
+                totalItemsValue: parseFloat(value).toFixed(2),
+                payment: {
+                    value: '2020.60',
+                    paymentForm: 'card',
+                    installment: '3',
+                    status: 'aguardando pagamento',
+                    codeGateway: 123,
+                    address_id: 1,
+                    cards: 1,
+                    order_id: 2,
+                    deliveryAddressEqualBilling: true,
+                },
+                is_completed: false, // create database collumn for this field
                 deleted: item.deleted,
                 created_at: item.created_at,
                 updated_at: item.updated_at,

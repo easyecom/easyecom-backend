@@ -13,6 +13,9 @@ class App {
     middlewares() {
         this.server.use(cors());
         this.server.use(express.json());
+        this.server.set('view engine', 'ejs');
+        this.server.disable('x-powered-by');
+        
         this.server.use(
             '/avatar',
             express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))

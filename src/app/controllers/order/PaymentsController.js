@@ -1,4 +1,5 @@
 const connection = require('../../../database/connection');
+const { createPayment } = require('../../integrations/pagseguro');
 
 class PaymentsController {
     async create(req, res) {
@@ -14,6 +15,8 @@ class PaymentsController {
             order_id,
             deliveryAddressEqualBilling,
         } = req.body;
+        console.log('start');
+        return createPayment();
 
         try {
             const data = await connection('payments')
