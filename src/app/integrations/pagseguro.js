@@ -24,7 +24,7 @@ const createPayment = async (senderHash, data) => {
         return { error: 'invalid payment form' };
     } catch (err) {
         console.log(err);
-        return { error: 'something broke' };
+        return { errorMessage: 'something broke', errors: err };
     }
 };
 

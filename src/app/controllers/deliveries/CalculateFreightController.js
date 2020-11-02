@@ -28,23 +28,24 @@ class CalculateFreightController {
                 zipcode,
                 storeZipcode
             );
-
-            return res.status(200).json({
-                correios_code: calculate.Codigo,
-                value: parseFloat(calculate.Valor),
-                deadline: `${calculate.PrazoEntrega} dias`,
-                deliverySaturday:
-                    calculate.EntregaSabado == 'S'
-                        ? 'Sim'
-                        : "Não",
-                delivery:
-                    calculate.EntregaDomiciliar == 'S'
-                        ? 'Sim'
-                        : calculate.EntregaDomiciliar,
-                obs: calculate.obsFim ? calculate.obsFim : undefined,
-                obs: calculate.Erro ? calculate.Erro : undefined,
-                obs: calculate.MsgErro ? calculate.MsgErro : undefined,
+            const calculates = calculate.map(item => {
+                return {
+                    type: item.Codigo == 40010 ? 'SEDEX' : 'PAC',
+                    correios_code: item.Codigo,
+                    value: parseFloat(item.Valor),
+                    deadline: `${item.PrazoEntrega} dias`,
+                    deliverySaturday: item.EntregaSabado == 'S' ? 'Sim' : 'Não',
+                    delivery:
+                        item.EntregaDomiciliar == 'S'
+                            ? 'Sim'
+                            : item.EntregaDomiciliar,
+                    obs: item.obsFim ? item.obsFim : undefined,
+                    obs: item.Erro ? item.Erro : undefined,
+                    obs: item.MsgErro ? item.MsgErro : undefined,
+                };
             });
+
+            res.status(200).json(calculates);
         } catch (err) {
             return console.error(err);
         }
