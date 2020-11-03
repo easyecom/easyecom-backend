@@ -41,7 +41,40 @@ class OrdersController {
             if (!checkAddress) {
                 return res
                     .status(404)
-                    .json({ message: 'address does note exist' });
+                    .json({ message: 'address does not exist' });
+            }
+
+            const { cost, deliveryTime, type, addressDelivery } = deliveryData;
+
+            let createAddressdelivery;
+            if (addressDelivery.zipcode) {
+                const {
+                    zipcode,
+                    street,
+                    number,
+                    complement,
+                    neighborhood,
+                    city,
+                    state,
+                    state_code,
+                    country,
+                } = addressDelivery;
+
+                createAddressdelivery = await connection('addresses')
+                    .returning('*')
+                    .insert({
+                        zipcode,
+                        street,
+                        number,
+                        complement,
+                        neighborhood,
+                        city,
+                        state,
+                        state_code,
+                        country,
+                        user_id,
+                        store_id,
+                    });
             }
 
             let [data] = await connection('orders')
@@ -58,8 +91,6 @@ class OrdersController {
                 return res.status(404).json({ message: 'delivery not exist' });
             }
 
-            const { cost, deliveryTime, type } = deliveryData;
-
             await connection('deliveries')
                 .returning('*')
                 .insert({
@@ -68,7 +99,12 @@ class OrdersController {
                     type,
                     cost,
                     deliveryTime,
-                    address_id: checkAddress.addressId,
+                    address_id:
+                        createAddressdelivery &&
+                        createAddressdelivery[0] &&
+                        createAddressdelivery[0].addressId
+                            ? createAddressdelivery[0].addressId
+                            : checkAddress.addressId,
                     store_id,
                     order_id: data.orderId,
                 });
@@ -78,15 +114,13 @@ class OrdersController {
                 return res.status(404).json({ message: 'payment not exist' });
             }
 
-            const { value, paymentForm, installment } = paymentData;
-
             await connection('payments')
                 .returning('*')
                 .insert({
                     status: 'aguardando pagamento',
-                    value,
-                    paymentForm,
-                    installment,
+                    value: paymentData.value,
+                    paymentForm: paymentData.paymentForm,
+                    installment: paymentData.installment,
                     address_id: checkAddress.addressId,
                     cards: {},
                     store_id,
