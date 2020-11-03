@@ -1,4 +1,5 @@
 module.exports = async ({ res, connection, store_id, order_id }) => {
+    // console.log(order_id)
     try {
         let data = await connection('orders')
             .join('clients', 'clients.clientId', 'orders.client_id')
@@ -7,7 +8,7 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
             .join('deliveries', 'deliveries.order_id', 'orders.orderId')
             .where({
                 'orders.orderId': order_id,
-                'orders.store_id': parseInt(store_id),
+                'orders.store_id': store_id,
             })
             .select('*');
 
@@ -58,6 +59,18 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
         for (let i = 0; i < totalValue.length; i++) {
             value = value += totalValue[i];
         }
+
+        // return res.json(data[0].address_id)
+
+        let deliveryAddress;
+        if (data[0].address_id !== data[0].addressId) {
+            deliveryAddress = await connection('addresses').where({
+                store_id: store_id,
+                addressId: data[0].address_id,
+            });
+            // return res.json(deliveryAddress);
+        }
+
         const [result] = data.map(item => {
             return {
                 Id: item.orderId,
@@ -84,6 +97,7 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
                     country: item.country,
                     storeIdToAddress: item.storeIdToAddress,
                 },
+
                 shipping: {
                     deliveryId: item.deliveryId,
                     cost: item.cost,
@@ -92,6 +106,9 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
                     trackingNumber: item.tracking,
                     type: item.type,
                     address_id: item.address_id,
+                    shippingAddress: deliveryAddress && deliveryAddress.length
+                        ? deliveryAddress[0]
+                        : null,
                 },
                 items: items,
                 totalItemsValue: parseFloat(value).toFixed(2),
