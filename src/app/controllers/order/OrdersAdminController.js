@@ -3,17 +3,19 @@ const getOrderById = require('../helpers/getOrderById');
 class AdminOrdersController {
     async findAll({ params, query }, res) {
         const { store_id } = params;
-        const { page = 1, limit } = query;
+        // const { page = 1, limit } = query;
 
         try {
             let data = await connection('orders')
                 .join('clients', 'clients.clientId', 'orders.client_id')
                 .join('users', 'clients.user_id', 'users.userId')
-                .join('addresses', 'addresses.user_id', 'users.userId')
-                .limit(limit)
-                .offset(page * limit)
+                // .join('addresses', 'addresses.user_id', 'users.userId')
+                // .limit(limit)
+                // .offset(page * limit)
                 .where('orders.store_id', store_id)
                 .select('*');
+
+            // return res.json(data);
 
             data = data.map(item => {
                 return {
@@ -27,19 +29,19 @@ class AdminOrdersController {
                         userName: item.userName,
                         email: item.email,
                         dateOfBirth: item.dateOfBirth,
-                        address: {
-                            addressId: item.addressId,
-                            zipcode: item.zipcode,
-                            street: item.street,
-                            number: item.number,
-                            complement: item.complement,
-                            neighborhood: item.neighborhood,
-                            city: item.city,
-                            state: item.state,
-                            state_code: item.state_code,
-                            country: item.country,
-                            storeIdToAddress: item.storeIdToAddress,
-                        },
+                        // address: {
+                        //     addressId: item.addressId,
+                        //     zipcode: item.zipcode,
+                        //     street: item.street,
+                        //     number: item.number,
+                        //     complement: item.complement,
+                        //     neighborhood: item.neighborhood,
+                        //     city: item.city,
+                        //     state: item.state,
+                        //     state_code: item.state_code,
+                        //     country: item.country,
+                        //     storeIdToAddress: item.storeIdToAddress,
+                        // },
                     },
                     payment: '', // make join
                     shipping: '', // make join
@@ -87,7 +89,12 @@ class AdminOrdersController {
         const { store_id, order_id } = params;
 
         try {
-            const data = await getOrderById({res, connection, store_id, order_id});
+            const data = await getOrderById({
+                res,
+                connection,
+                store_id,
+                order_id,
+            });
 
             return res.status(200).send({ order: data });
         } catch (err) {
