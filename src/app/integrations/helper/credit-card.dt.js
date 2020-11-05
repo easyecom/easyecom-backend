@@ -1,22 +1,23 @@
-module.exports = async (senderHash, data) => {
+module.exports = async data => {
     return {
         reference_id: 'ex-00001',
         description: 'Motivo da cobrança',
         amount: {
-            value: 1000,
+            value: data.value,
             currency: 'BRL',
         },
         payment_method: {
             type: 'CREDIT_CARD',
-            installments: 1,
+            installments: data.installment,
             capture: false,
             card: {
-                number: '4111111111111111',
-                exp_month: '03',
-                exp_year: '2026',
-                security_code: '123',
+                number: data.card[0].number,
+                exp_month: data.card[0].exp_month,
+                exp_year: data.card[0].exp_year,
+                security_code: data.card[0].security_code,
+                store: true,
                 holder: {
-                    name: 'Jose da Silva',
+                    name: data.card[0].holder.name,
                 },
             },
         },

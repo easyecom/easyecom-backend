@@ -106,9 +106,10 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
                     trackingNumber: item.tracking,
                     type: item.type,
                     address_id: item.address_id,
-                    shippingAddress: deliveryAddress && deliveryAddress.length
-                        ? deliveryAddress[0]
-                        : null,
+                    shippingAddress:
+                        deliveryAddress && deliveryAddress.length
+                            ? deliveryAddress[0]
+                            : null,
                 },
                 items: items,
                 totalItemsValue: parseFloat(value).toFixed(2),

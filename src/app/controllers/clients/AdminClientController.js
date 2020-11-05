@@ -8,7 +8,7 @@ class adminClientController {
         try {
             let data = await connection('clients')
                 .join('users', 'users.userId', 'clients.user_id')
-                .join('addresses', 'addresses.user_id', 'users.userId')
+                // .join('addresses', 'addresses.user_id', 'users.userId')
                 .limit(20)
                 .offset((page - 1) * 20)
                 .select('*')
@@ -31,19 +31,19 @@ class adminClientController {
                     email: item.email,
                     cpf: item.cpf,
                     dateOfBirth: item.dateOfBirth,
-                    address: {
-                        address_id: item.addressId,
-                        zipcode: item.zipcode,
-                        street: item.street,
-                        number: item.number,
-                        complement: item.complement,
-                        neighborhood: item.neighborhood,
-                        city: item.city,
-                        state: item.state,
-                        state_code: item.state_code,
-                        country: item.country,
-                        storeIdToAddress: item.storeIdToAddress,
-                    },
+                    // address: {
+                    //     address_id: item.addressId,
+                    //     zipcode: item.zipcode,
+                    //     street: item.street,
+                    //     number: item.number,
+                    //     complement: item.complement,
+                    //     neighborhood: item.neighborhood,
+                    //     city: item.city,
+                    //     state: item.state,
+                    //     state_code: item.state_code,
+                    //     country: item.country,
+                    //     storeIdToAddress: item.storeIdToAddress,
+                    // },
                     refId: item.refId,
                     store_id: item.store_id,
                     deleted: item.deleted,
