@@ -1,4 +1,4 @@
-module.exports = async (senderHash, data) => {
+module.exports = async data => {
     return {
         reference_id: 'ex-00001',
         description: 'Motivo da cobrança',

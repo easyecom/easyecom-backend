@@ -4,21 +4,14 @@ const billetDataTranformed = require('./helper/billet.dt');
 const creditCardDataTranformed = require('./helper/credit-card.dt');
 const postPayment = require('./helper/repository');
 
-const createPayment = async (senderHash, data) => {
-    const teste = 'boleto';
+const createPayment = async data => {
     try {
-        if (teste == 'boleto') {
-            const billetTransformed = await billetDataTranformed(
-                senderHash,
-                data
-            );
+        if (data.paymentForm == 'boleto') {
+            const billetTransformed = await billetDataTranformed(data);
             return await postPayment(billetTransformed);
         }
-        if (teste == 'creditCard') {
-            const creditCardTranformed = await creditCardDataTranformed(
-                senderHash,
-                data
-            );
+        if (data.paymentForm == 'creditCard') {
+            const creditCardTranformed = await creditCardDataTranformed(data);
             return await postPayment(creditCardTranformed);
         }
         return { error: 'invalid payment form' };

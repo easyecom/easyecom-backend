@@ -1,5 +1,7 @@
 const connection = require('../../../database/connection');
 const { calculateShipping } = require('../../integrations/correios');
+const { createPayment } = require('../../integrations/pagseguro');
+
 const getOrderById = require('../helpers/getOrderById');
 const util = require('util');
 
@@ -12,6 +14,7 @@ class OrdersController {
         // return res.json(shoppingCart);
 
         try {
+            // 1 - validate
             // if (!ShoppingCartValidation(shoppingCart))
             //     return res.json(422).json({ error: 'Dados do carrinho invalido' });
 
@@ -44,6 +47,7 @@ class OrdersController {
                     .json({ message: 'address does not exist' });
             }
 
+            // 2 - delivery
             const { cost, deliveryTime, type, addressDelivery } = deliveryData;
 
             let createAddressdelivery;
@@ -113,6 +117,9 @@ class OrdersController {
             if (!paymentData) {
                 return res.status(404).json({ message: 'payment not exist' });
             }
+
+            const token = await createPayment(paymentData);
+            console.log(token);
 
             await connection('payments')
                 .returning('*')
