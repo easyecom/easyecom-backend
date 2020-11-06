@@ -1,32 +1,37 @@
-module.exports = async data => {
+const { compareAsc, format, addDays } = require('date-fns');
+
+module.exports = async (data, client, address) => {
+    const add = addDays(new Date(), 3);
+    let due_date = format(add, 'yyyy-MM-dd');
+
     return {
         reference_id: 'ex-00001',
         description: 'Motivo da cobrança',
         amount: {
-            value: 25000,
+            value: data.value,
             currency: 'BRL',
         },
         payment_method: {
             type: 'BOLETO',
             boleto: {
-                due_date: '2020-11-07',
+                due_date,
                 instruction_lines: {
                     line_1: 'Pagamento processado para DESC Fatura',
                     line_2: 'Via PagSeguro',
                 },
                 holder: {
-                    name: 'Dariane Lourdes',
-                    tax_id: '44952971040',
-                    email: 'dariane@gmail.com',
+                    name: client.userName,
+                    tax_id: client.cpf.replace(/\D+/g, ''),
+                    email: client.email,
                     address: {
-                        country: 'Brasil',
-                        region: 'São Paulo',
-                        region_code: 'SP',
-                        city: 'Mogi das Cruzes',
-                        postal_code: '07190020',
-                        street: 'Rua Rubbens Henrique Picchi',
-                        number: '311',
-                        locality: 'Aeroporto',
+                        country: address.country,
+                        region: address.state,
+                        region_code: address.state_code,
+                        city: address.city,
+                        postal_code: address.zipcode.replace('-', ''),
+                        street: address.street,
+                        number: address.number,
+                        locality: address.neighborhood,
                     },
                 },
             },

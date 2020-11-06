@@ -118,22 +118,47 @@ class OrdersController {
                 return res.status(404).json({ message: 'payment not exist' });
             }
 
-            const token = await createPayment(paymentData);
-            console.log(token);
+            const responsePayment = await createPayment(
+                paymentData,
+                checkClient,
+                checkAddress
+            );
 
-            await connection('payments')
+            // const status = await createPayment(paymentData);
+
+            return console.log(responsePayment);
+
+            const testeRes = await connection('payments')
                 .returning('*')
                 .insert({
-                    status: 'aguardando pagamento',
+                    status: responsePayment && responsePayment.status,
                     value: paymentData.value,
                     paymentForm: paymentData.paymentForm,
                     installment: paymentData.installment,
                     address_id: checkAddress.addressId,
-                    cards: {},
+                    cards: [
+                        {
+                            cardToken_1:
+                                responsePayment &&
+                                responsePayment.payment_method &&
+                                responsePayment.payment_method.card &&
+                                responsePayment.payment_method.card.id
+                                    ? responsePayment.payment_method.card.id
+                                    : '',
+                            boleto:
+                                responsePayment &&
+                                responsePayment.links &&
+                                responsePayment.links[0].href
+                                    ? responsePayment.links[0].href
+                                    : '',
+                        },
+                    ],
                     store_id,
                     order_id: data.orderId,
                     deliveryAddressEqualBilling: true,
                 });
+
+            console.log(testeRes);
 
             return res.status(201).json(data);
         } catch (err) {
