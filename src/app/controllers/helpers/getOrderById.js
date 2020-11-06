@@ -6,6 +6,7 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
             .join('users', 'clients.user_id', 'users.userId')
             .join('addresses', 'addresses.user_id', 'users.userId')
             .join('deliveries', 'deliveries.order_id', 'orders.orderId')
+            .join('payments', 'payments.order_id', 'orders.orderId')
             .where({
                 'orders.orderId': order_id,
                 'orders.store_id': store_id,
@@ -114,14 +115,14 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
                 items: items,
                 totalItemsValue: parseFloat(value).toFixed(2),
                 payment: {
-                    value: '2020.60',
-                    paymentForm: 'card',
-                    installment: '3',
-                    status: 'aguardando pagamento',
-                    codeGateway: 123,
-                    address_id: 1,
-                    cards: 1,
-                    order_id: 2,
+                    value: item.value,
+                    paymentForm: item.paymentForm,
+                    installment: item.installment,
+                    status: item.status,
+                    codeGateway: item.codeGateway,
+                    address_id: item.address_id,
+                    cards: item.cards,
+                    order_id: item.order_id,
                     deliveryAddressEqualBilling: true,
                 },
                 is_completed: false, // create database collumn for this field

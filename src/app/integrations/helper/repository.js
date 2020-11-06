@@ -11,7 +11,7 @@ module.exports = body => {
             },
         })
         .then(({ data }) => {
-            return console.log(data);
+            return data;
         })
         .catch(err => console.error(err));
 };

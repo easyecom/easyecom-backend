@@ -15,7 +15,8 @@ class PaymentsController {
             order_id,
             deliveryAddressEqualBilling,
         } = req.body;
-        console.log('start');
+        // console.log('start');
+
         return createPayment();
 
         try {
