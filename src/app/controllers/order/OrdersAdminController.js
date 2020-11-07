@@ -1,5 +1,5 @@
 const connection = require('../../../database/connection');
-const getOrderById = require('../helpers/getOrderById');
+const getOrderById = require('./helpers/getOrderById');
 class AdminOrdersController {
     async findAll({ params, query }, res) {
         const { store_id } = params;
@@ -29,19 +29,6 @@ class AdminOrdersController {
                         userName: item.userName,
                         email: item.email,
                         dateOfBirth: item.dateOfBirth,
-                        // address: {
-                        //     addressId: item.addressId,
-                        //     zipcode: item.zipcode,
-                        //     street: item.street,
-                        //     number: item.number,
-                        //     complement: item.complement,
-                        //     neighborhood: item.neighborhood,
-                        //     city: item.city,
-                        //     state: item.state,
-                        //     state_code: item.state_code,
-                        //     country: item.country,
-                        //     storeIdToAddress: item.storeIdToAddress,
-                        // },
                     },
                     payment: '', // make join
                     shipping: '', // make join

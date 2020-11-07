@@ -1,8 +1,9 @@
 const connection = require('../../../database/connection');
-const { calculateShipping } = require('../../integrations/correios');
+const _ = require('lodash');
 const { createPayment } = require('../../integrations/pagseguro');
+const paymentResponse = require('./helpers/paymentResponse');
 
-const getOrderById = require('../helpers/getOrderById');
+const getOrderById = require('./helpers/getOrderById');
 const util = require('util');
 
 class OrdersController {
@@ -10,8 +11,6 @@ class OrdersController {
         const { store_id } = req.params;
         const { shoppingCart, deliveryData, paymentData, cancel } = req.body; // criar delivery no momento do pedido
         const { userId: user_id } = req;
-
-        // return res.json(shoppingCart);
 
         try {
             // 1 - validate
@@ -124,11 +123,7 @@ class OrdersController {
                 checkAddress
             );
 
-            // const status = await createPayment(paymentData);
-
-            return console.log(responsePayment);
-
-            const testeRes = await connection('payments')
+            await connection('payments')
                 .returning('*')
                 .insert({
                     status: responsePayment && responsePayment.status,
@@ -139,18 +134,20 @@ class OrdersController {
                     cards: [
                         {
                             cardToken_1:
-                                responsePayment &&
-                                responsePayment.payment_method &&
-                                responsePayment.payment_method.card &&
-                                responsePayment.payment_method.card.id
+                                _.get(
+                                    responsePayment,
+                                    'payment_method.card.id'
+                                ) &&
+                                _.get(responsePayment, 'payment_method.type') ==
+                                    'CREDIT_CARD'
                                     ? responsePayment.payment_method.card.id
-                                    : '',
+                                    : undefined,
                             boleto:
-                                responsePayment &&
-                                responsePayment.links &&
-                                responsePayment.links[0].href
+                                _.get(responsePayment, 'links[0].href') &&
+                                _.get(responsePayment, 'payment_method.type') ==
+                                    'BOLETO'
                                     ? responsePayment.links[0].href
-                                    : '',
+                                    : undefined,
                         },
                     ],
                     store_id,
@@ -158,7 +155,7 @@ class OrdersController {
                     deliveryAddressEqualBilling: true,
                 });
 
-            console.log(testeRes);
+            data.paymentResponse = await paymentResponse(responsePayment, _);
 
             return res.status(201).json(data);
         } catch (err) {
