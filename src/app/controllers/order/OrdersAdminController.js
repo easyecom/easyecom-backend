@@ -1,44 +1,22 @@
 const connection = require('../../../database/connection');
 const getOrderById = require('./helpers/getOrderById');
+const orderDT = require('./helpers/order.dt');
 class AdminOrdersController {
     async findAll({ params, query }, res) {
         const { store_id } = params;
-        // const { page = 1, limit } = query;
+        const { page = 1, limit } = query;
 
         try {
             let data = await connection('orders')
                 .join('clients', 'clients.clientId', 'orders.client_id')
                 .join('users', 'clients.user_id', 'users.userId')
                 // .join('addresses', 'addresses.user_id', 'users.userId')
-                // .limit(limit)
-                // .offset(page * limit)
+                .limit(limit)
+                .offset(page * limit)
                 .where('orders.store_id', store_id)
-                .select('*');
+                .select('*', 'orders.created_at', 'orders.updated_at');
 
-            // return res.json(data);
-
-            data = data.map(item => {
-                return {
-                    Id: item.orderId,
-                    store_id: item.store_id,
-                    delivery_id: item.delivery_id,
-
-                    customer: {
-                        userId: item.user_id,
-                        cpf: item.cpf,
-                        userName: item.userName,
-                        email: item.email,
-                        dateOfBirth: item.dateOfBirth,
-                    },
-                    payment: '', // make join
-                    shipping: '', // make join
-                    is_completed: '', // create database collumn for this field
-                    items: item.shoppingCart,
-                    deleted: item.deleted,
-                    created_at: item.created_at,
-                    updated_at: item.updated_at,
-                };
-            });
+            data = await orderDT(data);
 
             const total = data.length;
 

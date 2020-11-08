@@ -1,3 +1,5 @@
+const countCartValue = require('../util.js/countCartValue');
+
 module.exports = async ({ res, connection, store_id, order_id }) => {
     // console.log(order_id)
     try {
@@ -56,12 +58,7 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
             totalValue.push(data.offerPrice || data.salesPrice);
         }
 
-        let value = 0;
-        for (let i = 0; i < totalValue.length; i++) {
-            value = value += totalValue[i];
-        }
-
-        // return res.json(data[0].address_id)
+        const value = await countCartValue(totalValue);
 
         let deliveryAddress;
         if (data[0].address_id !== data[0].addressId) {
@@ -69,7 +66,6 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
                 store_id: store_id,
                 addressId: data[0].address_id,
             });
-            // return res.json(deliveryAddress);
         }
 
         const [result] = data.map(item => {

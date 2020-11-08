@@ -23,6 +23,8 @@ class OrdersController {
             // if (!PaymentValidation(shoppingCart, PaymentData))
             //     return res.json(422).json({ error: 'Dados de pagamento invalido' });
 
+            // verificar se cliente está logado ou realizando o cadastro no momento da compra
+
             const [checkClient] = await connection('clients')
                 .join('users', 'clients.user_id', 'users.userId')
                 .where({ user_id });
