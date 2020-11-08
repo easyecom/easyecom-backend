@@ -7,30 +7,29 @@ const postPayment = require('./helper/repository');
 
 const createPayment = async (data, client, address) => {
     try {
-        if (data.paymentForm == 'boleto') {
+        if (data.paymentForm == 'Boleto') {
             const billetTransformed = await billetDataTranformed(
                 data,
                 client,
                 address
             );
-            // return billetTransformed;
             return await postPayment(billetTransformed);
         }
-        if (data.paymentForm == 'credit_card') {
+
+        if (data.card[0].token) {
+            const creditCardTokenTranformed = await creditCardTokenDataTranformed(
+                data
+            );
+            return await postPayment(creditCardTokenTranformed);
+        }
+
+        if (data.paymentForm == 'Cartao de Credito') {
             const creditCardTranformed = await creditCardDataTranformed(
                 data,
                 client,
                 address
             );
-            // return creditCardTranformed
             return await postPayment(creditCardTranformed);
-        }
-        if (data.paymentForm == 'credit_card_token') {
-            const creditCardTokenTranformed = await creditCardTokenDataTranformed(
-                data
-            );
-            // return creditCardTokenTranformed;
-            return await postPayment(creditCardTokenTranformed);
         }
         return { error: 'invalid payment form' };
     } catch (err) {
