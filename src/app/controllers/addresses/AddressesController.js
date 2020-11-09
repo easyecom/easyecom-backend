@@ -6,7 +6,7 @@ class AddressController {
         const { store_id } = req.params;
         const { userId: user_id } = req;
 
-        const {
+        let {
             zipcode,
             street,
             number,
@@ -34,6 +34,58 @@ class AddressController {
 
         if (!checkUser) {
             return res.status(401).json({ message: 'users does not exist' });
+        }
+
+        const checkAddresses = await connection('addresses').where({
+            user_id,
+            store_id,
+        });
+
+        const [checkedAddresses] = checkAddresses
+            .map(item => {
+                if (
+                    item &&
+                    item.zipcode == zipcode &&
+                    item.street == street &&
+                    item.number == number
+                ) {
+                    return item;
+                }
+            })
+            .filter(item => item);
+
+        if (checkedAddresses) {
+            const data = await connection('addresses')
+                .returning('*')
+                .where({
+                    store_id,
+                    addressId: checkedAddresses.addressId,
+                })
+                .update(
+                    {
+                        zipcode,
+                        street,
+                        number,
+                        complement,
+                        neighborhood,
+                        city,
+                        state,
+                        state_code,
+                        country,
+                    },
+                    [
+                        'zipcode',
+                        'street',
+                        'number',
+                        'complement',
+                        'neighborhood',
+                        'city',
+                        'state',
+                        'state_code',
+                        'country',
+                    ]
+                );
+            return res.json(data);
         }
 
         const errors = [

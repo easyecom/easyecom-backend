@@ -65,21 +65,75 @@ class OrdersController {
                     country,
                 } = addressDelivery;
 
-                createAddressdelivery = await connection('addresses')
-                    .returning('*')
-                    .insert({
-                        zipcode,
-                        street,
-                        number,
-                        complement,
-                        neighborhood,
-                        city,
-                        state,
-                        state_code,
-                        country,
-                        user_id,
-                        store_id,
-                    });
+                const checkAddresses = await connection('addresses').where({
+                    user_id,
+                    store_id,
+                });
+
+                const [checkedAddresses] = checkAddresses
+                    .map(item => {
+                        if (
+                            item &&
+                            item.zipcode == zipcode &&
+                            item.street == street &&
+                            item.number == number
+                        ) {
+                            return item;
+                        }
+                        return null;
+                    })
+                    .filter(item => item);
+
+                if (checkedAddresses) {
+                    await connection('addresses')
+                        .returning('*')
+                        .where({
+                            store_id,
+                            addressId: checkedAddresses.addressId,
+                        })
+                        .update(
+                            {
+                                zipcode,
+                                street,
+                                number,
+                                complement,
+                                neighborhood,
+                                city,
+                                state,
+                                state_code,
+                                country,
+                            },
+                            [
+                                'zipcode',
+                                'street',
+                                'number',
+                                'complement',
+                                'neighborhood',
+                                'city',
+                                'state',
+                                'state_code',
+                                'country',
+                            ]
+                        );
+                }
+
+                if (!checkedAddresses) {
+                    createAddressdelivery = await connection('addresses')
+                        .returning('*')
+                        .insert({
+                            zipcode,
+                            street,
+                            number,
+                            complement,
+                            neighborhood,
+                            city,
+                            state,
+                            state_code,
+                            country,
+                            user_id,
+                            store_id,
+                        });
+                }
             }
 
             let [data] = await connection('orders')
