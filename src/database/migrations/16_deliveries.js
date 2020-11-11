@@ -6,11 +6,11 @@ exports.up = knex => {
             .primary()
             .unique();
 
-        table.string('status').notNullable();
+        table.string('deliveryStatus').notNullable();
         table.string('tracking').notNullable();
         table.string('type').notNullable();
         table.decimal('cost').notNullable();
-        table.string('deliveryTime').notNullable();
+        table.string('deadline').notNullable();
         table.string('refId');
 
         table.integer('address_id');

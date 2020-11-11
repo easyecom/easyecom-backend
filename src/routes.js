@@ -23,6 +23,9 @@ const CategoriesController = require('./app/controllers/catalog/categories/Categ
 const BrandsController = require('./app/controllers/catalog/brands/BrandsController');
 const EvaluationsController = require('./app/controllers/catalog/evaluations/EvaluationsController');
 const ProductsController = require('./app/controllers/catalog/products/ProductsController');
+const PricesController = require('./app/controllers/catalog/prices/PricesController');
+const StocksController = require('./app/controllers/catalog/stocks/StocksController');
+
 const SearchProductsController = require('./app/controllers/catalog/products/searchProductsController');
 const CategoryProductController = require('./app/controllers/catalog/category_products/CatProdController');
 const VariationsController = require('./app/controllers/catalog/variations/VariationsController');
@@ -278,6 +281,24 @@ routes.delete(
     VariationsController.delete
 );
 
+// prices
+
+routes.put(
+    '/stores/:store_id/prices',
+    authMiddleware,
+    storeValidation,
+    PricesController.update
+);
+
+// stock
+
+routes.put(
+    '/stores/:store_id/stocks',
+    authMiddleware,
+    storeValidation,
+    StocksController.update
+);
+
 // images
 
 routes.post(
@@ -381,9 +402,15 @@ routes.post(
 );
 
 // delivery
-routes.get('/stores/:store_id/deliveries/:delivery_id', DeliveryController.getById);
+routes.get(
+    '/stores/:store_id/deliveries/:delivery_id',
+    DeliveryController.getById
+);
 routes.get('/stores/:store_id/deliveries', DeliveryController.list);
-routes.put('/stores/:store_id/deliveries/:delivery_id', DeliveryController.update);
+routes.put(
+    '/stores/:store_id/deliveries/:delivery_id',
+    DeliveryController.update
+);
 routes.post('/stores/:store_id/deliveries/', DeliveryController.create);
 
 // payment

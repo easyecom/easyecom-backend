@@ -8,7 +8,7 @@ class PaymentsController {
             value,
             paymentForm,
             installment,
-            status,
+            paymentStatus,
             codeGateway,
             address_id,
             cards,
@@ -26,7 +26,7 @@ class PaymentsController {
                     value,
                     paymentForm,
                     installment,
-                    status,
+                    paymentStatus,
                     codeGateway,
                     address_id,
                     cards,
@@ -35,7 +35,7 @@ class PaymentsController {
                     store_id,
                 });
 
-            return res.status(201).json(data);
+            return res.paymentStatus(201).json(data);
         } catch (err) {
             return console.log(err);
         }
@@ -43,7 +43,7 @@ class PaymentsController {
 
     async findAll(req, res) {
         const data = await connection('payments');
-        return res.status(200).json(data);
+        return res.paymentStatus(200).json(data);
     }
 }
 

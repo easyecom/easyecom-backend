@@ -1,15 +1,23 @@
 exports.up = knex => {
     return knex.schema.createTable('prices', table => {
         table
-            .increments('priceId')
-            .unsigned()
+            .integer('variation_id')
             .primary()
             .unique();
+            
+        table
+            .foreign('variation_id')
+            .references('variationId')
+            .inTable('variations')
+            .onUpdate('CASCADE')
+            .onDelete('SET NULL');
 
-        table.decimal('costPriceSku');
+        table.decimal('costPrice');
+
         table.integer('profitMargin');
-        table.decimal('offerPriceSku');
-        table.decimal('salesPriceSku').notNullable();
+        table.decimal('offerPrice');
+        table.decimal('salesPrice').notNullable();
+
         table.specificType('promotion', 'jsonb[]');
 
         table.integer('store_id');
@@ -17,14 +25,6 @@ exports.up = knex => {
             .foreign('store_id')
             .references('storeId')
             .inTable('stores')
-            .onUpdate('CASCADE')
-            .onDelete('SET NULL');
-
-        table.integer('variation_id');
-        table
-            .foreign('variation_id')
-            .references('variationId')
-            .inTable('variations')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 

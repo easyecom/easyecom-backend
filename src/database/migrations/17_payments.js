@@ -7,9 +7,9 @@ exports.up = knex => {
             .unique();
 
         table.decimal('value').notNullable();
-        table.string('paymentForm').notNullable();
+        table.string('type').notNullable();
         table.integer('installment').defaultTo(1);
-        table.string('status').notNullable();
+        table.string('paymentStatus').notNullable();
         table.string('codeGateway');
 
         table.specificType('cards', 'jsonb[]');

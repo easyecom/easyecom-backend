@@ -29,7 +29,7 @@ class UsersController {
             'storeId',
             store_id
         );
-        if (!checkStore.length) {
+        if (!checkStore.length && !permission.includes('sup')) {
             return res.status(400).json({ message: 'store does not exist' });
         }
 
@@ -48,7 +48,7 @@ class UsersController {
             try {
                 bcrypt.hash(String(password), 7, (err, hash) => {
                     if (err) {
-                        console.error(err)
+                        console.error(err);
                         return reject(err);
                     }
                     resolve(

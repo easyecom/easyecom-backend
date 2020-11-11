@@ -16,10 +16,6 @@ class VariationsController {
             packagedWidth,
             weightKg,
             freeShipping,
-            amount,
-            costPrice,
-            offerPrice,
-            salesPrice,
             refId,
             product_id,
         } = req.body;
@@ -71,10 +67,6 @@ class VariationsController {
                     packagedWidth,
                     weightKg,
                     freeShipping,
-                    amount,
-                    costPrice,
-                    offerPrice,
-                    salesPrice,
                     refId,
                     store_id,
                     product_id,
@@ -105,12 +97,13 @@ class VariationsController {
 
         try {
             const data = await connection('variations')
+                .join('prices', 'prices.variation_id', 'variations.variationId')
                 .select('*')
-                .where('store_id', store_id);
+                .where({ 'variations.store_id': store_id });
 
             return res.status(200).json(data);
         } catch (err) {
-            return console.error(data);
+            return console.error(err);
         }
     }
 

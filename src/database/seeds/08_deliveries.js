@@ -7,7 +7,7 @@ exports.seed = function(knex) {
             return knex('deliveries').insert([
                 {
                     deliveryId: 1,
-                    status: 'objeto em transito',
+                    paymentStatus: 'objeto em transito',
                     tracking: '24568767',
                     type: 'pac',
                     cost: 12.0,
@@ -17,7 +17,7 @@ exports.seed = function(knex) {
                 },
                 {
                     deliveryId: 2,
-                    status: 'objeto em transito',
+                    paymentStatus: 'objeto em transito',
                     tracking: '24568767',
                     type: 'pac',
                     cost: 12.0,
@@ -27,7 +27,7 @@ exports.seed = function(knex) {
                 },
                 {
                     deliveryId: 3,
-                    status: 'objeto em transito',
+                    paymentStatus: 'objeto em transito',
                     tracking: '24568767',
                     type: 'pac',
                     cost: 12.0,
@@ -37,7 +37,7 @@ exports.seed = function(knex) {
                 },
                 {
                     deliveryId: 4,
-                    status: 'objeto em transito',
+                    paymentStatus: 'objeto em transito',
                     tracking: '24568767',
                     type: 'pac',
                     cost: 12.0,

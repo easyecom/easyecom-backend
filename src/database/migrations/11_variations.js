@@ -26,11 +26,6 @@ exports.up = knex => {
 
         table.boolean('freeShipping').defaultTo(false);
 
-        table.string('amount').notNullable();
-
-        table.decimal('costPrice').notNullable();
-        table.decimal('offerPrice').notNullable();
-        table.decimal('salesPrice').notNullable();
         table.string('refId');
 
         table.integer('store_id');

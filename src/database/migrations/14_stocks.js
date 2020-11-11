@@ -1,29 +1,28 @@
 exports.up = knex => {
     return knex.schema.createTable('stocks', table => {
         table
-            .increments('stockId')
+            .integer('variation_id')
             .unsigned()
             .primary()
             .unique();
+        table
+            .foreign('variation_id')
+            .references('variationId')
+            .inTable('variations')
+            .onUpdate('CASCADE')
+            .onDelete('SET NULL');
 
-        table.integer('amountSku').notNullable();
-        table.boolean('unlimitedAmount');
-        table.integer('minimumAmount').notNullable();
-        table.integer('maximumAmount').notNullable();
+        table.integer('quantity').notNullable();
+
+        table.boolean('quantityLimit').defaultTo(false);
+        table.integer('minimumAmount');
+        table.integer('maximumAmount');
 
         table.integer('store_id');
         table
             .foreign('store_id')
             .references('storeId')
             .inTable('stores')
-            .onUpdate('CASCADE')
-            .onDelete('SET NULL');
-
-        table.integer('variation_id');
-        table
-            .foreign('variation_id')
-            .references('variationId')
-            .inTable('variations')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
