@@ -51,15 +51,23 @@ class BrandsController {
         const { store_id } = req.params;
 
         try {
-            let data = await connection('brands')
+            let [brands] = await connection('brands')
+                .join('images', 'images.brand_id', 'brands.brandId')
                 .select('*')
-                .where('store_id', store_id);
+                .where('brands.store_id', store_id);
 
-            if (!data.length) {
+            brands.product_id = undefined;
+            brands.variation_id = undefined;
+            brands.category_id = undefined;
+            brands.brand_id = undefined;
+
+            brands.path = `http://localhost:3777/images/${brands.name}`;
+
+            if (!brands) {
                 return res.json({ message: 'without brands' });
             }
 
-            return res.status(200).json({ brands: data });
+            return res.status(200).json({ brands });
         } catch (err) {
             console.error({
                 message: err.message,
@@ -88,15 +96,23 @@ class BrandsController {
                 return res.json({ error: 'without brands' });
             }
 
-            const data = await connection('brands')
+            const [brands] = await connection('brands')
+                .join('images', 'images.brand_id', 'brands.brandId')
                 .where('brandId', brand_id)
                 .select('*');
 
-            if (!data.length) {
+            brands.product_id = undefined;
+            brands.variation_id = undefined;
+            brands.category_id = undefined;
+            brands.brand_id = undefined;
+
+            brands.path = `http://localhost:3777/images/${brands.name}`;
+
+            if (!brands) {
                 return res.status(404).json({ error: 'brand does not exist' });
             }
 
-            return res.status(200).json(data);
+            return res.status(200).json(brands);
         } catch (err) {
             return res.status(500).json('sorry, something broke...');
         }

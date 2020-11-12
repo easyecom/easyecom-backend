@@ -9,18 +9,18 @@ const util = require('util');
 class OrdersController {
     async create(req, res) {
         const { store_id } = req.params;
-        const { shoppingCart, deliveryData, paymentData, cancel } = req.body; // criar delivery no momento do pedido
+        const { cart, deliveryData, paymentData, cancel } = req.body; // criar delivery no momento do pedido
         const { userId: user_id } = req;
 
         try {
             // 1 - validate
-            // if (!ShoppingCartValidation(shoppingCart))
+            // if (!cartValidation(cart))
             //     return res.json(422).json({ error: 'Dados do carrinho invalido' });
 
-            // if (!DeliveryValidation(shoppingCart, deliveryData))
+            // if (!DeliveryValidation(cart, deliveryData))
             //     return res.json(422).json({ error: 'Dados de entrega invalido' });
 
-            // if (!PaymentValidation(shoppingCart, PaymentData))
+            // if (!PaymentValidation(cart, PaymentData))
             //     return res.json(422).json({ error: 'Dados de pagamento invalido' });
 
             // verificar se cliente está logado ou realizando o cadastro no momento da compra
@@ -140,7 +140,7 @@ class OrdersController {
                 .returning('*')
                 .insert({
                     client_id,
-                    shoppingCart,
+                    cart,
                     cancel,
                     store_id,
                 });

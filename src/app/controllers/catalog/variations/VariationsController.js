@@ -16,10 +16,6 @@ class VariationsController {
             packagedWidth,
             weightKg,
             freeShipping,
-            amount,
-            costPrice,
-            offerPrice,
-            salesPrice,
             refId,
             product_id,
         } = req.body;
@@ -71,10 +67,6 @@ class VariationsController {
                     packagedWidth,
                     weightKg,
                     freeShipping,
-                    amount,
-                    costPrice,
-                    offerPrice,
-                    salesPrice,
                     refId,
                     store_id,
                     product_id,
@@ -105,12 +97,14 @@ class VariationsController {
 
         try {
             const data = await connection('variations')
+                .join('prices', 'prices.variation_id', 'variations.variationId')
+                .join('stocks', 'stocks.variation_id', 'variations.variationId')
                 .select('*')
-                .where('store_id', store_id);
+                .where({ 'variations.store_id': store_id });
 
             return res.status(200).json(data);
         } catch (err) {
-            return console.error(data);
+            return console.error(err);
         }
     }
 
@@ -118,9 +112,22 @@ class VariationsController {
         const { store_id, variation_id } = req.params;
 
         try {
-            const data = await connection('variations')
-                .select('*')
-                .where({ store_id: store_id, variationId: variation_id });
+            let [data] = await connection('variations')
+                .join('prices', 'prices.variation_id', 'variations.variationId')
+                .join('stocks', 'stocks.variation_id', 'variations.variationId')
+                .join('images', 'images.variation_id', 'variations.variationId')
+                .select(
+                    '*',
+                    { priceId: 'prices.variation_id' },
+                    { stockId: 'stocks.variation_id' },
+                )
+                .where({
+                    'variations.store_id': store_id,
+                    variationId: variation_id,
+                });
+
+            data.variation_id = undefined; // ambiguo
+            data.path = `http://localhost:3777/images/${data.name}`
 
             return res.status(200).json(data);
         } catch (err) {
@@ -148,10 +155,6 @@ class VariationsController {
                     'packagedWidth',
                     'weightKg',
                     'freeShipping',
-                    'amount',
-                    'costPrice',
-                    'offerPrice',
-                    'salesPrice',
                     'store_id',
                     'product_id',
                 ]);

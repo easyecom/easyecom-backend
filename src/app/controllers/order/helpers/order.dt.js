@@ -2,7 +2,7 @@ module.exports = async data => {
     return data.map(item => {
         let totalValue = [];
 
-        for (let prices of item.shoppingCart) {
+        for (let prices of item.cart) {
             totalValue.push(prices.price);
         }
 
@@ -27,7 +27,7 @@ module.exports = async data => {
             payment: '', // make join
             shipping: '', // make join
             is_completed: '', // create database collumn for this field
-            items: item.shoppingCart,
+            items: item.cart,
             totalValue: parseFloat(value)
                 .toFixed(2)
                 .replace('.', ','),

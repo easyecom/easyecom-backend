@@ -19,12 +19,12 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
             return res.status(400).json({ message: 'order does not exist' });
         }
 
-        const { shoppingCart } = data[0];
+        const { cart } = data[0];
 
         let items = [];
         let totalValue = [];
 
-        for (let item of shoppingCart) {
+        for (let item of cart) {
             const [product] = await connection('products').where(
                 'productId',
                 item.product_id
@@ -58,7 +58,7 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
             totalValue.push(data.offerPrice || data.salesPrice);
         }
 
-        const value = await countCartValue(totalValue);
+        const totalOrderValue = await countCartValue(totalValue);
 
         let deliveryAddress;
         if (data[0].address_id !== data[0].addressId) {
@@ -109,7 +109,7 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
                             : null,
                 },
                 items: items,
-                totalItemsValue: parseFloat(value).toFixed(2),
+                totalItemsValue: parseFloat(totalOrderValue).toFixed(2),
                 payment: {
                     value: item.value,
                     paymentForm: item.paymentForm,

@@ -38,7 +38,7 @@ class AdminOrdersController {
                 .select(
                     'orderId',
                     'client_id',
-                    'shoppingCart',
+                    'cart',
                     'delivery_id',
                     'store_id',
                     'cancel',

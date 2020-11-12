@@ -14,8 +14,6 @@ exports.up = knex => {
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
-        table.specificType('shoppingCart', 'jsonb[]');
-
         table.integer('store_id');
         table
             .foreign('store_id')
@@ -23,6 +21,12 @@ exports.up = knex => {
             .inTable('stores')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
+
+        table.decimal('total');
+
+        table.specificType('status', 'jsonb[]');
+
+        table.specificType('cart', 'jsonb[]');
 
         table.boolean('cancel').defaultTo(false);
         table.boolean('is_completed').defaultTo(false);

@@ -76,11 +76,22 @@ class CategoriesController {
         const { store_id, category_id } = req.params;
 
         try {
-            const data = await connection('categories')
+            const [data] = await connection('categories')
+                .join('images', 'images.category_id', 'categories.categoryId')
                 .select('*')
-                .where({'categoryId': category_id, store_id});
+                .where({
+                    categoryId: category_id,
+                    'categories.store_id': store_id,
+                });
 
-            if (!data.length) {
+            data.product_id = undefined;
+            data.variation_id = undefined;
+            data.category_id = undefined;
+            data.brand_id = undefined;
+
+            data.path = `http://localhost:3777/images/${data.name}`;
+
+            if (!data) {
                 return res.status(404).json({ warn: 'without category' });
             }
 
