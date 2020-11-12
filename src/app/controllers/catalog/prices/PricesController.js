@@ -1,72 +1,6 @@
 const connection = require('../../../../database/connection');
 
 class PricesController {
-    async getAll(req, res) {
-        try {
-            const { store_id } = req.params;
-            // const { page = 1 } = req.query;
-
-            const checkStore = await connection('stores').where({
-                storeId: store_id,
-            });
-
-            if (!checkStore.length) {
-                return res
-                    .status(404)
-                    .json({ error: { message: 'store does not exist' } });
-            }
-
-            const data = await connection('products')
-                // .join(
-                //     'categories',
-                //     'products.productId',
-                //     'categories.categoryId'
-                // )
-                .join('brands', 'products.brand_id', 'brands.brandId')
-                // .limit(20)
-                // .offset((page - 1) * 20)
-                .select(
-                    'products.productId',
-                    'products.productName',
-                    'products.descriptionShort',
-                    'brands.brandName',
-                    // 'categories.categoryName',
-                    'products.variations',
-                    'products.evaluations'
-                )
-                .where({
-                    'products.store_id': store_id,
-                    'brands.store_id': store_id,
-                });
-
-            return res.status(200).json({ products: data });
-        } catch (err) {
-            console.log(err);
-            return res.status(500).json('sorry, something broke...');
-        }
-    }
-
-    async getOne(req, res) {
-        const { store_id, product_id } = req.params;
-
-        try {
-            const data = await connection('products')
-                .where({ productId: product_id, store_id })
-                .select('*');
-
-            if (!data.length) {
-                return res
-                    .status(404)
-                    .json({ error: { message: ' product does not exist' } });
-            }
-
-            return res.status(200).json(data);
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json('sorry, something broke...');
-        }
-    }
-
     async update(req, res) {
         const { store_id } = req.params;
         const {
@@ -83,7 +17,27 @@ class PricesController {
                 .select('*');
 
             if (checkPrices) {
-                return res.json({ message: 'update price' });
+                let [updatePrice] = await connection('prices')
+                    .returning('*')
+                    .update(
+                        {
+                            variation_id,
+                            costPrice,
+                            offerPrice,
+                            salesPrice,
+                            promotion,
+                        },
+                        [
+                            'variation_id',
+                            'costPrice',
+                            'offerPrice',
+                            'salesPrice',
+                            'promotion',
+                        ]
+                    )
+                    .where({ variation_id, store_id });
+
+                return res.json(updatePrice);
             }
 
             let createPrice = await connection('prices')
@@ -98,35 +52,55 @@ class PricesController {
                 });
 
             return res.json(createPrice);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json('sorry, something broke...');
+        }
+    }
 
-            productData.categoryId = undefined;
+    async getAll(req, res) {
+        try {
+            const { store_id } = req.params;
+            // const { page = 1 } = req.query;
 
-            if (!checkProduct.length) {
+            const checkStore = await connection('stores').where({
+                storeId: store_id,
+            });
+
+            if (!checkStore.length) {
                 return res
                     .status(404)
-                    .json({ error: { message: ' product does not exist' } });
+                    .json({ error: { message: 'store does not exist' } });
             }
 
-            const data = await connection('products')
-                .where('productId', product_id)
-                .update(productData, [
-                    'productName',
-                    'isActive',
-                    'keyWords',
-                    'title',
-                    'descriptionShort',
-                    'description',
-                    'sku',
-                    'variations',
-                    'images',
-                    'evaluations',
-                    'refId',
-                    'mainCategory',
-                    'store_id',
-                    'brand_id',
-                ]);
+            const prices = await connection('prices')
+                .select('*')
+                .where({
+                    'prices.store_id': store_id,
+                });
 
-            return res.status(201).json(data);
+            return res.status(200).json({ prices });
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json('sorry, something broke...');
+        }
+    }
+
+    async getById(req, res) {
+        const { store_id, price_id } = req.params;
+
+        try {
+            const [price] = await connection('prices')
+                .where({ variation_id: price_id, store_id })
+                .select('*');
+
+            if (!price) {
+                return res
+                    .status(404)
+                    .json({ error: { message: 'Price does not exist' } });
+            }
+
+            return res.status(200).json(price);
         } catch (err) {
             console.error(err);
             return res.status(500).json('sorry, something broke...');
@@ -134,25 +108,26 @@ class PricesController {
     }
 
     async delete(req, res) {
-        const { store_id, product_id } = req.params;
+        const { store_id, price_id } = req.params;
 
         try {
-            const checkProduct = await connection('products')
-                .where({ productId: product_id, store_id })
+            const checkPrice = await connection('prices')
+                .where({ variation_id: price_id, store_id })
                 .select('*');
 
-            if (!checkProduct.length) {
+            if (!checkPrice.length) {
                 return res
                     .status(404)
-                    .json({ error: { message: ' product does not exist' } });
+                    .json({ error: { message: ' Price does not exist' } });
             }
-            await connection('products')
-                .where('productId', product_id)
+
+            await connection('prices')
+                .where({ variation_id: price_id, store_id })
                 .del();
 
             return res
                 .status(200)
-                .json({ message: 'product removed successfully' });
+                .json({ message: 'Price removed successfully' });
         } catch (err) {
             return res.status(500).json('sorry, something broke...');
         }

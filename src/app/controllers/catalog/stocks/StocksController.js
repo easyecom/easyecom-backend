@@ -1,6 +1,63 @@
 const connection = require('../../../../database/connection');
 
-class PricesController {
+class StockController {
+    async update(req, res) {
+        const { store_id } = req.params;
+        const {
+            variation_id,
+            quantity,
+            quantityLimit,
+            minimumAmount,
+            maximumAmount,
+        } = req.body;
+
+        try {
+            let [checkstocks] = await connection('stocks')
+                .where({ variation_id, store_id })
+                .select('*');
+
+            if (checkstocks) {
+                let [updateStocks] = await connection('stocks')
+                    .returning('*')
+                    .update(
+                        {
+                            variation_id,
+                            quantity,
+                            quantityLimit,
+                            minimumAmount,
+                            maximumAmount,
+                        },
+                        [
+                            'variation_id',
+                            'quantity',
+                            'quantityLimit',
+                            'minimumAmount',
+                            'maximumAmount',
+                        ]
+                    )
+                    .where({ variation_id, store_id });
+
+                return res.json(updateStocks);
+            }
+
+            let createStock = await connection('stocks')
+                .returning('*')
+                .insert({
+                    variation_id,
+                    quantity,
+                    quantityLimit,
+                    minimumAmount,
+                    maximumAmount,
+                    store_id,
+                });
+
+            return res.json(createStock);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json('sorry, something broke...');
+        }
+    }
+
     async getAll(req, res) {
         try {
             const { store_id } = req.params;
@@ -16,94 +73,34 @@ class PricesController {
                     .json({ error: { message: 'store does not exist' } });
             }
 
-            const data = await connection('products')
-                // .join(
-                //     'categories',
-                //     'products.productId',
-                //     'categories.categoryId'
-                // )
-                .join('brands', 'products.brand_id', 'brands.brandId')
-                // .limit(20)
-                // .offset((page - 1) * 20)
-                .select(
-                    'products.productId',
-                    'products.productName',
-                    'products.descriptionShort',
-                    'brands.brandName',
-                    // 'categories.categoryName',
-                    'products.variations',
-                    'products.evaluations'
-                )
+            const stocks = await connection('stocks')
+                .select('*')
                 .where({
-                    'products.store_id': store_id,
-                    'brands.store_id': store_id,
+                    'stocks.store_id': store_id,
                 });
 
-            return res.status(200).json({ products: data });
+            return res.status(200).json({ stocks });
         } catch (err) {
             console.log(err);
             return res.status(500).json('sorry, something broke...');
         }
     }
 
-    async getOne(req, res) {
-        const { store_id, product_id } = req.params;
+    async getById(req, res) {
+        const { store_id, stock_id } = req.params;
 
         try {
-            const data = await connection('products')
-                .where({ productId: product_id, store_id })
+            const [stock] = await connection('stocks')
+                .where({ variation_id: stock_id, store_id })
                 .select('*');
 
-            if (!data.length) {
+            if (!stock) {
                 return res
                     .status(404)
-                    .json({ error: { message: ' product does not exist' } });
+                    .json({ error: { message: 'stock does not exist' } });
             }
 
-            return res.status(200).json(data);
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json('sorry, something broke...');
-        }
-    }
-
-    async update(req, res) {
-        const { store_id, product_id } = req.params;
-        let productData = req.body;
-
-        try {
-            let checkProduct = await connection('products')
-                .where({ productId: product_id, store_id })
-                .select('*');
-
-            productData.categoryId = undefined;
-
-            if (!checkProduct.length) {
-                return res
-                    .status(404)
-                    .json({ error: { message: ' product does not exist' } });
-            }
-
-            const data = await connection('products')
-                .where('productId', product_id)
-                .update(productData, [
-                    'productName',
-                    'isActive',
-                    'keyWords',
-                    'title',
-                    'descriptionShort',
-                    'description',
-                    'sku',
-                    'variations',
-                    'images',
-                    'evaluations',
-                    'refId',
-                    'mainCategory',
-                    'store_id',
-                    'brand_id',
-                ]);
-
-            return res.status(201).json(data);
+            return res.status(200).json(stock);
         } catch (err) {
             console.error(err);
             return res.status(500).json('sorry, something broke...');
@@ -111,28 +108,29 @@ class PricesController {
     }
 
     async delete(req, res) {
-        const { store_id, product_id } = req.params;
+        const { store_id, stock_id } = req.params;
 
         try {
-            const checkProduct = await connection('products')
-                .where({ productId: product_id, store_id })
+            const checkstock = await connection('stocks')
+                .where({ variation_id: stock_id, store_id })
                 .select('*');
 
-            if (!checkProduct.length) {
+            if (!checkstock.length) {
                 return res
                     .status(404)
-                    .json({ error: { message: ' product does not exist' } });
+                    .json({ error: { message: ' stock does not exist' } });
             }
-            await connection('products')
-                .where('productId', product_id)
+
+            await connection('stocks')
+                .where({ variation_id: stock_id, store_id })
                 .del();
 
             return res
                 .status(200)
-                .json({ message: 'product removed successfully' });
+                .json({ message: 'stock removed successfully' });
         } catch (err) {
             return res.status(500).json('sorry, something broke...');
         }
     }
 }
-module.exports = new PricesController();
+module.exports = new StockController();

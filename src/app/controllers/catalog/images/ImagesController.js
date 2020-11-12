@@ -3,7 +3,7 @@ const connection = require('../../../../database/connection');
 class ImagesController {
     async store(req, res) {
         try {
-            const { category_id, product_id, variation_id } = req.body;
+            const { category_id, product_id, variation_id, brand_id } = req.body;
 
             const { filename: name, originalname: path } = req.file;
 
@@ -15,6 +15,7 @@ class ImagesController {
                     category_id,
                     product_id,
                     variation_id,
+                    brand_id
                 });
 
             return res.status(201).json({

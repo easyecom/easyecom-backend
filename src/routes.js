@@ -290,6 +290,28 @@ routes.put(
     PricesController.update
 );
 
+routes.get(
+    '/stores/:store_id/prices',
+    authMiddleware,
+    storeValidation,
+    PricesController.getAll
+);
+
+
+routes.get(
+    '/stores/:store_id/prices/:price_id',
+    authMiddleware,
+    storeValidation,
+    PricesController.getById
+);
+
+routes.delete(
+    '/stores/:store_id/prices/:price_id',
+    authMiddleware,
+    storeValidation,
+    PricesController.delete
+);
+
 // stock
 
 routes.put(
@@ -297,6 +319,28 @@ routes.put(
     authMiddleware,
     storeValidation,
     StocksController.update
+);
+
+routes.get(
+    '/stores/:store_id/stocks',
+    authMiddleware,
+    storeValidation,
+    StocksController.getAll
+);
+
+
+routes.get(
+    '/stores/:store_id/stocks/:stock_id',
+    authMiddleware,
+    storeValidation,
+    StocksController.getById
+);
+
+routes.delete(
+    '/stores/:store_id/stocks/:stock_id',
+    authMiddleware,
+    storeValidation,
+    StocksController.delete
 );
 
 // images
