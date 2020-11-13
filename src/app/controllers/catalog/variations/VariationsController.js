@@ -96,11 +96,17 @@ class VariationsController {
         const { store_id } = req.params;
 
         try {
-            const data = await connection('variations')
+            let data = await connection('variations')
+                .join('images', 'images.variation_id', 'variations.variationId')
                 .join('prices', 'prices.variation_id', 'variations.variationId')
                 .join('stocks', 'stocks.variation_id', 'variations.variationId')
                 .select('*')
                 .where({ 'variations.store_id': store_id });
+
+            data.forEach(
+                item =>
+                    (item.image = `http://localhost:3777/images/${item.name}`)
+            );
 
             return res.status(200).json(data);
         } catch (err) {
@@ -119,7 +125,7 @@ class VariationsController {
                 .select(
                     '*',
                     { priceId: 'prices.variation_id' },
-                    { stockId: 'stocks.variation_id' },
+                    { stockId: 'stocks.variation_id' }
                 )
                 .where({
                     'variations.store_id': store_id,
@@ -127,7 +133,7 @@ class VariationsController {
                 });
 
             data.variation_id = undefined; // ambiguo
-            data.path = `http://localhost:3777/images/${data.name}`
+            data.path = `http://localhost:3777/images/${data.name}`;
 
             return res.status(200).json(data);
         } catch (err) {

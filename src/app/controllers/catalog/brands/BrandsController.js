@@ -51,19 +51,16 @@ class BrandsController {
         const { store_id } = req.params;
 
         try {
-            let [brands] = await connection('brands')
+            let brands = await connection('brands')
                 .join('images', 'images.brand_id', 'brands.brandId')
                 .select('*')
                 .where('brands.store_id', store_id);
 
-            brands.product_id = undefined;
-            brands.variation_id = undefined;
-            brands.category_id = undefined;
-            brands.brand_id = undefined;
+            brands.map(item => {
+                item.image = `http://localhost:3777/images/${item.name}`;
+            });
 
-            brands.path = `http://localhost:3777/images/${brands.name}`;
-
-            if (!brands) {
+            if (!brands.length) {
                 return res.json({ message: 'without brands' });
             }
 

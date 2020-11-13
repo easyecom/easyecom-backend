@@ -7,7 +7,7 @@ const postPayment = require('./helper/repository');
 
 const createPayment = async (data, client, address) => {
     try {
-        if (data.paymentForm == 'Boleto') {
+        if (data.type == 'Boleto') {
             const billetTransformed = await billetDataTranformed(
                 data,
                 client,
@@ -23,12 +23,13 @@ const createPayment = async (data, client, address) => {
             return await postPayment(creditCardTokenTranformed);
         }
 
-        if (data.paymentForm == 'Cartao de Credito') {
+        if (data.type == 'Cartao de Credito') {
             const creditCardTranformed = await creditCardDataTranformed(
                 data,
                 client,
                 address
             );
+            // return creditCardTranformed
             return await postPayment(creditCardTranformed);
         }
         return { error: 'invalid payment form' };

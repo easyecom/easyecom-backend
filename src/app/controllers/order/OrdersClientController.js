@@ -49,7 +49,7 @@ class OrdersController {
             }
 
             // 2 - delivery
-            const { cost, deliveryTime, type, addressDelivery } = deliveryData;
+            const { cost, deadline, type, addressDelivery } = deliveryData;
 
             let createAddressdelivery;
             if (addressDelivery.zipcode) {
@@ -153,11 +153,11 @@ class OrdersController {
             await connection('deliveries')
                 .returning('*')
                 .insert({
-                    status: 'aguardando aprovação',
+                    deliveryStatus: 'aguardando aprovação',
                     tracking: '',
                     type,
                     cost,
-                    deliveryTime,
+                    deadline,
                     address_id:
                         createAddressdelivery &&
                         createAddressdelivery[0] &&
@@ -179,12 +179,15 @@ class OrdersController {
                 checkAddress
             );
 
+            // return res.json(responsePayment);
+
             await connection('payments')
                 .returning('*')
                 .insert({
-                    status: responsePayment && responsePayment.status,
+                    paymentStatus:
+                        responsePayment && responsePayment.status,
                     value: paymentData.value,
-                    paymentForm: paymentData.paymentForm,
+                    type: paymentData.type,
                     installment: paymentData.installment,
                     address_id: checkAddress.addressId,
                     cards: [
