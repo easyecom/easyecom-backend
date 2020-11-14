@@ -29,7 +29,6 @@ const createPayment = async (data, client, address) => {
                 client,
                 address
             );
-            // return creditCardTranformed
             return await postPayment(creditCardTranformed);
         }
         return { error: 'invalid payment form' };

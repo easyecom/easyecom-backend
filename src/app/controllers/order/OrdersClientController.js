@@ -153,7 +153,7 @@ class OrdersController {
             await connection('deliveries')
                 .returning('*')
                 .insert({
-                    deliveryStatus: 'aguardando aprovação',
+                    deliveryStatus: 'aguardando manuseio',
                     tracking: '',
                     type,
                     cost,
@@ -179,13 +179,15 @@ class OrdersController {
                 checkAddress
             );
 
-            // return res.json(responsePayment);
+            // return res.json(responsePayment); // gateway return
 
             await connection('payments')
                 .returning('*')
                 .insert({
                     paymentStatus:
-                        responsePayment && responsePayment.status,
+                        responsePayment && responsePayment.status
+                            ? responsePayment.status
+                            : '',
                     value: paymentData.value,
                     type: paymentData.type,
                     installment: paymentData.installment,

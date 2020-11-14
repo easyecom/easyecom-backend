@@ -100,7 +100,7 @@ class VariationsController {
                 .join('images', 'images.variation_id', 'variations.variationId')
                 .join('prices', 'prices.variation_id', 'variations.variationId')
                 .join('stocks', 'stocks.variation_id', 'variations.variationId')
-                .select('*')
+                .select('*', { product_id: 'variations.product_id' })
                 .where({ 'variations.store_id': store_id });
 
             data.forEach(
@@ -125,7 +125,9 @@ class VariationsController {
                 .select(
                     '*',
                     { priceId: 'prices.variation_id' },
-                    { stockId: 'stocks.variation_id' }
+                    { stockId: 'stocks.variation_id' },
+                    { product_id: 'variations.product_id' },
+                    { store_id: 'variations.store_id' }
                 )
                 .where({
                     'variations.store_id': store_id,

@@ -29,14 +29,17 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
                 'productId',
                 item.product_id
             );
-            const [variation] = await connection('variations').where(
-                'variationId',
-                item.variation_id
-            );
+
+            // return item
+
+            const [variation] = await connection('variations')
+                .join('prices', 'prices.variation_id', 'variations.variationId')
+                .join('stocks', 'stocks.variation_id', 'variations.variationId')
+                .where('variationId', item.variation_id);
 
             const data = {
                 name: variation.variationName,
-                amount: variation.amount,
+                amount: item.amount,
                 freeShipping: variation.freeShipping,
                 costPrice: parseInt(variation.costPrice),
                 offerPrice: parseInt(variation.offerPrice),
@@ -98,8 +101,8 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
                 shipping: {
                     deliveryId: item.deliveryId,
                     cost: item.cost,
-                    status: item.status,
-                    time: item.deliveryTime,
+                    status: item.deliveryStatus,
+                    time: item.deadline,
                     trackingNumber: item.tracking,
                     type: item.type,
                     address_id: item.address_id,
@@ -112,9 +115,9 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
                 totalItemsValue: parseFloat(totalOrderValue).toFixed(2),
                 payment: {
                     value: item.value,
-                    paymentForm: item.paymentForm,
+                    paymentForm: item.type,
                     installment: item.installment,
-                    status: item.status,
+                    status: item.paymentStatus,
                     codeGateway: item.codeGateway,
                     address_id: item.address_id,
                     cards: item.cards,
