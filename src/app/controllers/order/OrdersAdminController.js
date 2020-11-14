@@ -32,18 +32,10 @@ class AdminOrdersController {
         try {
             const data = await connection('orders')
                 .where({
-                    client_id: client_id,
-                    store_id: store_id,
+                    client_id,
+                    store_id,
                 })
-                .select(
-                    'orderId',
-                    'client_id',
-                    'cart',
-                    'delivery_id',
-                    'store_id',
-                    'cancel',
-                    'created_at'
-                );
+                .select('*');
             return res.status(200).json(data);
         } catch (err) {
             console.error(err);
@@ -54,14 +46,14 @@ class AdminOrdersController {
         const { store_id, order_id } = params;
 
         try {
-            const data = await getOrderById({
+            const order = await getOrderById({
                 res,
                 connection,
                 store_id,
                 order_id,
             });
 
-            return res.status(200).send({ order: data });
+            return res.status(200).json({ order });
         } catch (err) {
             console.error(err);
         }
