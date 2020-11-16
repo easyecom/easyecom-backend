@@ -411,7 +411,7 @@ routes.get(
     AdminOrdersController.listOrdersByClient
 );
 routes.delete(
-    '/stores/:store_id/ordersAdmin/:order_id',
+    'stores/:store_id/orders/:order_id/admin',
     authMiddleware,
     storeValidation,
     AdminOrdersController.delete
