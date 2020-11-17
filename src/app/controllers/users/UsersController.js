@@ -1,6 +1,5 @@
-const connection = require('../../../database/connection');
-
 const bcrypt = require('bcrypt');
+const connection = require('../../../database/connection');
 
 class UsersController {
     async store(req, res) {
@@ -13,7 +12,7 @@ class UsersController {
             permission,
         } = req.body;
 
-        let error = [];
+        const error = [];
 
         if (!userName) error.push('userName');
         if (!email) error.push('email');

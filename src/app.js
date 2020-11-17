@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const routes = require('./routes');
+const routes = require('./routes/routes');
 
 class App {
     constructor() {
@@ -15,7 +15,7 @@ class App {
         this.server.use(express.json());
         this.server.set('view engine', 'ejs');
         this.server.disable('x-powered-by');
-        
+
         this.server.use(
             '/avatar',
             express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
