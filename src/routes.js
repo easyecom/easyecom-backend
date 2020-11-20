@@ -79,7 +79,7 @@ routes.delete(
 // store
 routes.post('/stores', StoresController.store);
 routes.get('/stores', authMiddleware, StoresController.getAll);
-routes.get('/stores/:store_id', authMiddleware, StoresController.getOne);
+routes.get('/stores/:store_id', StoresController.getOne);
 routes.put(
     '/stores/:store_id',
     authMiddleware,
