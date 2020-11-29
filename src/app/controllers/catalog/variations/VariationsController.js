@@ -1,4 +1,5 @@
 const connection = require('../../../../database/connection');
+const defaultImages = require('../helpers/defaultImages');
 
 class VariationsController {
     async store(req, res) {
@@ -71,6 +72,9 @@ class VariationsController {
                     store_id,
                     product_id,
                 });
+
+            // create default image
+            await defaultImages(data, connection);
 
             let variations = [];
 

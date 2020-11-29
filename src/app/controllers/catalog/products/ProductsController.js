@@ -83,9 +83,9 @@ class ProductsController {
                     descriptionShort,
                     description,
                     sku,
-                    variations,
+                    variations: [],
+                    evaluations: [],
                     images,
-                    evaluations,
                     refId,
                     mainCategory,
                     store_id,
@@ -93,7 +93,10 @@ class ProductsController {
                 });
 
             let products = [];
+            console.log(checkBrand)
+            
             products.push(data.productId, ...checkBrand.products);
+
             await connection('brands')
                 .where({ brandId: brand_id, store_id })
                 .update({ products }, ['products']);
