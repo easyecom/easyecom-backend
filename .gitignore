@@ -18,12 +18,15 @@ lerna-debug.log*
 
 # OS
 .DS_Store
+/uploads
+tmp
 
 # Tests
 /coverage
 /.nyc_output
 lcov-report
 lcov.info
+
 
 # IDEs and editors
 /.idea

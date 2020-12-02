@@ -353,7 +353,8 @@ routes.post(
     ImagesController.store
 );
 routes.get('/stores/:store_id/images', ImagesController.getAll);
-routes.get('/stores/:store_id/images/:id', ImagesController.getOne);
+routes.get('/stores/:store_id/images/:id', upload.single('file'), ImagesController.getOne);
+routes.put('/stores/:store_id/images/:id', ImagesController.update);
 routes.delete('/stores/:store_id/images/:id', ImagesController.delete);
 
 // evaluations
