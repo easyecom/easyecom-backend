@@ -60,7 +60,7 @@ class StoresController {
         }
     }
 
-    async getOne(req, res) {
+    async getById(req, res) {
         try {
             const { store_id } = req.params;
 
