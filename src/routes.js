@@ -78,14 +78,15 @@ routes.delete(
 
 // store
 routes.post('/stores', StoresController.store);
+routes.get('/stores/:store_id', StoresController.getById);
 routes.get('/stores', authMiddleware, StoresController.getAll);
-routes.get('/stores/:store_id', StoresController.getOne);
 routes.put(
     '/stores/:store_id',
     authMiddleware,
     storeValidation,
     StoresController.update
 );
+
 routes.delete(
     '/stores/:store_id',
     authMiddleware,
