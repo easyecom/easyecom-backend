@@ -1,6 +1,5 @@
-const connection = require('../../../database/connection');
-
 const bcrypt = require('bcrypt');
+const connection = require('../../../database/connection');
 
 class UsersController {
     async store(req, res) {
@@ -12,9 +11,6 @@ class UsersController {
             refId,
             permission,
         } = req.body;
-
-        const data = { userName, email, password };
-        let fields = ['userName', 'email', 'password'];
 
         const error = fields.filter(field => {
             if (!data[field]) {
