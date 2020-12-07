@@ -10,6 +10,7 @@ exports.up = knex => {
         table.boolean('isActive').defaultTo(true);
         table.boolean('IsVisible').defaultTo(false);
         table.boolean('soldOut').defaultTo(false);
+        table.boolean('highlight').defaultTo(false);
         table.string('keyWords');
         table.string('title');
         table.string('descriptionShort');

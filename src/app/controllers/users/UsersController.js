@@ -12,13 +12,13 @@ class UsersController {
             permission,
         } = req.body;
 
-        const error = [];
+        const error = fields.filter(field => {
+            if (!data[field]) {
+                return field;
+            }
+        });
 
-        if (!userName) error.push('userName');
-        if (!email) error.push('email');
-        if (!password) error.push('password');
-
-        if (error.length > 0) {
+        if (error.length) {
             return res
                 .status(400)
                 .json({ error: 'thing that you forgot', required: error });

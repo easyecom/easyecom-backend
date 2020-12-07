@@ -3,7 +3,12 @@ const connection = require('../../../../database/connection');
 class ImagesController {
     async store(req, res) {
         try {
-            const { category_id, product_id, variation_id, brand_id } = req.body;
+            const {
+                category_id,
+                product_id,
+                variation_id,
+                brand_id,
+            } = req.body;
 
             const { filename: name, originalname: path } = req.file;
 
@@ -15,7 +20,7 @@ class ImagesController {
                     category_id,
                     product_id,
                     variation_id,
-                    brand_id
+                    brand_id,
                 });
 
             return res.status(201).json({
@@ -52,6 +57,23 @@ class ImagesController {
             console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
+    }
+
+    async update(req, res) {
+        const { id } = req.params;
+        const data = res.body;
+
+        const result = await connection('images')
+            .where('images.id', id)
+            .update(data, [
+                'name',
+                'path',
+                'category_id',
+                'product_id',
+                'variation_id',
+                'brand_id',
+            ]);
+        return res.json(result);
     }
 
     async getOne(req, res) {

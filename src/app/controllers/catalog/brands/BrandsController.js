@@ -1,4 +1,5 @@
 const connection = require('../../../../database/connection');
+const defaultImages = require('../helpers/defaultImages');
 
 class BrandsController {
     async store(req, res) {
@@ -30,16 +31,18 @@ class BrandsController {
                 });
             }
 
-            const data = await connection('brands')
+            const [data] = await connection('brands')
                 .returning('*')
                 .insert({
                     brandName,
                     description,
                     isActive,
                     refId,
-                    products,
+                    products: [],
                     store_id,
                 });
+
+            await defaultImages(data, connection);
 
             return res.status(201).json(data);
         } catch (err) {

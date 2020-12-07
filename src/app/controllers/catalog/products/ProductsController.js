@@ -11,9 +11,7 @@ class ProductsController {
             descriptionShort,
             description,
             sku,
-            variations,
             images,
-            evaluations,
             refId,
             mainCategory,
             categoryId,
@@ -83,9 +81,9 @@ class ProductsController {
                     descriptionShort,
                     description,
                     sku,
-                    variations,
+                    variations: [],
+                    evaluations: [],
                     images,
-                    evaluations,
                     refId,
                     mainCategory,
                     store_id,
@@ -93,7 +91,9 @@ class ProductsController {
                 });
 
             let products = [];
+
             products.push(data.productId, ...checkBrand.products);
+
             await connection('brands')
                 .where({ brandId: brand_id, store_id })
                 .update({ products }, ['products']);
@@ -108,8 +108,6 @@ class ProductsController {
 
                 let products = [];
 
-                // products.push();
-
                 const [category] = await connection('categories').where({
                     categoryId,
                     store_id,
@@ -117,7 +115,7 @@ class ProductsController {
 
                 products.push(data.productId, ...category.products);
 
-                let [newProductArray] = await connection('categories')
+                await connection('categories')
                     .where({
                         categoryId,
                         store_id,
@@ -134,7 +132,7 @@ class ProductsController {
     async getAll(req, res) {
         try {
             const { store_id } = req.params;
-            // const { page = 1 } = req.query;
+            const { page = 1 } = req.query;
 
             const checkStore = await connection('stores').where({
                 storeId: store_id,
@@ -146,30 +144,48 @@ class ProductsController {
                     .json({ error: { message: 'store does not exist' } });
             }
 
-            const data = await connection('products')
-                // .join(
-                //     'categories',
-                //     'products.productId',
-                //     'categories.categoryId'
-                // )
-                .join('brands', 'products.brand_id', 'brands.brandId')
-                // .limit(20)
-                // .offset((page - 1) * 20)
-                .select(
-                    'products.productId',
-                    'products.productName',
-                    'products.descriptionShort',
-                    'brands.brandName',
-                    // 'categories.categoryName',
-                    'products.variations',
-                    'products.evaluations'
-                )
+            const products = await connection('products')
+                .innerJoin('brands', 'products.brand_id', 'brands.brandId')
+                .select('products.*', 'brands.brandName')
                 .where({
                     'products.store_id': store_id,
                     'brands.store_id': store_id,
                 });
 
-            return res.status(200).json({ products: data });
+            let newProduct = [];
+            for (let product of products) {
+                const data = await connection('variations')
+                    .join(
+                        'prices',
+                        'prices.variation_id',
+                        'variations.variationId'
+                    )
+                    .join(
+                        'products',
+                        'products.productId',
+                        'variations.product_id'
+                    )
+                    .join(
+                        'stocks',
+                        'stocks.variation_id',
+                        'variations.variationId'
+                    )
+                    .join('images', 'images.variation_id', 'variations.variationId')
+                    .select(
+                        '*',
+                        { priceId: 'prices.variation_id' },
+                        { stockId: 'stocks.variation_id' },
+                        { product_id: 'variations.product_id' },
+                        { store_id: 'variations.store_id' }
+                    )
+                    .where({
+                        'variations.store_id': store_id,
+                        variationId: product.variations[0],
+                    });
+                newProduct.push(...data);
+            }
+
+            return res.status(200).json(newProduct);
         } catch (err) {
             console.log(err);
             return res.status(500).json('sorry, something broke...');

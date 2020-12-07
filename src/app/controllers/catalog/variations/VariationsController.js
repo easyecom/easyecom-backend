@@ -1,4 +1,5 @@
 const connection = require('../../../../database/connection');
+const defaultImages = require('../helpers/defaultImages');
 
 class VariationsController {
     async store(req, res) {
@@ -72,6 +73,9 @@ class VariationsController {
                     product_id,
                 });
 
+            // create default image
+            // await defaultImages(data, connection);
+
             let variations = [];
 
             const [product] = await connection('products').where({
@@ -94,19 +98,19 @@ class VariationsController {
 
     async findAll(req, res) {
         const { store_id } = req.params;
+        const { page = 1, limit } = req.query;
 
         try {
             let data = await connection('variations')
+                .limit(limit)
+                .offset((page - 1) * 1)
                 .join('images', 'images.variation_id', 'variations.variationId')
                 .join('prices', 'prices.variation_id', 'variations.variationId')
                 .join('stocks', 'stocks.variation_id', 'variations.variationId')
                 .select('*', { product_id: 'variations.product_id' })
                 .where({ 'variations.store_id': store_id });
 
-            data.forEach(
-                item =>
-                    (item.image = `http://localhost:3777/images/${item.name}`)
-            );
+            data.forEach(item => (item.image = item.name));
 
             return res.status(200).json(data);
         } catch (err) {

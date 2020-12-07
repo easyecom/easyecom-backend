@@ -16,6 +16,7 @@ class AddressController {
             state,
             state_code,
             country,
+            storeIdToAddress,
         } = req.body;
 
         const [checkStore] = await connection('stores').where(
@@ -119,6 +120,7 @@ class AddressController {
                     state_code,
                     country,
                     user_id,
+                    storeIdToAddress,
                     store_id,
                 });
             return res.status(201).json(data);
