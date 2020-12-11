@@ -1,4 +1,8 @@
 require('dotenv').config();
+const knex = require('knex')
+
+const setupPaginator = require('knex-paginator');
+setupPaginator(knex);
 
 module.exports = {
     production: {

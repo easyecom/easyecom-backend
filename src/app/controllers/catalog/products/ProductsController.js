@@ -1,4 +1,6 @@
+// const knex = require('knex')(config);
 const connection = require('../../../../database/connection');
+// paginate(perPage = 10, page = 1, isLengthAware = false)
 
 class ProductsController {
     async store({ params, body }, res) {
@@ -132,7 +134,7 @@ class ProductsController {
     async getAll(req, res) {
         try {
             const { store_id } = req.params;
-            const { page = 1 } = req.query;
+            const { page } = req.query;
 
             const checkStore = await connection('stores').where({
                 storeId: store_id,
@@ -170,7 +172,11 @@ class ProductsController {
                         'stocks.variation_id',
                         'variations.variationId'
                     )
-                    .join('images', 'images.variation_id', 'variations.variationId')
+                    .join(
+                        'images',
+                        'images.variation_id',
+                        'variations.variationId'
+                    )
                     .select(
                         '*',
                         { priceId: 'prices.variation_id' },

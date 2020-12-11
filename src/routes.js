@@ -247,15 +247,11 @@ routes.get(
     SearchProductsController.search
 );
 
-// category product for dev
-routes.post(
-    '/stores/:store_id/category_products',
-    authMiddleware,
-    storeValidation,
-    CategoryProductController.store
+// category product
+routes.get(
+    '/stores/:store_id/category/:category_id/products',
+    CategoryProductController.getById
 );
-routes.get('/category_products', CategoryProductController.getAll);
-routes.delete('/category_products/:id', CategoryProductController.delete);
 
 // variations
 routes.post(
@@ -298,7 +294,6 @@ routes.get(
     PricesController.getAll
 );
 
-
 routes.get(
     '/stores/:store_id/prices/:price_id',
     authMiddleware,
@@ -329,7 +324,6 @@ routes.get(
     StocksController.getAll
 );
 
-
 routes.get(
     '/stores/:store_id/stocks/:stock_id',
     authMiddleware,
@@ -354,7 +348,11 @@ routes.post(
     ImagesController.store
 );
 routes.get('/stores/:store_id/images', ImagesController.getAll);
-routes.get('/stores/:store_id/images/:id', upload.single('file'), ImagesController.getOne);
+routes.get(
+    '/stores/:store_id/images/:id',
+    upload.single('file'),
+    ImagesController.getOne
+);
 routes.put('/stores/:store_id/images/:id', ImagesController.update);
 routes.delete('/stores/:store_id/images/:id', ImagesController.delete);
 
