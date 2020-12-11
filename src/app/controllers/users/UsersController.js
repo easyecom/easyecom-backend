@@ -12,18 +12,6 @@ class UsersController {
             permission,
         } = req.body;
 
-        const error = fields.filter(field => {
-            if (!data[field]) {
-                return field;
-            }
-        });
-
-        if (error.length) {
-            return res
-                .status(400)
-                .json({ error: 'thing that you forgot', required: error });
-        }
-
         const checkStore = await connection('stores').where(
             'storeId',
             store_id
