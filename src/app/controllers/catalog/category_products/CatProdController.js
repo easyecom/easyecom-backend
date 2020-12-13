@@ -17,8 +17,8 @@ class Category_product_controller {
                 'variations.*',
                 { brand_id: 'brands.brandId' },
                 { stock: 'stocks.quantity' },
-                { price: 'prices.salesPrice' },
-                { promotion: 'prices.offerPrice' },
+                { salesPrice: 'prices.salesPrice' },
+                { offerPrice: 'prices.offerPrice' },
                 { images: 'images.name' },
                 { category_id: 'products.mainCategory' }
             )
