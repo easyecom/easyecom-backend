@@ -134,7 +134,7 @@ class ProductsController {
     async getAll(req, res) {
         try {
             const { store_id } = req.params;
-            const { page } = req.query;
+            const { page, limit } = req.query;
 
             const checkStore = await connection('stores').where({
                 storeId: store_id,
@@ -154,7 +154,7 @@ class ProductsController {
                     'brands.store_id': store_id,
                 });
 
-            let newProduct = [];
+            let results = [];
             for (let product of products) {
                 const data = await connection('variations')
                     .join(
@@ -188,10 +188,10 @@ class ProductsController {
                         'variations.store_id': store_id,
                         variationId: product.variations[0],
                     });
-                newProduct.push(...data);
+                results.push(...data);
             }
 
-            return res.status(200).json(newProduct);
+            return res.status(200).json(results);
         } catch (err) {
             console.log(err);
             return res.status(500).json('sorry, something broke...');

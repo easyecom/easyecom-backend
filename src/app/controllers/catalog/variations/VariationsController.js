@@ -102,8 +102,8 @@ class VariationsController {
 
         try {
             let data = await connection('variations')
-                // .limit(limit)
-                // .offset((page - 1) * 1)
+                .limit(limit)
+                .offset((page - 1) * limit)
                 .join('images', 'images.variation_id', 'variations.variationId')
                 .join('prices', 'prices.variation_id', 'variations.variationId')
                 .join('stocks', 'stocks.variation_id', 'variations.variationId')
