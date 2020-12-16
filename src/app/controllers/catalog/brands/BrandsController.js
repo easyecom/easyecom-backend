@@ -1,5 +1,4 @@
 const connection = require('../../../../database/connection');
-const defaultImages = require('../helpers/defaultImages');
 
 class BrandsController {
     async store(req, res) {
