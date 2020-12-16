@@ -1,9 +1,9 @@
 const connection = require('../../../../database/connection');
 const variationImages = require('../../../../helpers/listImagesByVariation.helper');
 
-class Category_product_controller {
+class Brand_product_controller {
     async getById(req, res) {
-        const { store_id, category_id } = req.params;
+        const { store_id, brand_id } = req.params;
         const { page = 1, limit } = req.query;
 
         const products = await connection('products')
@@ -23,7 +23,7 @@ class Category_product_controller {
             )
             .where({
                 'products.store_id': store_id,
-                'products.mainCategory': category_id,
+                'products.brand_id': brand_id,
             });
 
         const results = await variationImages(products, connection);
@@ -38,9 +38,12 @@ class Category_product_controller {
         });
     }
     catch(err) {
-        console.error(err);
+        console.error({
+            message: err.message,
+            stack: err.stack,
+        });
         return res.status(500).json('sorry, something broke...');
     }
 }
 
-module.exports = new Category_product_controller();
+module.exports = new Brand_product_controller();

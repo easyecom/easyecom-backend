@@ -9,6 +9,15 @@ class StoresController {
                 email,
                 businessPhone,
                 cellPhone,
+                zipcode,
+                street,
+                number,
+                complement,
+                neighborhood,
+                city,
+                state,
+                state_code,
+                country,
             } = req.body;
 
             let error = [];
@@ -40,6 +49,15 @@ class StoresController {
                     email,
                     businessPhone,
                     cellPhone,
+                    zipcode,
+                    street,
+                    number,
+                    complement,
+                    neighborhood,
+                    city,
+                    state,
+                    state_code,
+                    country,
                 });
 
             return res.status(201).json(data);
@@ -90,12 +108,36 @@ class StoresController {
                 email,
                 businessPhone,
                 cellPhone,
+                zipcode,
+                street,
+                number,
+                complement,
+                neighborhood,
+                city,
+                state,
+                state_code,
+                country,
             } = req.body;
 
             const data = await connection('stores')
                 .returning('*')
                 .where('storeId', store_id)
-                .update({ storeName, cnpj, email, businessPhone, cellPhone });
+                .update({
+                    storeName,
+                    cnpj,
+                    email,
+                    businessPhone,
+                    cellPhone,
+                    zipcode,
+                    street,
+                    number,
+                    complement,
+                    neighborhood,
+                    city,
+                    state,
+                    state_code,
+                    country,
+                });
 
             return res.status(200).json(data);
         } catch (err) {

@@ -55,13 +55,9 @@ class BrandsController {
 
         try {
             let brands = await connection('brands')
-                .join('images', 'images.brand_id', 'brands.brandId')
+                .join('images', 'images.brand_id', '=', 'brands.brandId')
                 .select('*')
                 .where('brands.store_id', store_id);
-
-            brands.map(item => {
-                item.image = `http://localhost:3777/images/${item.name}`;
-            });
 
             if (!brands.length) {
                 return res.json({ message: 'without brands' });
