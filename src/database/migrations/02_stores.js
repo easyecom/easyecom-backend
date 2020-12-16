@@ -20,6 +20,16 @@ exports.up = knex => {
         table.string('businessPhone');
         table.string('cellPhone');
 
+        table.string('zipcode')
+        table.string('street')
+        table.string('number')
+        table.string('complement');
+        table.string('neighborhood')
+        table.string('city')
+        table.string('state')
+        table.string('state_code');
+        table.string('country');
+
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
     });

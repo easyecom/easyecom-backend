@@ -16,6 +16,7 @@ exports.up = knex => {
         table.string('descriptionShort');
         table.string('description');
         table.string('ean');
+        table.string('installment');
 
         table.string('packagedHeight').notNullable();
         table.string('packagedLength').notNullable();

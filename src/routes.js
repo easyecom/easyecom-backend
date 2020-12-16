@@ -28,6 +28,7 @@ const StocksController = require('./app/controllers/catalog/stocks/StocksControl
 
 const SearchProductsController = require('./app/controllers/catalog/products/searchProductsController');
 const CategoryProductController = require('./app/controllers/catalog/category_products/CatProdController');
+const brandProdController = require('./app/controllers/catalog/brand_products/brandProdController');
 const VariationsController = require('./app/controllers/catalog/variations/VariationsController');
 const ImagesController = require('./app/controllers/catalog/images/ImagesController');
 
@@ -253,6 +254,11 @@ routes.get(
     CategoryProductController.getById
 );
 
+routes.get(
+    '/stores/:store_id/brand/:brand_id/products',
+    brandProdController.getById
+);
+
 // variations
 routes.post(
     '/stores/:store_id/variations',
@@ -342,7 +348,7 @@ routes.delete(
 
 routes.post(
     '/stores/:store_id/images',
-    upload.single('file'),
+    upload.any(),
     authMiddleware,
     storeValidation,
     ImagesController.store

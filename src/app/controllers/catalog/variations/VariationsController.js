@@ -1,5 +1,5 @@
 const connection = require('../../../../database/connection');
-const defaultImages = require('../helpers/defaultImages');
+const variationImages = require('../../../../helpers/listImagesByVariation.helper');
 
 class VariationsController {
     async store(req, res) {
@@ -101,18 +101,17 @@ class VariationsController {
         const { page = 1, limit } = req.query;
 
         try {
-            let data = await connection('variations')
+            let variations = await connection('variations')
                 .limit(limit)
                 .offset((page - 1) * limit)
-                .join('images', 'images.variation_id', 'variations.variationId')
                 .join('prices', 'prices.variation_id', 'variations.variationId')
                 .join('stocks', 'stocks.variation_id', 'variations.variationId')
                 .select('*', { product_id: 'variations.product_id' })
                 .where({ 'variations.store_id': store_id });
 
-            data.forEach(item => (item.image = item.name));
+            const results = await variationImages(variations, connection);
 
-            return res.status(200).json(data);
+            return res.json(results);
         } catch (err) {
             return console.error(err);
         }

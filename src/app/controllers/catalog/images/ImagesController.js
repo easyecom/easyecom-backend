@@ -10,27 +10,24 @@ class ImagesController {
                 brand_id,
             } = req.body;
 
-            const { filename: name, originalname: path } = req.file;
+            const images = req.files;
 
-            const [data] = await connection('images')
-                .returning('*')
-                .insert({
-                    name,
-                    path,
-                    category_id,
-                    product_id,
-                    variation_id,
-                    brand_id,
-                });
+            let newImages = [];
+            for (let image of images) {
+                const result = await connection('images')
+                    .returning('*')
+                    .insert({
+                        name: image.originalname,
+                        path: image.filename,
+                        category_id,
+                        product_id,
+                        variation_id,
+                        brand_id,
+                    });
+                newImages.push(...result);
+            }
 
-            return res.status(201).json({
-                category_id: data.category_id,
-                brand_id: data.brand_id,
-                product_id: data.product_id,
-                variation_id: data.variation_id,
-                id: data.id,
-                path: `http://localhost:3777/images/${data.name}`,
-            });
+            return res.json(newImages);
         } catch (err) {
             console.error(err);
             return res.status(500).json('sorry, something broke...');
