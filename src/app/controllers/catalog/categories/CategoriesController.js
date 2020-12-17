@@ -46,8 +46,6 @@ class CategoriesController {
                     store_id,
                 });
 
-            await defaultImages(data, connection);
-
             return res.status(201).json(data);
         } catch (err) {
             console.error(err);

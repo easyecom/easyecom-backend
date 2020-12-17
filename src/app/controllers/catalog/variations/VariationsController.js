@@ -73,9 +73,6 @@ class VariationsController {
                     product_id,
                 });
 
-            // create default image
-            // await defaultImages(data, connection);
-
             let variations = [];
 
             const [product] = await connection('products').where({
