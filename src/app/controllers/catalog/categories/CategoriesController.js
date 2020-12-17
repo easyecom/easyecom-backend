@@ -77,16 +77,13 @@ class CategoriesController {
 
         try {
             const data = await connection('categories')
-                .join('images', 'images.category_id', 'categories.categoryId')
                 .select('*')
                 .where({
                     categoryId: category_id,
                     'categories.store_id': store_id,
                 });
 
-            data.map(item => {
-                item.image = `http://localhost:3777/images/${item.name}`;
-            });
+            return res.json(data);
 
             if (!data.length) {
                 return res.status(404).json({ warn: 'without category' });

@@ -52,7 +52,6 @@ class BrandsController {
 
         try {
             let brands = await connection('brands')
-                .join('images', 'images.brand_id', '=', 'brands.brandId')
                 .select('*')
                 .where('brands.store_id', store_id);
 
@@ -90,7 +89,6 @@ class BrandsController {
             }
 
             const [brands] = await connection('brands')
-                .join('images', 'images.brand_id', 'brands.brandId')
                 .where('brandId', brand_id)
                 .select('*');
 
