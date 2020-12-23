@@ -1,34 +1,31 @@
 version: '3'
 
 services:
-    app:
-        build: .
-        container_name: "api-easyecom"
-        command: sh -c "npm run
-         migrate && npm run dev"
-        ports:
-          - 3777:3777
-        volumes:
-          - .:/usr/app
-        networks:
-          - overlay
-        depends_on:
-          - db
-        environment:
-          DB_HOST: ${DATABASE_HOST}
-          DB_USER: ${DATABASE_USER}
-          DB_PASS: ${DATABASE_PASSWORD}
-          DB_NAME: ${DATABASE_NAME}
-    db:
-        image: postgres:alpine
-        container_name: db-easyecom
-        networks:
-          - overlay
-        ports:
-            - '5432:5432'
-        environment:
-            - POSTGRES_USER=${DATABASE_USER}
-            - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-            - POSTGRES_NAME=${DATABASE_NAME}
+  app:
+    build: .
+    container_name: 'api-easyecom'
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 3777:3777
+    command: sh ./exec.sh
+    depends_on:
+      - db
+    networks:
+      - overlay
+  db:
+    image: postgres:alpine
+    container_name: db-easyecom
+    networks:
+      - overlay
+    ports:
+      - '5432:5432'
+    volumes:
+      - /var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_NAME: ${DATABASE_NAME}
+      
 networks:
     overlay:

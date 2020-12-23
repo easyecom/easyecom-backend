@@ -1,6 +1,6 @@
 const connection = require ('../../../database/connection');
 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 class RecoveredController {
     async showCompleteRecovery(req, res, next) {

@@ -1,15 +1,13 @@
-FROM node:12.18.1-alpine
+FROM node:slim
 
 LABEL version="1.0" description="node image"
 
-WORKDIR /usr/app
+WORKDIR /usr/src/app
 
 COPY package*.json ./
-
-RUN npm
 
 COPY . . 
 
 EXPOSE 3777
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
