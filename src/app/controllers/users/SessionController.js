@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const connection = require('../../../database/connection');
 const authConfig = require('../../../config/auth');
 
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcryptjs");
 
 class SessionController {
     async create(req, res) {
