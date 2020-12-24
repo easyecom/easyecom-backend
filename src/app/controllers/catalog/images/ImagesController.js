@@ -1,4 +1,5 @@
 const connection = require('../../../../database/connection');
+// const { catch } = require('../category_products/CatProdController');
 
 class ImagesController {
     async store(req, res) {
@@ -13,12 +14,12 @@ class ImagesController {
             const images = req.files;
 
             let newImages = [];
-            for (let image of images) {
+            for (let { originalname, filename } of images) {
                 const result = await connection('images')
                     .returning('*')
                     .insert({
-                        name: image.originalname,
-                        path: image.filename,
+                        name: originalname,
+                        path: filename,
                         category_id,
                         product_id,
                         variation_id,
@@ -31,6 +32,36 @@ class ImagesController {
         } catch (err) {
             console.error(err);
             return res.status(500).json('sorry, something broke...');
+        }
+    }
+
+    async update(req, res) {
+        try {
+            const { id } = req.params;
+            const {
+                category_id,
+                product_id,
+                variation_id,
+                brand_id,
+            } = req.body;
+            return console.log(variation_id);
+
+            const images = req.files;
+
+            const result = await connection('images')
+                .where('images.id', id)
+                .update({ category_id, product_id, variation_id, brand_id }, [
+                    'name',
+                    'path',
+                    'category_id',
+                    'product_id',
+                    'variation_id',
+                    'brand_id',
+                ]);
+
+            return res.json(result);
+        } catch (err) {
+            return console.error(err);
         }
     }
 
@@ -54,23 +85,6 @@ class ImagesController {
             console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
-    }
-
-    async update(req, res) {
-        const { id } = req.params;
-        const data = res.body;
-
-        const result = await connection('images')
-            .where('images.id', id)
-            .update(data, [
-                'name',
-                'path',
-                'category_id',
-                'product_id',
-                'variation_id',
-                'brand_id',
-            ]);
-        return res.json(result);
     }
 
     async getOne(req, res) {

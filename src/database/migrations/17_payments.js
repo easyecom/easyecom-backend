@@ -45,6 +45,6 @@ exports.up = knex => {
     });
 };
 
-exports.down = knex => {
-    knex.schema.dropTable('payments');
+exports.down = async knex => {
+    await knex.schema.dropTable('payments');
 };

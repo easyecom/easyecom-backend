@@ -5,7 +5,7 @@ services:
     build: .
     container_name: 'api-easyecom'
     volumes:
-      - .:/usr/src/app
+      - .:/usr/app
     ports:
       - 3777:3777
     command: sh ./exec.sh
@@ -26,6 +26,7 @@ services:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_NAME: ${DATABASE_NAME}
+    restart: on-failure
       
 networks:
     overlay:

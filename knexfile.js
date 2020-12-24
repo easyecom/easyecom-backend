@@ -1,8 +1,4 @@
 require('dotenv').config();
-const knex = require('knex');
-
-const setupPaginator = require('knex-paginator');
-setupPaginator(knex);
 
 module.exports = {
     production: {
@@ -39,22 +35,15 @@ module.exports = {
         },
     },
 
-    staging: {
-        client: 'pg',
+    test: {
+        client: 'sqlite3',
         connection: {
-            host: process.env.DATABASE_STAGE_HOST,
-            database: process.env.DATABASE_STAGE_NAME,
-            port: process.env.DATABASE_STAGE_PORT,
-            user: process.env.DATABASE_STAGE_USER,
-            password: process.env.DATABASE_STAGE_PASSWORD,
+            filename: './src/database/test/db.sqlite',
         },
+        useNullAsDefault: true,
         migrations: {
             directory: './src/database/migrations',
         },
-        seeds: { directory: './src/database/seeds' },
-        pool: {
-            min: 2,
-            max: 10,
-        },
+        dialect: process.env.DB_DIALECT,
     },
 };
