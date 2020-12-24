@@ -51,6 +51,6 @@ exports.up = knex => {
     });
 };
 
-exports.down = knex => {
-    knex.schema.dropTable('variations');
+exports.down = async knex => {
+    await knex.schema.dropTable('variations');
 };

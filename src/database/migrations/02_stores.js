@@ -6,27 +6,25 @@ exports.up = knex => {
             .primary()
             .unique();
 
-        table
-            .string('uuid')
-            .unique();
+        table.string('uuid').unique();
 
         table.string('storeName').notNullable();
         table
             .string('cnpj')
             .notNullable()
             .unique();
-            
+
         table.string('email').notNullable();
         table.string('businessPhone');
         table.string('cellPhone');
 
-        table.string('zipcode')
-        table.string('street')
-        table.string('number')
+        table.string('zipcode');
+        table.string('street');
+        table.string('number');
         table.string('complement');
-        table.string('neighborhood')
-        table.string('city')
-        table.string('state')
+        table.string('neighborhood');
+        table.string('city');
+        table.string('state');
         table.string('state_code');
         table.string('country');
 
@@ -35,6 +33,6 @@ exports.up = knex => {
     });
 };
 
-exports.down = knex => {
-    knex.schema.dropTable('stores');
+exports.down = async knex => {
+    await knex.schema.dropTable('stores');
 };

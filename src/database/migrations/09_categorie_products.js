@@ -27,6 +27,6 @@ exports.up = knex => {
     });
 };
 
-exports.down = knex => {
-    knex.schema.dropTable('category_products');
+exports.down = async knex => {
+    await knex.schema.dropTable('category_products');
 };

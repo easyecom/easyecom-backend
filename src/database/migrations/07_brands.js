@@ -7,12 +7,12 @@ exports.up = knex => {
             .unique();
 
         table.string('brandName').notNullable();
-        table.string('description')
+        table.string('description');
         table.boolean('isActive').defaultTo(true);
         table.string('refId');
         table.specificType('products', 'jsonb[]');
 
-        table.integer('store_id')
+        table.integer('store_id');
         table
             .foreign('store_id')
             .references('storeId')
@@ -25,6 +25,6 @@ exports.up = knex => {
     });
 };
 
-exports.down = knex => {
-    knex.schema.dropTable('brands');
+exports.down = async knex => {
+    await knex.schema.dropTable('brands');
 };
