@@ -65,7 +65,7 @@ class CategoriesController {
                 return res.status(404).json({ warn: 'without category' });
             }
 
-            return res.status(200).json({ categories: data });
+            return res.status(200).json(data);
         } catch (err) {
             console.error(err);
             return res.status(500).json('sorry, something broke...');
