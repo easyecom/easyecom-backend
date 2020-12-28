@@ -25,7 +25,7 @@ class VariationsController {
             let error = [];
 
             if (!variationName) error.push('variationName');
-            if (!descriptionShort) error.push('descriptionShort');
+            if (!title) error.push('title');
             if (!product_id) error.push('product_id');
 
             if (error.length > 0) {
@@ -118,10 +118,9 @@ class VariationsController {
         const { store_id, variation_id } = req.params;
 
         try {
-            let [data] = await connection('variations')
+            let data = await connection('variations')
                 .join('prices', 'prices.variation_id', 'variations.variationId')
                 .join('stocks', 'stocks.variation_id', 'variations.variationId')
-                .join('images', 'images.variation_id', 'variations.variationId')
                 .select(
                     '*',
                     { priceId: 'prices.variation_id' },
@@ -134,10 +133,9 @@ class VariationsController {
                     variationId: variation_id,
                 });
 
-            data.variation_id = undefined; // ambiguo
-            data.path = `http://localhost:3777/images/${data.name}`;
+            const [results] = await variationImages(data, connection);
 
-            return res.status(200).json(data);
+            return res.status(200).json({ results });
         } catch (err) {
             return console.error(err);
         }

@@ -6,6 +6,12 @@ class Category_product_controller {
         const { store_id, category_id } = req.params;
         const { page = 1, limit } = req.query;
 
+        const [count] = await connection('products')
+            .where({
+                'products.mainCategory': category_id,
+            })
+            .count();
+
         const products = await connection('products')
             .limit(limit)
             .offset((page - 1) * limit)
@@ -26,15 +32,16 @@ class Category_product_controller {
                 'products.mainCategory': category_id,
             });
 
-        const results = await variationImages(products, connection);
+        const body = await variationImages(products, connection);
 
         return res.status(200).json({
-            results,
+            statusCode: 200,
             infos: {
                 page: parseInt(page),
-                limit: limit,
-                total: results.length,
+                limit: parseInt(limit),
+                total: parseInt(count.count),
             },
+            body,
         });
     }
     catch(err) {

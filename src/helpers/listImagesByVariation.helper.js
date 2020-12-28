@@ -5,7 +5,7 @@ module.exports = async (variations, connection) => {
         const images = await connection('images')
             .select({
                 image_id: 'id',
-                productName: 'name',
+                file: 'name',
                 path: 'path',
             })
             .where({ variation_id: variation.variationId });

@@ -76,7 +76,7 @@ class CategoriesController {
         const { store_id, category_id } = req.params;
 
         try {
-            const data = await connection('categories')
+            const [data] = await connection('categories')
                 .select('*')
                 .where({
                     categoryId: category_id,
