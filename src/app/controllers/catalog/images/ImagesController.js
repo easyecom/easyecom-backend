@@ -44,22 +44,35 @@ class ImagesController {
                 variation_id,
                 brand_id,
             } = req.body;
-            return console.log(variation_id);
 
             const images = req.files;
+            
+            let newUpdateImages = [];
+            for (let { originalname, filename } of images) {
+                const result = await connection('images')
+                    .where('images.id', id)
+                    .update(
+                        {
+                            name: originalname,
+                            path: filename,
+                            category_id,
+                            product_id,
+                            variation_id,
+                            brand_id,
+                        },
+                        [
+                            'name',
+                            'path',
+                            'category_id',
+                            'product_id',
+                            'variation_id',
+                            'brand_id',
+                        ]
+                    );
+                newUpdateImages.push(...result);
+            }
 
-            const result = await connection('images')
-                .where('images.id', id)
-                .update({ category_id, product_id, variation_id, brand_id }, [
-                    'name',
-                    'path',
-                    'category_id',
-                    'product_id',
-                    'variation_id',
-                    'brand_id',
-                ]);
-
-            return res.json(result);
+            return res.json(newUpdateImages);
         } catch (err) {
             return console.error(err);
         }
@@ -69,18 +82,7 @@ class ImagesController {
         try {
             let data = await connection('images').select('*');
 
-            data = data.map(item => {
-                return {
-                    category_id: item.category_id,
-                    brand_id: item.brand_id,
-                    product_id: item.product_id,
-                    variation_id: item.variation_id,
-                    id: item.id,
-                    path: `http://localhost:3777/images/${item.name}`,
-                };
-            });
-
-            return res.status(400).json(data);
+            return res.status(200).json(data);
         } catch (err) {
             console.error(err);
             return res.status(500).json('sorry, something broke...');
@@ -101,14 +103,7 @@ class ImagesController {
                     .json({ message: 'images does not exist' });
             }
 
-            return res.status(200).json({
-                category_id: data.category_id,
-                brand_id: data.brand_id,
-                product_id: data.product_id,
-                variation_id: data.variation_id,
-                id: data.id,
-                path: `http://localhost:3777/images/${data.name}`,
-            });
+            return res.status(200).json(data);
         } catch (err) {
             console.error(err);
             return res.status(500).json('sorry, something broke...');

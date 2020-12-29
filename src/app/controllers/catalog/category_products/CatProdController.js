@@ -32,7 +32,7 @@ class Category_product_controller {
                 'products.mainCategory': category_id,
             });
 
-        const body = await variationImages(products, connection);
+        const results = await variationImages(products, connection);
 
         return res.status(200).json({
             statusCode: 200,
@@ -41,7 +41,7 @@ class Category_product_controller {
                 limit: parseInt(limit),
                 total: parseInt(count.count),
             },
-            body,
+            results, // ajuste 
         });
     }
     catch(err) {
