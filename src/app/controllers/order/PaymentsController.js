@@ -17,7 +17,7 @@ class PaymentsController {
         } = req.body;
         // console.log('start');
 
-        return createPayment();
+        // return createPayment();
 
         try {
             const data = await connection('payments')

@@ -2,6 +2,7 @@ const axios = require('axios').default;
 const { baseUrl } = require('../../../config/pagseguro');
 
 module.exports = body => {
+    // return body
     return axios
         .post(`${baseUrl}/charges`, body, {
             headers: {

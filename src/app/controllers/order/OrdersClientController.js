@@ -10,6 +10,7 @@ class OrdersController {
     async create(req, res) {
         const { store_id } = req.params;
         const { cart, deliveryData, paymentData, cancel } = req.body; // criar delivery no momento do pedido
+
         const { userId: user_id } = req;
 
         try {
@@ -178,8 +179,6 @@ class OrdersController {
                 checkClient,
                 checkAddress
             );
-
-            // return res.json(responsePayment); // gateway return
 
             await connection('payments')
                 .returning('*')
