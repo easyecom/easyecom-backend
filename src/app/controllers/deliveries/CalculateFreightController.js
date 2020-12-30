@@ -3,7 +3,7 @@ const { calculateShipping } = require('../../integrations/correios');
 
 class CalculateFreightController {
     async calculate({ body, params }, res) {
-        const { store_id, product_id } = params;
+        const { store_id, variation_id } = params;
         let { zipcode } = body;
 
         zipcode = zipcode.replace(/\-/g, '');
@@ -11,13 +11,21 @@ class CalculateFreightController {
         try {
             // validar se produto existe no carrinho para relizar calculo
             const product = await connection('variations').where({
-                variationId: product_id,
+                variationId: variation_id,
                 store_id,
             });
 
-            const [address] = await connection('stores')
-                .join('addresses', 'addresses.store_id', 'stores.storeId') // need to create new fields for address store id
-                .where({ 'stores.storeId': store_id });
+            if (!product.length)
+                return res
+                    .status(400)
+                    .json({
+                        statusCode: 400,
+                        message: 'produc does not exist',
+                    });
+
+            const [address] = await connection('stores').where({
+                'stores.storeId': store_id,
+            });
 
             if (!address) return res.status(400).json('address not exist');
 

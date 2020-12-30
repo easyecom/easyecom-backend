@@ -26,7 +26,7 @@ module.exports = async data => {
             },
             payment: '', // make join
             shipping: '', // make join
-            is_completed: '', // create database collumn for this field
+            is_completed: '', 
             items: item.cart,
             totalValue: parseFloat(value)
                 .toFixed(2)

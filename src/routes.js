@@ -449,7 +449,7 @@ routes.delete(
 
 // calculate freight
 routes.post(
-    '/stores/:store_id/calculateFreight/productId/:product_id',
+    '/stores/:store_id/calculateFreight/variationId/:variation_id',
     calculateFreightController.calculate
 );
 

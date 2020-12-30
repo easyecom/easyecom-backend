@@ -5,7 +5,7 @@ class DeliveryController {
     async create({ params, body }, res) {
         const { store_id } = params;
 
-        const { status, tracking, type, cost, deliveryTime, address_id } = body;
+        const { deliveryStatus, tracking, type, cost, deadline, address_id } = body;
 
         const [checkAddress] = await connection('addresses').where(
             'addressId',
@@ -20,11 +20,11 @@ class DeliveryController {
             const data = await connection('deliveries')
                 .returning('*')
                 .insert({
-                    status,
+                    deliveryStatus,
                     tracking,
                     type,
                     cost,
-                    deliveryTime,
+                    deadline,
                     address_id,
                     store_id,
                 });
@@ -54,7 +54,7 @@ class DeliveryController {
             }
 
             const data = await connection('deliveries')
-                .update(delivery, ['status', 'tracking'])
+                .update(delivery, ['deliveryStatus', 'tracking'])
                 .where({ store_id: store_id, deliveryId: delivery_id });
 
             return res.status(200).json(data);
