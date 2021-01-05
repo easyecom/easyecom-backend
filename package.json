@@ -4,8 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "node src/server.js",
-        "dev": "nodemon src/server.js",
+        "start": "node src/main/server.js",
+        "dev": "nodemon src/main/server.js",
         "pretest": "NODE_ENV=test knex migrate:latest",
         "test": "NODE_ENV=test jest",
         "posttest": "NODE_ENV=test knex migrate:rollback --all",
@@ -25,6 +25,7 @@
         "express": "^4.17.1",
         "express-jwt": "^6.0.0",
         "faker": "^5.1.0",
+        "sqlite3": "^5.0.0",
         "i": "^0.3.6",
         "jsonwebtoken": "^8.5.1",
         "knex": "^0.21.1",
@@ -50,7 +51,6 @@
         "eslint-plugin-react": "^7.16.0",
         "eslint-plugin-react-hooks": "^1.7.0",
         "jest": "^26.1.0",
-        "sqlite3": "^5.0.0",
         "prettier": "^1.19.1",
         "supertest": "^4.0.2",
         "factory-girl": "^5.0.4"

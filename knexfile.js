@@ -5,9 +5,9 @@ module.exports = {
         client: 'pg',
         connection: process.env.DATABASE_URL,
         migrations: {
-            directory: './src/database/migrations',
+            directory: './src/infra/database/migrations',
         },
-        seeds: { directory: './src/database/seeds' },
+        seeds: { directory: './src/infra/database/seeds' },
         useNullAsDefault: true,
         pool: {
             min: 5,
@@ -24,9 +24,9 @@ module.exports = {
             password: process.env.DATABASE_PASSWORD,
         },
         migrations: {
-            directory: './src/database/migrations',
+            directory: './src/infra/database/migrations',
         },
-        seeds: { directory: './src/database/seeds' },
+        seeds: { directory: './src/infra/database/seeds' },
         // seeds: { directory: './src/database/seeds' },
         useNullAsDefault: true,
         pool: {
@@ -38,11 +38,11 @@ module.exports = {
     test: {
         client: 'sqlite3',
         connection: {
-            filename: './src/database/test/db.sqlite',
+            filename: './src/infra/database/dbTest/db.sqlite',
         },
         useNullAsDefault: true,
         migrations: {
-            directory: './src/database/migrations',
+            directory: './src/infra/database/migrations',
         },
         dialect: process.env.DB_DIALECT,
     },

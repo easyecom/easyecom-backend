@@ -1,5 +1,5 @@
 const transporter = require('nodemailer').createTransport(
-    require('../src/config/mail')
+    require('../src/main/config/mail')
 );
 
 const baseURL = 'http://localhost:3777';
