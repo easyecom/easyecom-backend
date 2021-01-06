@@ -1,7 +1,7 @@
 require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const request = require('supertest');
-const app = require('../../src/app');
+const app = require('../../../src/main/app');
 
 describe('user', () => {
     it('should be create user on database', async () => {

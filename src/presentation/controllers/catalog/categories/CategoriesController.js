@@ -11,6 +11,9 @@ class CategoriesController {
                 store_id,
             });
 
+            if (results.method == 'update')
+                return res.status(200).json(results);
+
             if (results.error)
                 return res.status(400).json({
                     statusCode: 400,
@@ -50,7 +53,7 @@ class CategoriesController {
 
         try {
             const results = await categoryService.getById({
-                payload: category_id,
+                id: category_id,
                 store_id,
             });
 
@@ -75,6 +78,12 @@ class CategoriesController {
                 store_id,
             });
 
+            if (results.error)
+                return res.status(400).json({
+                    statusCode: 400,
+                    message: 'Categoria não existe',
+                });
+
             if (!results) {
                 return res
                     .status(404)
@@ -91,27 +100,21 @@ class CategoriesController {
         const { category_id, store_id } = params;
 
         try {
-            // const checkCategory = await connection('categories')
-            //     .select('*')
-            //     .where('categoryId', category_id);
-
-            // if (!checkCategory.length) {
-            //     return res
-            //         .status(404)
-            //         .json({ warn: 'category does not exist' });
-            // }
-
-            const data = await categoryService.delete({
+            const results = await categoryService.delete({
                 category_id,
                 store_id,
             });
 
-            return res
-                .status(200)
-                .json({
-                    statusCode: 200,
-                    message: `category ${data} deleted successfully`,
+            if (results.error)
+                return res.status(400).json({
+                    statusCode: 400,
+                    message: 'Categoria não existe',
                 });
+
+            return res.status(200).json({
+                statusCode: 200,
+                message: `category deleted successfully`,
+            });
         } catch (err) {
             return res.status(500).json('sorry, something broke...');
         }

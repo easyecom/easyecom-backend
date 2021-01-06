@@ -22,10 +22,19 @@ class CategoryRepository {
             .select('*');
     }
 
-    async getById({ payload: categoryId, store_id }) {
+    async getById({ id, store_id }) {
         return await connection('categories')
             .select('*')
-            .where({ categoryId, store_id });
+            .where({ categoryId: id, store_id });
+    }
+
+    async checkName({ payload, store_id }) {
+        return await connection('categories')
+            .select('*')
+            .where({
+                store_id,
+                categoryName: payload.categoryName,
+            });
     }
 
     async update({ payload, category_id, store_id }) {
