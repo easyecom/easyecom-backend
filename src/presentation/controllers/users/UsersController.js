@@ -1,111 +1,32 @@
 const bcrypt = require('bcryptjs');
 const connection = require('../../../infra/database/connection');
-const logger = require('../../../domain/helpers/logger.helper');
+const logger = require('../../../helpers/logger.helper');
+const UserService = require('../../../domain/services/User.service');
 
 class UsersController {
-    async store(req, res) {
-        const {
-            userName,
-            email,
-            password,
-            store_id,
-            refId,
-            permission,
-        } = req.body;
-        logger.start();
+    async store({ body: users }, res) {
+        const results = await UserService.create({ payload: users });
 
-        await logger.success({
-            entity: 'userController',
-            message: 'Start receiving data...',
-            data: req.body,
-        });
-
-        const checkStore = await connection('stores').where(
-            'storeId',
-            store_id
-        );
-        await logger.success({
-            entity: 'userController',
-            message: 'Checking store exist...',
-            data: checkStore,
-        });
-
-        if (!checkStore.length && !permission.includes('sup')) {
-            await logger.error({
-                entity: 'userController',
-                message: 'Stop cause store does not exist',
-                data: checkStore,
+        if (results.error) {
+            return res.status(400).json({
+                statusCode: 400,
+                message: `missing data: ${results.error}`,
             });
-            return res
-                .status(400)
-                .json({ statusCode: 400, message: 'Store does not exist' });
         }
 
-        const checkEmail = await connection('users')
-            .select('*')
-            .where('email', email);
-        await logger.success({
-            entity: 'userController',
-            message: 'Checking duplicate emails...',
-            data: checkEmail.length ? checkEmail : 'email this ok',
-        });
-
-        if (checkEmail.length && checkEmail[0].store_id === store_id) {
-            await logger.error({
-                entity: 'userController',
-                message: 'Stop cause email alredy exist',
-                data: checkEmail,
-            });
-
+        if (results.storeEmpty) {
             return res
                 .status(400)
-                .json({ statusCode: 400, message: 'Email already exist' });
+                .json({ statusCode: 400, mesagge: 'Store does not exist' });
         }
 
-        // if (checkEmail.length) {
-        //     return res.status(400).json('email already exist');
-        // }
+        if (results.duplicateEmail) {
+            return res
+                .status(400)
+                .json({ statusCode: 400, mesagge: 'Email already exist' });
+        }
 
-        const user = new Promise((resolve, reject) => {
-            try {
-                bcrypt.hash(String(password), 7, (err, hash) => {
-                    if (err) {
-                        console.error(err);
-                        return reject(err);
-                    }
-                    resolve(
-                        connection('users')
-                            .returning('*')
-                            .insert({
-                                userName,
-                                email,
-                                password: hash,
-                                store_id,
-                                refId,
-                                permission,
-                            })
-                    );
-                });
-            } catch (err) {
-                console.error(err);
-                return res.status(500).json({
-                    statusCode: 400,
-                    message: 'sorry, something broke...',
-                });
-            }
-        });
-        await logger.success({
-            entity: 'userController',
-            message: ' finished create user!',
-            data: user,
-        });
-
-        user.then(result => {
-            return res.status(201).send(result);
-        }).catch(err => {
-            console.error(err);
-            return res.status(500).json('sorry, something broke...');
-        });
+        return res.status(201).json(results);
     }
 
     // for dev

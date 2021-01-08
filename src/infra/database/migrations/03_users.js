@@ -8,7 +8,10 @@ exports.up = knex => {
 
         table.string('userName', 50).notNullable();
 
-        table.string('email', 30).notNullable();
+        table
+            .string('email', 30)
+            .notNullable()
+            .unique();
         // .unique();
 
         table.string('password').notNullable();

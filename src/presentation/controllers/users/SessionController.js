@@ -2,12 +2,12 @@ const jwt = require('jsonwebtoken');
 const connection = require('../../../infra/database/connection');
 const authConfig = require('../../../main/config/auth');
 
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcryptjs');
 
 class SessionController {
-    async create(req, res) {
+    async create({ body }, res) {
         try {
-            const { email, password } = req.body;
+            const { email, password } = body;
 
             let error = [];
 

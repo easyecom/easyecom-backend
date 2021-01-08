@@ -7,10 +7,15 @@ module.exports = async (req, res, next) => {
     if (!user_admin)
         return res
             .status(400)
-            .json({ message: 'include a valid administrator' });
+            .json({
+                statusCode: 400,
+                message: 'include a valid administrator',
+            });
 
     if (!store_id || !store_id.length) {
-        return res.status(400).json({ message: 'missing store' });
+        return res
+            .status(400)
+            .json({ statusCode: 400, message: 'missing store' });
     }
 
     const store = await connection('stores')
@@ -19,7 +24,7 @@ module.exports = async (req, res, next) => {
 
     if (!store.length) {
         return res
-            .status(404)
+            .status(400)
             .json({ statusCode: 400, error: 'store does not exist' });
     }
 
@@ -36,15 +41,24 @@ module.exports = async (req, res, next) => {
         .where({ userId: user_admin, store_id });
 
     if (!checkUserPermission.length) {
-        return res.status(403).json({ Error: { EACCES: 'permission denied' } });
+        return res
+            .status(403)
+            .json({ statusCode: 403, Error: { EACCES: 'permission denied' } });
     }
 
     if (!user[0].permission.includes('admin')) {
-        return res.status(403).json({ Error: { EACCES: 'permission denied' } });
+        return res
+            .status(403)
+            .json({ statusCode: 403, Error: { EACCES: 'permission denied' } });
     }
 
     if (user[0].store_id.toString() !== store_id) {
-        return res.status(403).json('store administrator not have permmission');
+        return res
+            .status(403)
+            .json({
+                statusCode: 403,
+                message: 'store administrator not have permmission',
+            });
     }
 
     return next();

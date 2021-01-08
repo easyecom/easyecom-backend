@@ -1,6 +1,4 @@
-const connection = require('../../../../infra/database/connection');
 const CategoryService = require('../../../../domain/services/category.service');
-const categoryService = require('../../../../domain/services/category.service');
 
 class CategoriesController {
     async store({ body: categories, params }, res) {
@@ -32,13 +30,15 @@ class CategoriesController {
             const { store_id } = params;
             const { page } = query;
 
-            const results = await categoryService.list({
+            const results = await CategoryService.list({
                 payload: page,
                 store_id,
             });
 
             if (!results.length) {
-                return res.status(404).json({ warn: 'without category' });
+                return res
+                    .status(400)
+                    .json({ statusCode: 400, message: 'without category' });
             }
 
             return res.status(200).json(results);
@@ -52,13 +52,15 @@ class CategoriesController {
         const { store_id, category_id } = req.params;
 
         try {
-            const results = await categoryService.getById({
+            const results = await CategoryService.getById({
                 id: category_id,
                 store_id,
             });
 
             if (!results.length) {
-                return res.status(404).json({ warn: 'without category' });
+                return res
+                    .status(400)
+                    .json({ statusCode: 400, message: 'without category' });
             }
 
             return res.status(200).json(results[0]);
@@ -72,7 +74,7 @@ class CategoriesController {
         const { category_id, store_id } = params;
 
         try {
-            const results = await categoryService.update({
+            const results = await CategoryService.update({
                 payload: body,
                 category_id,
                 store_id,
@@ -100,7 +102,7 @@ class CategoriesController {
         const { category_id, store_id } = params;
 
         try {
-            const results = await categoryService.delete({
+            const results = await CategoryService.delete({
                 category_id,
                 store_id,
             });

@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../../../src/main/app');
+const app = require('../../main/app');
 
 describe('stores', () => {
     it('should create store', async () => {

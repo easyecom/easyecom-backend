@@ -1,5 +1,5 @@
 const connection = require('../../../../infra/database/connection');
-const variationImages = require('../../../../domain/helpers/listImagesByVariation.helper');
+const variationImages = require('../../../../helpers/listImagesByVariation.helper');
 
 class VariationsController {
     async store(req, res) {

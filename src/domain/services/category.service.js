@@ -1,6 +1,6 @@
 const CategoryRepository = require('../../infra/repository/category.repository');
 const StoreRepository = require('../../infra/repository/store.repository');
-const logger = require('../helpers/logger.helper');
+const logger = require('../../helpers/logger.helper');
 
 const { isValidFields } = require('../validator/validFields');
 
@@ -27,15 +27,6 @@ class CategoryService {
             data: isValidate,
         });
 
-        // check order
-        const checkStore = await StoreRepository.getById({ storeId: store_id });
-        if (!checkStore) return checkStore;
-        await logger.success({
-            entity: 'categories',
-            message: 'Loja valida',
-            data: checkStore,
-        });
-
         // check category
         const [checkCategory] = await CategoryRepository.checkName({
             payload,
@@ -46,11 +37,13 @@ class CategoryService {
             await logger.success({
                 entity: 'categories',
                 message: 'Essa categoria já existe e foi atualizada',
-                data: checkStore,
+                data: checkCategory,
             });
 
             return {
+                statusCode: 200,
                 method: 'update',
+                message: 'category updated successfully',
                 body: await CategoryRepository.update({
                     payload,
                     category_id: checkCategory.categoryId,
