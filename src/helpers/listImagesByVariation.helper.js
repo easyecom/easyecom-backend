@@ -6,7 +6,7 @@ module.exports = async (data, connection) => {
             .select({
                 image_id: 'id',
                 file: 'name',
-                path: 'path',
+                path: 'url',
             })
             .where({ variation_id: d.variationId });
 

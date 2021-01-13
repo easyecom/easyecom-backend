@@ -14,12 +14,21 @@ class ImagesController {
             const images = req.files;
 
             let newImages = [];
-            for (let { originalname, filename } of images) {
+            for (let {
+                originalname,
+                filename,
+                key,
+                size,
+                location: url = '',
+            } of images) {
                 const result = await connection('images')
                     .returning('*')
                     .insert({
                         name: originalname,
-                        path: filename,
+                        path: key,
+                        key,
+                        size,
+                        url,
                         category_id,
                         product_id,
                         variation_id,
@@ -46,7 +55,7 @@ class ImagesController {
             } = req.body;
 
             const images = req.files;
-            
+
             let newUpdateImages = [];
             for (let { originalname, filename } of images) {
                 const result = await connection('images')

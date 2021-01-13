@@ -8,6 +8,9 @@ exports.up = knex => {
 
         table.string('name').notNullable();
         table.string('path').notNullable();
+        table.string('key')
+        table.string('size')
+        table.string('url')
 
         table.integer('product_id');
         table
