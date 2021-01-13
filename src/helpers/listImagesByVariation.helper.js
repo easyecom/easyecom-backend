@@ -1,17 +1,17 @@
-module.exports = async (variations, connection) => {
+module.exports = async (data, connection) => {
     let results = [];
 
-    for (let variation of variations) {
+    for (let d of data) {
         const images = await connection('images')
             .select({
                 image_id: 'id',
                 file: 'name',
-                path: 'path',
+                path: 'url',
             })
-            .where({ variation_id: variation.variationId });
+            .where({ variation_id: d.variationId });
 
-        variation.images = images;
-        results.push(variation);
+        d.images = images;
+        results.push(d);
     }
 
     return results;
