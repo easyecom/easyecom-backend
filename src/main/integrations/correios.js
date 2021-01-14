@@ -1,6 +1,6 @@
-const Correios = require('node-correios');
+// const Correios = require('node-correios');
 const correiosConfig = require('../config/correios');
-let correios = new Correios();
+let correios = "" // new Correios();
 
 const calculateShipping = async (cart, zipcode, storeZipcode) => {
     const _variation = await cart.map(item => {
