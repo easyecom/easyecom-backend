@@ -35,15 +35,15 @@ module.exports = {
         },
     },
 
-    test: {
-        client: 'sqlite3',
-        connection: {
-            filename: './src/infra/database/dbTest/db.sqlite',
-        },
-        useNullAsDefault: true,
-        migrations: {
-            directory: './src/infra/database/migrations',
-        },
-        dialect: process.env.DB_DIALECT,
-    },
+    // test: {
+    //     client: 'sqlite3',
+    //     connection: {
+    //         filename: './src/infra/database/dbTest/db.sqlite',
+    //     },
+    //     useNullAsDefault: true,
+    //     migrations: {
+    //         directory: './src/infra/database/migrations',
+    //     },
+    //     dialect: process.env.DB_DIALECT,
+    // },
 };
