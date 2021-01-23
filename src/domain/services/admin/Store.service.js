@@ -1,4 +1,4 @@
-const connection = require('../database/connection');
+const connection = require('../../database/connection');
 
 class StoreRepository {
     async create(payload) {

@@ -1,4 +1,5 @@
-const CategoryService = require('../../../../domain/services/category.service');
+// const CategoryService = require('../../../../domain/services/category.service');
+const CategoryService = require('../../../../domain/services/catalog/Category.service');
 
 class CategoriesController {
     async store({ body: categories, params }, res) {
@@ -25,7 +26,7 @@ class CategoriesController {
         }
     }
 
-    async getAll({ params, query }, res) {
+    async list({ params, query }, res) {
         try {
             const { store_id } = params;
             const { page } = query;
@@ -48,12 +49,12 @@ class CategoriesController {
         }
     }
 
-    async getOne(req, res) {
+    async getById(req, res) {
         const { store_id, category_id } = req.params;
 
         try {
             const results = await CategoryService.getById({
-                id: category_id,
+                categoryId: category_id,
                 store_id,
             });
 
@@ -76,7 +77,7 @@ class CategoriesController {
         try {
             const results = await CategoryService.update({
                 payload: body,
-                category_id,
+                categoryId: category_id,
                 store_id,
             });
 
@@ -94,6 +95,7 @@ class CategoriesController {
 
             return res.status(200).json(results);
         } catch (err) {
+            console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
     }
@@ -103,7 +105,7 @@ class CategoriesController {
 
         try {
             const results = await CategoryService.delete({
-                category_id,
+                categoryId: category_id,
                 store_id,
             });
 
@@ -118,6 +120,7 @@ class CategoriesController {
                 message: `category deleted successfully`,
             });
         } catch (err) {
+            console.error(err);
             return res.status(500).json('sorry, something broke...');
         }
     }

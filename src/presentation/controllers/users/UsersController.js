@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const connection = require('../../../infra/database/connection');
 const logger = require('../../../helpers/logger.helper');
-const UserService = require('../../../domain/services/User.service');
+const UserService = require('../../../domain/services/user/User.service');
 
 class UsersController {
     async store({ body: users }, res) {

@@ -1,4 +1,4 @@
-const connection = require('../database/connection');
+const connection = require('../../database/connection');
 
 class CategoryRepository {
     async create({ payload, store_id }) {
@@ -16,16 +16,16 @@ class CategoryRepository {
 
     async list({ page, store_id }) {
         return await connection('categories')
-            .limit(10)
-            .offset((parseInt(page) - 1) * 10)
+            .limit(20)
+            .offset((parseInt(page) - 1) * 20)
             .where({ store_id })
             .select('*');
     }
 
-    async getById({ id, store_id }) {
+    async getById({ categoryId, store_id }) {
         return await connection('categories')
             .select('*')
-            .where({ categoryId: id, store_id });
+            .where({ categoryId, store_id });
     }
 
     async checkName({ payload, store_id }) {
@@ -37,9 +37,9 @@ class CategoryRepository {
             });
     }
 
-    async update({ payload, category_id, store_id }) {
+    async update({ payload, categoryId, store_id }) {
         return await connection('categories')
-            .where({ categoryId: category_id, store_id })
+            .where({ categoryId, store_id })
             .update(payload, [
                 'categoryName',
                 'isActive',
@@ -50,9 +50,9 @@ class CategoryRepository {
             ]);
     }
 
-    async delete({ category_id, store_id }) {
+    async delete({ categoryId, store_id }) {
         return await connection('categories')
-            .where({ categoryId: category_id, store_id })
+            .where({ categoryId, store_id })
             .del();
     }
 }
