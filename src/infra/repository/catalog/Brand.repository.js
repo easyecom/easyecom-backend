@@ -9,7 +9,7 @@ class BrandRepository {
                 description: payload.description,
                 isActive: payload.isActive,
                 refId: payload.refId,
-                products: payload.products,
+                products: [],
                 store_id,
             });
     }
@@ -48,6 +48,12 @@ class BrandRepository {
                 'store_id', // this code not update store from category
                 'refId',
             ]);
+    }
+
+    async updateProductArray({ payload: products, brandId, store_id }) {
+        return await connection('brands')
+            .where({ brandId, store_id })
+            .update({ products }, ['products']);
     }
 
     async delete({ brandId, store_id }) {

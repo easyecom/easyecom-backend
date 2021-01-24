@@ -3,8 +3,12 @@ const BrandRepository = require('../../../infra/repository/catalog/Brand.reposit
 const ProductRepository = require('../../../infra/repository/catalog/Product.repository');
 
 const logger = require('../../../helpers/logger.helper');
+const checkExist = require('../../../helpers/checkExist.helper');
+const AddProduct = require('../../../helpers/addProduct.helper');
 
 const { isValidFields } = require('../../validator/validFields');
+
+const connection = require('../../../infra/database/connection');
 
 class ProductService {
     async create({ payload, store_id }) {
@@ -33,26 +37,13 @@ class ProductService {
             data: isValidate,
         });
 
-        let arrayCategoryId = [];
+        // check categories exist
+        const arrayCategoryIds = await checkExist.category({
+            payload,
+            store_id,
+        });
 
-        const categoryIds = payload.categoryId;
-        for (let categoryId of categoryIds) {
-            const [checkCategoryExist] = await CategoryRepository.getById({
-                categoryId,
-                store_id,
-            });
-
-            if (checkCategoryExist) {
-                arrayCategoryId.push(categoryId);
-                continue;
-            }
-
-            await logger.error({
-                entity: 'categories',
-                message: 'Categoria não existe',
-                data: { categoryId },
-            });
-        }
+        if (!arrayCategoryIds) return { checkCategoryExist: false };
 
         const [checkBrand] = await BrandRepository.getById({
             brandId: payload.brand_id,
@@ -70,23 +61,23 @@ class ProductService {
             store_id,
         });
 
+        // not reapet product in some store
         if (checkName.length && checkStore.length)
             return { CheckProductExist: true };
 
-        const data = await ProductRepository.create({ payload, store_id });
-        return data;
+        const [data] = await ProductRepository.create({ payload, store_id });
 
-        ////// - 23/01
+        // add productIds at brand
+        const updateBrandProduct = await AddProduct.addObjProduct(
+            data,
+            checkBrand
+        ); // nomear melhor esse trecho
 
-        let products = [];
+        return updateBrandProduct;
+        ////////////////////////////////
 
-        products.push(data.productId, ...checkBrand.products);
-
-        await connection('brands')
-            .where({ brandId: brand_id, store_id })
-            .update({ products }, ['products']);
-
-        for (let categoryId of arrayCategoryId) {
+        for (let categoryId of arrayCategoryIds) {
+            // function associate
             await connection('category_products')
                 .returning('*')
                 .insert({
@@ -94,6 +85,7 @@ class ProductService {
                     product_id: data.productId,
                 });
 
+            // function add product
             let products = [];
 
             const [category] = await connection('categories').where({
