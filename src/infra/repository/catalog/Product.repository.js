@@ -30,10 +30,10 @@ class ProductRepository {
             .select('*');
     }
 
-    async getById({ id, store_id }) {
+    async getById({ productId, store_id }) {
         return await connection('products')
             .select('*')
-            .where({ productId: id, store_id });
+            .where({ productId, store_id });
     }
 
     async checkName({ payload, store_id }) {
@@ -41,13 +41,19 @@ class ProductRepository {
             .select('*')
             .where({
                 store_id,
-                brandName: payload.brandName,
+                productName: payload.productName,
             });
     }
 
-    async update({ payload, product_id, store_id }) {
+    async checkStore({ store_id }) {
         return await connection('products')
-            .where({ productId: product_id, store_id })
+            .where({ store_id })
+            .select('*');
+    }
+
+    async update({ payload, productId, store_id }) {
+        return await connection('products')
+            .where({ productId, store_id })
             .update(payload, [
                 'productName',
                 'isActive',
