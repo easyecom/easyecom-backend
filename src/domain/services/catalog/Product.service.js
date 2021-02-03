@@ -1,14 +1,18 @@
 const CategoryRepository = require('../../../infra/repository/catalog/Category.repository');
+const CategoryProductRepository = require('../../../infra/repository/catalog/Category_products.repository');
 const BrandRepository = require('../../../infra/repository/catalog/Brand.repository');
 const ProductRepository = require('../../../infra/repository/catalog/Product.repository');
 
 const logger = require('../../../helpers/logger.helper');
 const checkExist = require('../../../helpers/checkExist.helper');
 const AddProduct = require('../../../helpers/addProduct.helper');
+const CategoryProductAssign = require('../../../helpers/categoryProductAssign.helper');
 
 const { isValidFields } = require('../../validator/validFields');
 
 const connection = require('../../../infra/database/connection');
+
+const ParallelAssociate = require('../../../helpers/parallelAssociate.helper');
 
 class ProductService {
     async create({ payload, store_id }) {
@@ -68,40 +72,24 @@ class ProductService {
         const [data] = await ProductRepository.create({ payload, store_id });
 
         // add productIds at brand
-        const updateBrandProduct = await AddProduct.addObjProduct(
-            data,
-            checkBrand
-        ); // nomear melhor esse trecho
+        const brand = await AddProduct.addObjProduct(data, checkBrand); // nomear melhor esse trecho
 
-        return updateBrandProduct;
-        ////////////////////////////////
+        const parallel = new ParallelAssociate({
+            items: arrayCategoryIds,
+            item2: data.productId,
+            repository: CategoryProductRepository,
+            method: 'create',
+        });
+        await parallel.execute();
 
-        for (let categoryId of arrayCategoryIds) {
-            // function associate
-            await connection('category_products')
-                .returning('*')
-                .insert({
-                    category_id: categoryId,
-                    product_id: data.productId,
-                });
+        // console.log(arrayCategoryIds)
+        const category = await CategoryProductAssign(
+            arrayCategoryIds,
+            store_id,
+            data
+        );
 
-            // function add product
-            let products = [];
-
-            const [category] = await connection('categories').where({
-                categoryId,
-                store_id,
-            });
-
-            products.push(data.productId, ...category.products);
-
-            await connection('categories')
-                .where({
-                    categoryId,
-                    store_id,
-                })
-                .update({ products }, ['products']);
-        }
+        return { results: data, category, brand };
     }
 
     async list({ page, store_id }) {

@@ -1,4 +1,5 @@
 module.exports = async (data, connection) => {
+    // return data;
     let results = [];
 
     for (let d of data) {

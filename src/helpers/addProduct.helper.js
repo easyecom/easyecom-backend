@@ -12,7 +12,8 @@ class addProduct {
             store_id: checkBrand.store_id,
         });
 
-        return updateBrandPruduct;
+        return { message: 'brand products assigned' };
+        // add logger
     }
 
     async addArrayProduct() {}
