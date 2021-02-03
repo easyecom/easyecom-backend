@@ -71,9 +71,12 @@ class ProductsController {
                     )
                     .join('brands', 'brands.brandId', 'products.brand_id')
                     .select(
+                        { variations: 'products.variations' },
                         { variationTitle: 'variations.title' },
                         { variationId: 'variations.variationId' },
+                        { productId: 'products.productId' },
                         { brand_id: 'brands.brandId' },
+                        { brandName: 'brands.brandName' },
                         { category_id: 'products.mainCategory' },
                         { stock: 'stocks.quantity' },
                         { salesPrice: 'prices.salesPrice' },
@@ -91,7 +94,6 @@ class ProductsController {
                 productAll.push(data);
             }
 
-            
             const results = await variationImages(productAll, connection);
 
             return res.status(200).json({
