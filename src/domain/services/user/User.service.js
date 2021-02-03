@@ -1,9 +1,9 @@
-const UserRepository = require('../../infra/repository/User.repository');
-const StoreRepository = require('../../infra/repository/store.repository');
-const logger = require('../../helpers/logger.helper');
-const hashPassword = require('../../helpers/hashPassword.helper');
+const UserRepository = require('../../../infra/repository/user/User.repository');
+const StoreRepository = require('../../../infra/repository/admin/Store.repository');
+const logger = require('../../../helpers/logger.helper');
+const hashPassword = require('../../../helpers/hashPassword.helper');
 
-const { isValidFields } = require('../validator/validFields');
+const { isValidFields } = require('../../validator/validFields');
 
 class UserService {
     async create({ payload }) {

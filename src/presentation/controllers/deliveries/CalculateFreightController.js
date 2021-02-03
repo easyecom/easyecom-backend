@@ -16,12 +16,10 @@ class CalculateFreightController {
             });
 
             if (!product.length)
-                return res
-                    .status(400)
-                    .json({
-                        statusCode: 400,
-                        message: 'produc does not exist',
-                    });
+                return res.status(400).json({
+                    statusCode: 400,
+                    message: 'produc does not exist',
+                });
 
             const [address] = await connection('stores').where({
                 'stores.storeId': store_id,
@@ -47,9 +45,9 @@ class CalculateFreightController {
                         item.EntregaDomiciliar == 'S'
                             ? 'Sim'
                             : item.EntregaDomiciliar,
-                    obs: item.obsFim ? item.obsFim : undefined,
-                    obs: item.Erro ? item.Erro : undefined,
-                    obs: item.MsgErro ? item.MsgErro : undefined,
+                    obsFim: item.obsFim ? item.obsFim : undefined,
+                    Erro: item.Erro ? item.Erro : undefined,
+                    MsgErro: item.MsgErro ? item.MsgErro : undefined,
                 };
             });
 

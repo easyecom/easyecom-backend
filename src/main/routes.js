@@ -181,10 +181,10 @@ routes.post(
     storeValidation,
     CategoriesController.store
 );
-routes.get('/stores/:store_id/categories', CategoriesController.getAll);
+routes.get('/stores/:store_id/categories', CategoriesController.list);
 routes.get(
     '/stores/:store_id/categories/:category_id',
-    CategoriesController.getOne
+    CategoriesController.getById
 );
 routes.put(
     '/stores/:store_id/categories/:category_id',
@@ -206,8 +206,8 @@ routes.post(
     storeValidation,
     BrandsController.store
 );
-routes.get('/stores/:store_id/brands', BrandsController.getAll);
-routes.get('/stores/:store_id/brands/:brand_id', BrandsController.getOne);
+routes.get('/stores/:store_id/brands', BrandsController.list);
+routes.get('/stores/:store_id/brands/:brand_id', BrandsController.getById);
 routes.put(
     '/stores/:store_id/brands/:brand_id',
     authMiddleware,

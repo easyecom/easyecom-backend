@@ -12,7 +12,6 @@ exports.up = knex => {
             .string('email', 30)
             .notNullable()
             .unique();
-        // .unique();
 
         table.string('password').notNullable();
 

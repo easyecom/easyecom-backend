@@ -2,130 +2,19 @@ const connection = require('../../../../infra/database/connection');
 // const variationImages = require('../../../../domain/helpers/listImagesByVariation.helper');
 const variationImages = require('../../../../helpers/listImagesByVariation.helper');
 
+const ProductService = require('../../../../domain/services/catalog/Product.service');
+
 class ProductsController {
-    async store({ params, body }, res) {
+    async store({ params, body: products }, res) {
         const { store_id } = params;
-        const {
-            productName,
-            isActive,
-            keyWords,
-            title,
-            descriptionShort,
-            description,
-            sku,
-            images,
-            refId,
-            mainCategory,
-            categoryId,
-            brand_id,
-        } = body;
 
         try {
-            let error = [];
+            const results = await ProductService.create({
+                payload: products,
+                store_id,
+            });
 
-            if (!productName) error.push('productName');
-            // if (!descriptionShort) error.push('descriptionShort');
-            // if (!sku) error.push('sku');
-            if (!brand_id) error.push('brand_id');
-            if (!categoryId) error.push('categoryId');
-
-            if (error.length > 0) {
-                return res
-                    .status(404)
-                    .json({ error: 'missing data', required: error });
-            }
-
-            let arrayCategoryId = [];
-
-            for (let category of categoryId) {
-                const [checkCategoryExist] = await connection(
-                    'categories'
-                ).where('categoryId', category);
-
-                if (!checkCategoryExist) {
-                    return res
-                        .status(404)
-                        .json({ message: 'category does not exist' });
-                }
-
-                arrayCategoryId.push(category);
-            }
-
-            const [checkBrand] = await connection('brands')
-                .select('*')
-                .where({ brandId: brand_id });
-
-            if (!checkBrand) {
-                return res
-                    .status(404)
-                    .json({ error: { message: 'brands does not exist' } });
-            }
-
-            const checkName = await connection('products')
-                .where('productName', productName)
-                .select('*');
-
-            const checkStore = await connection('products')
-                .where('store_id', store_id)
-                .select('*');
-
-            if (checkName.length && checkStore.length) {
-                return res.status(400).json('product already exist');
-            }
-
-            const [data] = await connection('products')
-                .returning('*')
-                .insert({
-                    productName,
-                    isActive,
-                    keyWords,
-                    title,
-                    descriptionShort,
-                    description,
-                    sku,
-                    variations: [],
-                    evaluations: [],
-                    images,
-                    refId,
-                    mainCategory,
-                    store_id,
-                    brand_id,
-                });
-
-            let products = [];
-
-            products.push(data.productId, ...checkBrand.products);
-
-            await connection('brands')
-                .where({ brandId: brand_id, store_id })
-                .update({ products }, ['products']);
-
-            for (let categoryId of arrayCategoryId) {
-                await connection('category_products')
-                    .returning('*')
-                    .insert({
-                        category_id: categoryId,
-                        product_id: data.productId,
-                    });
-
-                let products = [];
-
-                const [category] = await connection('categories').where({
-                    categoryId,
-                    store_id,
-                });
-
-                products.push(data.productId, ...category.products);
-
-                await connection('categories')
-                    .where({
-                        categoryId,
-                        store_id,
-                    })
-                    .update({ products }, ['products']);
-            }
-
-            return res.status(201).json(data);
+            return res.status(201).json(results);
         } catch (err) {
             return console.error(err);
         }
@@ -182,8 +71,8 @@ class ProductsController {
                     )
                     .join('brands', 'brands.brandId', 'products.brand_id')
                     .select(
-                        '*',
                         { variationTitle: 'variations.title' },
+                        { variationId: 'variations.variationId' },
                         { brand_id: 'brands.brandId' },
                         { category_id: 'products.mainCategory' },
                         { stock: 'stocks.quantity' },
@@ -196,14 +85,13 @@ class ProductsController {
                     });
 
                 delete data.products;
-                delete data.product_id
-                delete data.variation_id
+                delete data.product_id;
+                delete data.variation_id;
 
                 productAll.push(data);
             }
 
-            // return res.json(productAll);
-
+            
             const results = await variationImages(productAll, connection);
 
             return res.status(200).json({

@@ -27,6 +27,24 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_NAME: ${DATABASE_NAME}
     restart: on-failure
+
+  # sonarqube:
+  #   image: sonarqube:8.2-community
+  #   container_name: sonarqube
+  #   hostname: sonarqube
+  #   networks:
+  #     - overlay
+  #   # depends_on:
+  #   #   - database
+  #   ports:
+  #     - 9000:9000
+  #   environment:
+  #     - sonar.jdbc.url=jdbc:postgresql://database:5432/sonarqube
+  #   volumes:
+  #     - /opt/sonarqube/conf:/opt/sonarqube/conf:z
+  #     - /opt/sonarqube/extensions/plugins:/opt/sonarqube/extensions/plugins:z
+  #     - /opt/sonarqube/extensions/downloads:/opt/sonarqube/extensions/downloads:z
+  #     - /opt/sonarqube/data:/opt/sonarqube/data:z
       
 networks:
     overlay:

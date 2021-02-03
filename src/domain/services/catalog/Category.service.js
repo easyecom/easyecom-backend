@@ -1,12 +1,10 @@
-const CategoryRepository = require('../../infra/repository/category.repository');
-const StoreRepository = require('../../infra/repository/store.repository');
-const logger = require('../../helpers/logger.helper');
+const CategoryRepository = require('../../../infra/repository/catalog/Category.repository');
+const logger = require('../../../helpers/logger.helper');
 
-const { isValidFields } = require('../validator/validFields');
+const { isValidFields } = require('../../validator/validFields');
 
 class CategoryService {
     async create({ payload, store_id }) {
-        // validate fields
         const isValidate = await isValidFields(payload, [
             'categoryName',
             'description',
@@ -27,7 +25,6 @@ class CategoryService {
             data: isValidate,
         });
 
-        // check category
         const [checkCategory] = await CategoryRepository.checkName({
             payload,
             store_id,
@@ -46,7 +43,7 @@ class CategoryService {
                 message: 'category updated successfully',
                 body: await CategoryRepository.update({
                     payload,
-                    category_id: checkCategory.categoryId,
+                    categoryId: checkCategory.categoryId,
                     store_id,
                 }),
             };
@@ -55,21 +52,21 @@ class CategoryService {
         return await CategoryRepository.create({ payload, store_id });
     }
 
-    async list({ payload, store_id }) {
-        return await CategoryRepository.list({ payload, store_id });
+    async list({ page, store_id }) {
+        return await CategoryRepository.list({ page, store_id });
     }
 
-    async getById({ id, store_id }) {
-        return await CategoryRepository.getById({ id, store_id });
+    async getById({ categoryId, store_id }) {
+        return await CategoryRepository.getById({ categoryId, store_id });
     }
 
     async checkName({ payload, store_id }) {
         return await CategoryRepository.checkName({ payload, store_id });
     }
 
-    async update({ payload, category_id, store_id }) {
+    async update({ payload, categoryId, store_id }) {
         const [checkCategory] = await CategoryRepository.getById({
-            id: category_id,
+            categoryId,
             store_id,
         });
 
@@ -85,14 +82,14 @@ class CategoryService {
 
         return await CategoryRepository.update({
             payload,
-            category_id,
+            categoryId,
             store_id,
         });
     }
 
-    async delete({ category_id, store_id }) {
+    async delete({ categoryId, store_id }) {
         const [checkCategory] = await CategoryRepository.getById({
-            id: category_id,
+            categoryId,
             store_id,
         });
 
@@ -107,7 +104,7 @@ class CategoryService {
         }
 
         return await CategoryRepository.delete({
-            category_id,
+            categoryId,
             store_id,
         });
     }

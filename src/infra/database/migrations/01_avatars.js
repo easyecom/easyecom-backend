@@ -4,8 +4,8 @@ exports.up = knex => {
             .increments('id')
             .unsigned()
             .primary()
-            .unique();;
-            
+            .unique();
+
         table.string('name').notNullable();
         table.string('path').notNullable();
 
