@@ -15,7 +15,7 @@ services:
       - overlay
   db:
     image: postgres:alpine
-    container_name: db-easyecom
+    container_name: 'db-easyecom'
     networks:
       - overlay
     ports:
