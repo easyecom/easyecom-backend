@@ -8,6 +8,7 @@ module.exports = {
             directory: './src/infra/database/migrations',
         },
         seeds: { directory: './src/infra/database/seeds' },
+        ssl: { rejectUnauthorized: false },
         useNullAsDefault: true,
         pool: {
             min: 5,
