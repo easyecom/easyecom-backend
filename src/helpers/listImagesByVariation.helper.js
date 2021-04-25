@@ -1,6 +1,5 @@
 module.exports = async (data, connection) => {
-    // return data;
-    let results = [];
+    let ProductAllAndVariationImages = [];
 
     for (let d of data) {
         const images = await connection('images')
@@ -12,8 +11,8 @@ module.exports = async (data, connection) => {
             .where({ variation_id: d.variationId });
 
         d.images = images;
-        results.push(d);
+        ProductAllAndVariationImages.push(d);
     }
 
-    return results;
+    return ProductAllAndVariationImages;
 };

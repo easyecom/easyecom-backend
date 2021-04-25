@@ -59,7 +59,7 @@ class OrderRepository {
                 'description',
                 'orders',
                 'store_id', // this code not update store from category
-                'refId',
+                'externalRefId',
             ]);
     }
 

@@ -11,7 +11,6 @@ exports.seed = function(knex) {
                     isActive: true,
                     keyWords:
                         "calcados, sapatos, tenis, skate, camiseta, 'relogios'",
-                    title: 'muito legal',
                     descriptionShort: 'muito legal',
                     description: 'muito legal',
                     sku: 1,
@@ -27,7 +26,6 @@ exports.seed = function(knex) {
                     isActive: true,
                     keyWords:
                         "calcados, sapatos, tenis, skate, camiseta, 'relogios'",
-                    title: 'muito legal',
                     descriptionShort: 'muito legal',
                     description: 'muito legal',
                     sku: 1,
@@ -43,7 +41,6 @@ exports.seed = function(knex) {
                     isActive: true,
                     keyWords:
                         "calcados, sapatos, tenis, skate, camiseta, 'relogios'",
-                    title: 'muito legal',
                     descriptionShort: 'muito legal',
                     description: 'muito legal',
                     sku: 1,
@@ -59,7 +56,6 @@ exports.seed = function(knex) {
                     isActive: true,
                     keyWords:
                         "calcados, sapatos, tenis, skate, camiseta, 'relogios'",
-                    title: 'muito legal',
                     descriptionShort: 'muito legal',
                     description: 'muito legal',
                     sku: 1,

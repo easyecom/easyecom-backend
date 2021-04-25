@@ -12,7 +12,6 @@ exports.up = knex => {
         table.boolean('soldOut').defaultTo(false);
         table.boolean('highlight').defaultTo(false);
         table.string('keyWords');
-        table.string('title');
         table.string('descriptionShort');
         table.string('description');
         table.string('ean');
@@ -28,7 +27,7 @@ exports.up = knex => {
 
         table.boolean('freeShipping').defaultTo(false);
 
-        table.string('refId');
+        table.string('externalRefId');
 
         table.integer('store_id');
         table
@@ -43,6 +42,22 @@ exports.up = knex => {
             .foreign('product_id')
             .references('productId')
             .inTable('products')
+            .onUpdate('CASCADE')
+            .onDelete('SET NULL');
+
+        table.integer('size_id');
+        table
+            .foreign('size_id')
+            .references('sizeId')
+            .inTable('sizes')
+            .onUpdate('CASCADE')
+            .onDelete('SET NULL');
+
+        table.integer('color_id');
+        table
+            .foreign('color_id')
+            .references('colorId')
+            .inTable('colors')
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 

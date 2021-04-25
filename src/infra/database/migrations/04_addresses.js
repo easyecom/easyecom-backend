@@ -16,7 +16,7 @@ exports.up = knex => {
         table.string('state_code');
         table.string('country');
         table.integer('storeIdToAddress')
-        table.string('refId');
+        table.string('externalRefId');
 
         table.integer('store_id');
         table

@@ -8,14 +8,13 @@ class ProductRepository {
                 productName: payload.productName,
                 isActive: payload.isActive,
                 keyWords: payload.keyWords,
-                title: payload.title,
                 descriptionShort: payload.descriptionShort,
                 description: payload.description,
                 sku: payload.sku,
                 variations: payload.variations,
                 evaluations: payload.evaluations,
                 images: payload.images,
-                refId: payload.refId,
+                externalRefId: payload.externalRefId,
                 mainCategory: payload.mainCategory,
                 store_id,
                 brand_id: payload.brand_id,
@@ -60,7 +59,7 @@ class ProductRepository {
                 'description',
                 'products',
                 'store_id', // this code not update store from category
-                'refId',
+                'externalRefId',
             ]);
     }
 

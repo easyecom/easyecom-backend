@@ -23,9 +23,7 @@ exports.up = knex => {
             .onDelete('SET NULL');
 
         table.decimal('total');
-
         table.specificType('status', 'jsonb[]');
-
         table.specificType('cart', 'jsonb[]');
 
         table.boolean('cancel').defaultTo(false);

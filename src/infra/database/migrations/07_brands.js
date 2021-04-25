@@ -9,7 +9,7 @@ exports.up = knex => {
         table.string('brandName').notNullable();
         table.string('description');
         table.boolean('isActive').defaultTo(true);
-        table.string('refId');
+        table.string('externalRefId');
         table.specificType('products', 'jsonb[]');
 
         table.integer('store_id');

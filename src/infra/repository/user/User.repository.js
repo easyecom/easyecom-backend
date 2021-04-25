@@ -9,7 +9,7 @@ class UserRepository {
                 email: payload.email,
                 password: payload.password,
                 store_id: payload.store_id,
-                refId: payload.refId,
+                externalRefId: payload.externalRefId,
                 permission: payload.permission,
             });
 
@@ -50,7 +50,7 @@ class UserRepository {
     //             'description',
     //             'products',
     //             'store_id', // this code not update store from category
-    //             'refId',
+    //             'externalRefId',
     //         ]);
     // }
 

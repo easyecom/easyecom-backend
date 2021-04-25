@@ -7,7 +7,7 @@ class CategoryRepository {
             .insert({
                 categoryName: payload.categoryName,
                 description: payload.description,
-                refId: payload.refId,
+                externalRefId: payload.externalRefId,
                 isActive: payload.isActive,
                 products: [],
                 store_id,
@@ -46,7 +46,7 @@ class CategoryRepository {
                 'description',
                 'products',
                 'store_id', // this code not update store from category
-                'refId',
+                'externalRefId',
             ]);
     }
 
