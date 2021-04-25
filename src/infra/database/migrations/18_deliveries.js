@@ -7,11 +7,11 @@ exports.up = knex => {
             .unique();
 
         table.string('deliveryStatus').notNullable();
-        table.string('tracking').notNullable();
+        table.string('tracking')
         table.string('type').notNullable();
         table.decimal('cost').notNullable();
         table.string('deadline').notNullable();
-        table.string('refId');
+        table.string('externalRefId');
 
         table.integer('address_id');
         table

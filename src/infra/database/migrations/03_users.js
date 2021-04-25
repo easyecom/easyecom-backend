@@ -7,21 +7,17 @@ exports.up = knex => {
             .unique();
 
         table.string('userName', 50).notNullable();
-
         table
             .string('email', 30)
             .notNullable()
             .unique();
 
         table.string('password').notNullable();
-
         table.specificType('permission', 'text[]').defaultTo('{client}');
 
         table.string('recoveryToken');
-
         table.specificType('recoveryExpireToken', 'date');
-
-        table.string('refId');
+        table.string('externalRefId');
 
         table.integer('store_id');
         table

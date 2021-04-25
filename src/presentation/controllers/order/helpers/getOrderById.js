@@ -44,7 +44,7 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
                 costPrice: parseInt(variation.costPrice),
                 offerPrice: parseInt(variation.offerPrice),
                 salesPrice: parseInt(variation.salesPrice),
-                refId: variation.refId,
+                externalRefId: variation.externalRefId,
                 color: 'vermelho', // create on migration
                 measures: 'P', // create on migration
 

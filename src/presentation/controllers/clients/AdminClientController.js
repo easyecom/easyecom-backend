@@ -44,7 +44,7 @@ class adminClientController {
                     //     country: item.country,
                     //     storeIdToAddress: item.storeIdToAddress,
                     // },
-                    refId: item.refId,
+                    externalRefId: item.externalRefId,
                     store_id: item.store_id,
                     deleted: item.deleted,
                     created_at: item.created_at,

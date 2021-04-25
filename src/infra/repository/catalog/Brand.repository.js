@@ -8,7 +8,7 @@ class BrandRepository {
                 brandName: payload.brandName,
                 description: payload.description,
                 isActive: payload.isActive,
-                refId: payload.refId,
+                externalRefId: payload.externalRefId,
                 products: [],
                 store_id,
             });
@@ -46,7 +46,7 @@ class BrandRepository {
                 'description',
                 'products',
                 'store_id', // this code not update store from category
-                'refId',
+                'externalRefId',
             ]);
     }
 

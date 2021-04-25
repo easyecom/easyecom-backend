@@ -19,7 +19,6 @@ class ProductService {
         const isValidate = await isValidFields(payload, [
             'productName',
             'descriptionShort',
-            'title',
             'mainCategory',
             'brand_id',
             'categoryId',
@@ -93,6 +92,7 @@ class ProductService {
     }
 
     async list({ page, store_id }) {
+        console.log("======>")
         return await connection('products')
             .limit(10)
             .offset((parseInt(page) - 1) * 10)
@@ -124,7 +124,7 @@ class ProductService {
                 'description',
                 'products',
                 'store_id', // this code not update store from category
-                'refId',
+                'externalRefId',
             ]);
     }
 

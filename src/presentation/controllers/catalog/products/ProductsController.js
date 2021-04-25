@@ -71,12 +71,12 @@ class ProductsController {
                     )
                     .join('brands', 'brands.brandId', 'products.brand_id')
                     .select(
+                        { productName: 'products.productName' },
                         { variations: 'products.variations' },
-                        { variationTitle: 'variations.title' },
+                        { brandName: 'brands.brandName' },
                         { variationId: 'variations.variationId' },
                         { productId: 'products.productId' },
                         { brand_id: 'brands.brandId' },
-                        { brandName: 'brands.brandName' },
                         { category_id: 'products.mainCategory' },
                         { stock: 'stocks.quantity' },
                         { salesPrice: 'prices.salesPrice' },
@@ -91,19 +91,20 @@ class ProductsController {
                 delete data.product_id;
                 delete data.variation_id;
 
+                console.log(data, 'data')
+
                 productAll.push(data);
             }
 
-            const results = await variationImages(productAll, connection);
+            const data = await variationImages(productAll, connection);
 
             return res.status(200).json({
-                statusCode: 200,
-                infos: {
+                data,
+                params: {
                     page: parseInt(page),
                     limit: parseInt(limit),
                     total: parseInt(count.count),
                 },
-                results,
             });
         } catch (err) {
             console.log(err);
@@ -155,14 +156,13 @@ class ProductsController {
                     'productName',
                     'isActive',
                     'keyWords',
-                    'title',
                     'descriptionShort',
                     'description',
                     'sku',
                     'variations',
                     'images',
                     'evaluations',
-                    'refId',
+                    'externalRefId',
                     'mainCategory',
                     'store_id',
                     'brand_id',

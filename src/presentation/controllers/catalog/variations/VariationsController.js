@@ -9,7 +9,6 @@ class VariationsController {
             variationName,
             isActive,
             keyWords,
-            title,
             descriptionShort,
             description,
             packagedHeight,
@@ -17,7 +16,7 @@ class VariationsController {
             packagedWidth,
             weightKg,
             freeShipping,
-            refId,
+            externalRefId,
             product_id,
         } = req.body;
 
@@ -25,7 +24,6 @@ class VariationsController {
             let error = [];
 
             if (!variationName) error.push('variationName');
-            if (!title) error.push('title');
             if (!product_id) error.push('product_id');
 
             if (error.length > 0) {
@@ -60,7 +58,6 @@ class VariationsController {
                     variationName,
                     isActive,
                     keyWords,
-                    title,
                     descriptionShort,
                     description,
                     packagedHeight,
@@ -68,7 +65,7 @@ class VariationsController {
                     packagedWidth,
                     weightKg,
                     freeShipping,
-                    refId,
+                    externalRefId,
                     store_id,
                     product_id,
                 });

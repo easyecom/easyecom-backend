@@ -8,7 +8,6 @@ class VariationRepository {
                 variationName: payload.variationName,
                 isActive: payload.isActive,
                 keyWords: payload.keyWords,
-                title: payload.title,
                 descriptionShort: payload.descriptionShort,
                 description: payload.description,
                 packagedHeight: payload.packagedHeight,
@@ -16,7 +15,7 @@ class VariationRepository {
                 packagedWidth: payload.packagedWidth,
                 weightKg: payload.weightKg,
                 freeShipping: payload.freeShipping,
-                refId: payload.refId,
+                externalRefId: payload.externalRefId,
                 store_id,
                 product_id: payload.product_id,
             });
@@ -54,7 +53,7 @@ class VariationRepository {
                 'description',
                 'variations',
                 'store_id', // this code not update store from category
-                'refId',
+                'externalRefId',
             ]);
     }
 
