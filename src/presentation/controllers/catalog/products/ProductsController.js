@@ -91,8 +91,6 @@ class ProductsController {
                 delete data.product_id;
                 delete data.variation_id;
 
-                console.log(data, 'data')
-
                 productAll.push(data);
             }
 

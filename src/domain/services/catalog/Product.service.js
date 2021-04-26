@@ -81,7 +81,6 @@ class ProductService {
         });
         await parallel.execute();
 
-        // console.log(arrayCategoryIds)
         const category = await CategoryProductAssign(
             arrayCategoryIds,
             store_id,
@@ -92,7 +91,6 @@ class ProductService {
     }
 
     async list({ page, store_id }) {
-        console.log("======>")
         return await connection('products')
             .limit(10)
             .offset((parseInt(page) - 1) * 10)

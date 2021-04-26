@@ -94,7 +94,6 @@ class UsersController {
                 ]);
 
             if (!data.length) {
-                console.log('user does not exist');
                 return res.status(400).json({ message: 'user does not exist' });
             }
 
