@@ -1,7 +1,7 @@
 const connection = require('../../../../infra/database/connection');
 const variationImages = require('../../../../helpers/listImagesByVariation.helper');
 
-class Category_product_controller {
+class CategoryProductController {
     async getById(req, res) {
         const { store_id, category_id } = req.params;
         const { page = 1, limit } = req.query;
@@ -32,16 +32,15 @@ class Category_product_controller {
                 'products.mainCategory': category_id,
             });
 
-        const results = await variationImages(products, connection);
+        const data = await variationImages(products, connection);
 
         return res.status(200).json({
-            statusCode: 200,
-            infos: {
+            data,
+            params: {
                 page: parseInt(page),
                 limit: parseInt(limit),
                 total: parseInt(count.count),
             },
-            results, // ajuste 
         });
     }
     catch(err) {
@@ -50,4 +49,4 @@ class Category_product_controller {
     }
 }
 
-module.exports = new Category_product_controller();
+module.exports = new CategoryProductController();

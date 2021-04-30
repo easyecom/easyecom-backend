@@ -1,10 +1,10 @@
 const connection = require('../../../../infra/database/connection');
 const variationImages = require('../../../../helpers/listImagesByVariation.helper');
 
-class Brand_product_controller {
-    async getById(req, res) {
-        const { store_id, brand_id } = req.params;
-        const { page = 1, limit } = req.query;
+class BrandProductController {
+    async getById({ params, query }, res) {
+        const { store_id, brand_id } = params;
+        const { page = 1, limit } = query;
 
         const products = await connection('products')
             .limit(limit)
@@ -26,11 +26,11 @@ class Brand_product_controller {
                 'products.brand_id': brand_id,
             });
 
-        const results = await variationImages(products, connection);
+        const data = await variationImages(products, connection);
 
         return res.status(200).json({
-            results,
-            infos: {
+            data,
+            params: {
                 page: parseInt(page),
                 limit: limit,
                 total: results.length,
@@ -46,4 +46,4 @@ class Brand_product_controller {
     }
 }
 
-module.exports = new Brand_product_controller();
+module.exports = new BrandProductController();
