@@ -61,6 +61,14 @@ exports.up = knex => {
             .onUpdate('CASCADE')
             .onDelete('SET NULL');
 
+        table.integer('modelProduct_id');
+        table
+            .foreign('modelProduct_id')
+            .references('modelProductId')
+            .inTable('modelProducts')
+            .onUpdate('CASCADE')
+            .onDelete('SET NULL');
+
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
     });

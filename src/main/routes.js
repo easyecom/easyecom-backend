@@ -25,6 +25,8 @@ const EvaluationsController = require('../presentation/controllers/catalog/evalu
 const ProductsController = require('../presentation/controllers/catalog/products/ProductsController');
 const PricesController = require('../presentation/controllers/catalog/prices/PricesController');
 const StocksController = require('../presentation/controllers/catalog/stocks/StocksController');
+const ColorsController = require('../presentation/controllers/catalog/grids/colors/Create.controller');
+const SizesController = require('../presentation/controllers/catalog/grids/sizes/Create.controller');
 
 const SearchProductsController = require('../presentation/controllers/catalog/products/searchProductsController');
 const CategoryProductController = require('../presentation/controllers/catalog/category_products/CatProdController');
@@ -343,6 +345,14 @@ routes.delete(
     storeValidation,
     StocksController.delete
 );
+
+// colors
+
+routes.post('/colors', ColorsController.create);
+
+// colors
+
+routes.post('/sizes', SizesController.create);
 
 // images
 

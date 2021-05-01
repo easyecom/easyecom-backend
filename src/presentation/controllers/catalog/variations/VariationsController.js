@@ -17,6 +17,8 @@ class VariationsController {
             weightKg,
             freeShipping,
             externalRefId,
+            color_id,
+            size_id,
             product_id,
         } = req.body;
 
@@ -66,6 +68,8 @@ class VariationsController {
                     weightKg,
                     freeShipping,
                     externalRefId,
+                    color_id,
+                    size_id,
                     store_id,
                     product_id,
                 });

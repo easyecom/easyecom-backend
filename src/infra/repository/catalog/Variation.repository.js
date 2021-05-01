@@ -2,6 +2,7 @@ const connection = require('../../database/connection');
 
 class VariationRepository {
     async create({ payload, store_id }) {
+        console.log(payload)
         return await connection('variations')
             .returning('*')
             .insert({
@@ -16,6 +17,8 @@ class VariationRepository {
                 weightKg: payload.weightKg,
                 freeShipping: payload.freeShipping,
                 externalRefId: payload.externalRefId,
+                color_id: payload.color_id,
+                size_id: payload.size_id,
                 store_id,
                 product_id: payload.product_id,
             });

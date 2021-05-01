@@ -7,8 +7,8 @@ exports.up = knex => {
             .unique();
 
         table.string('size').notNullable();
+        table.string('typeProduct').notNullable();
         table.string('description');
-        table.string('createdBy');
 
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
