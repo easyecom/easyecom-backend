@@ -2,7 +2,6 @@ const connection = require('../../database/connection');
 
 class VariationRepository {
     async create({ payload, store_id }) {
-        console.log(payload)
         return await connection('variations')
             .returning('*')
             .insert({

@@ -1,24 +1,8 @@
-const connection = require('../../database/connection');
+const VariationRepository = require('../../../infra/repository/catalog/Variation.repository');
 
-class VariationRepository {
+class VariationService {
     async create({ payload, store_id }) {
-        return await connection('variations')
-            .returning('*')
-            .insert({
-                variationName: payload.variationName,
-                isActive: payload.isActive,
-                keyWords: payload.keyWords,
-                descriptionShort: payload.descriptionShort,
-                description: payload.description,
-                packagedHeight: payload.packagedHeight,
-                packagedLength: payload.packagedLength,
-                packagedWidth: payload.packagedWidth,
-                weightKg: payload.weightKg,
-                freeShipping: payload.freeShipping,
-                externalRefId: payload.externalRefId,
-                store_id,
-                product_id: payload.product_id,
-            });
+        return await VariationRepository.create({ payload, store_id });
     }
 
     async list({ page, store_id }) {
@@ -64,4 +48,4 @@ class VariationRepository {
     }
 }
 
-module.exports = new VariationRepository();
+module.exports = new VariationService();

@@ -2,7 +2,6 @@ const connection = require('../../../../database/connection');
 
 class SizeRepository {
     async create({ payload }) {
-        console.log(payload);
         return await connection('sizes')
             .returning('*')
             .insert({

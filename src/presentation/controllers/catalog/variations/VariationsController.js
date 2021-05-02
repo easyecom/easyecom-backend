@@ -1,32 +1,16 @@
 const connection = require('../../../../infra/database/connection');
 const variationImages = require('../../../../helpers/listImagesByVariation.helper');
+const VariationService = require('../../../../domain/services/catalog/Variation.service');
 
 class VariationsController {
-    async store(req, res) {
-        const { store_id } = req.params;
-
-        const {
-            variationName,
-            isActive,
-            keyWords,
-            descriptionShort,
-            description,
-            packagedHeight,
-            packagedLength,
-            packagedWidth,
-            weightKg,
-            freeShipping,
-            externalRefId,
-            color_id,
-            size_id,
-            product_id,
-        } = req.body;
+    async store({ body: variationsData, params }, res) {
+        const { store_id } = params;
 
         try {
             let error = [];
 
-            if (!variationName) error.push('variationName');
-            if (!product_id) error.push('product_id');
+            if (!variationsData.variationName) error.push('variationName');
+            if (!variationsData.product_id) error.push('product_id');
 
             if (error.length > 0) {
                 return res
@@ -36,7 +20,7 @@ class VariationsController {
 
             const checkProduct = await connection('products')
                 .select('*')
-                .where({ productId: product_id });
+                .where({ productId: variationsData.product_id });
 
             if (!checkProduct.length) {
                 return res
@@ -46,7 +30,10 @@ class VariationsController {
 
             const checkVariation = await connection('variations')
                 .select('*')
-                .where({ variationName: variationName, store_id: store_id });
+                .where({
+                    variationName: variationsData.variationName,
+                    store_id: store_id,
+                });
 
             if (checkVariation.length) {
                 return res.status(400).json({
@@ -54,39 +41,23 @@ class VariationsController {
                 });
             }
 
-            const [data] = await connection('variations')
-                .returning('*')
-                .insert({
-                    variationName,
-                    isActive,
-                    keyWords,
-                    descriptionShort,
-                    description,
-                    packagedHeight,
-                    packagedLength,
-                    packagedWidth,
-                    weightKg,
-                    freeShipping,
-                    externalRefId,
-                    color_id,
-                    size_id,
-                    store_id,
-                    product_id,
-                });
+            const [data] = await VariationService.create({
+                payload: variationsData,
+                store_id
+            });
 
             let variations = [];
 
             const [product] = await connection('products').where({
-                productId: product_id,
+                productId: variationsData.product_id,
                 store_id,
             });
 
             variations.push(...product.variations, data.variationId);
 
-            const [newProductArray] = await connection('products')
-                .where({ productId: product_id, store_id })
+            await connection('products')
+                .where({ productId: variationsData.product_id, store_id })
                 .update({ variations }, [variations]);
-            console.table(newProductArray);
 
             return res.status(201).json(data);
         } catch (err) {
