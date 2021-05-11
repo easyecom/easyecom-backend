@@ -13,29 +13,24 @@ class CategoryProductController {
             .count();
 
         const products = await connection('products')
-            .limit(limit)
-            .offset((page - 1) * limit)
+            .select(
+                'products.*',
+                { offerPrice: 'prices.offerPrice' },
+                { salesPrice: 'prices.salesPrice' },
+                { images: 'images.url' }
+            )
+            .join('images', 'images.product_id', 'products.productId')
             .join('variations', 'products.productId', 'variations.product_id')
             .join('prices', 'prices.variation_id', 'variations.variationId')
-            .join('stocks', 'stocks.variation_id', 'variations.variationId')
-            .join('brands', 'brands.brandId', 'products.brand_id')
-            .select(
-                'variations.*',
-                { brand_id: 'brands.brandId' },
-                { stock: 'stocks.quantity' },
-                { salesPrice: 'prices.salesPrice' },
-                { offerPrice: 'prices.offerPrice' },
-                { category_id: 'products.mainCategory' }
-            )
+            .limit(limit)
+            .offset((page - 1) * limit)
             .where({
                 'products.store_id': store_id,
                 'products.mainCategory': category_id,
             });
 
-        const data = await variationImages(products, connection);
-
         return res.status(200).json({
-            data,
+            data: products,
             params: {
                 page: parseInt(page),
                 limit: parseInt(limit),

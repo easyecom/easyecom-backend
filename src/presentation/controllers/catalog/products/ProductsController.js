@@ -1,7 +1,4 @@
 const connection = require('../../../../infra/database/connection');
-// const variationImages = require('../../../../domain/helpers/listImagesByVariation.helper');
-const variationImages = require('../../../../helpers/listImagesByVariation.helper');
-
 const ProductService = require('../../../../domain/services/catalog/Product.service');
 
 class ProductsController {
@@ -16,7 +13,7 @@ class ProductsController {
 
             return res.status(201).json(results);
         } catch (err) {
-            return console.error(err);  
+            return console.error(err);
         }
     }
 
@@ -42,52 +39,31 @@ class ProductsController {
                 .count();
 
             const products = await connection('products')
+                .select(
+                    'products.*',
+                    { offerPrice: 'prices.offerPrice' },
+                    { salesPrice: 'prices.salesPrice' },
+                    { images: 'images.url' }
+                )
+                .join('images', 'images.product_id', 'products.productId')
+                .join(
+                    'variations',
+                    'products.productId',
+                    'variations.product_id'
+                )
+                .join(
+                    'prices',
+                    'prices.variation_id',
+                    'variations.variationId'
+                )
                 .limit(limit)
                 .offset((page - 1) * limit)
                 .where({
                     'products.store_id': store_id,
                 });
 
-            let productAll = [];
-            for (let product of products) {
-                const [data] = await connection('products')
-                    .join(
-                        'variations',
-                        'products.productId',
-                        'variations.product_id'
-                    )
-                    .join(
-                        'prices',
-                        'prices.variation_id',
-                        'variations.variationId'
-                    )
-                    .join('brands', 'brands.brandId', 'products.brand_id')
-                    .select(
-                        { productId: 'products.productId' },
-                        { productName: 'products.productName' }, // store and dashboard
-                        { descriptionShort: 'products.descriptionShort' }, // store and dashboard
-                        { variations: 'products.variations' }, // qtd dashboard
-                        { variationId: 'variations.variationId' }, // qtd dashboard
-                        { brandName: 'brands.brandName' }, // dashboard
-                        { salesPrice: 'prices.salesPrice' },
-                        { offerPrice: 'prices.offerPrice' }
-                    )
-                    .where({
-                        'variations.store_id': store_id,
-                        variationId: product.variations[0],
-                    });
-
-                delete data.products;
-                delete data.product_id;
-                delete data.variation_id;
-
-                productAll.push(data);
-            }
-
-            const data = await variationImages(productAll, connection);
-
             return res.status(200).json({
-                data,
+                data: products,
                 params: {
                     page: parseInt(page),
                     limit: parseInt(limit),
