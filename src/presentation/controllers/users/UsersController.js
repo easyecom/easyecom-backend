@@ -32,7 +32,16 @@ class UsersController {
     // for dev
     async getAll(req, res) {
         try {
-            const users = await connection('users').select('*');
+            const users = await connection('users').select(
+                { userId: 'users.userId' },
+                { userName: 'users.userName' },
+                { email: 'users.email' },
+                { store_id: 'users.store_id' },
+                { permission: 'users.permission' },
+                { externalRefId: 'users.externalRefId' },
+                { created_at: 'users.created_at' },
+                { updated_at: 'users.updated_at' }
+            );
 
             if (!users.length) {
                 return res.status(200).json({ message: 'without users' });
@@ -49,7 +58,16 @@ class UsersController {
         const { userId: user_id } = req;
         try {
             const data = await connection('users')
-                .select('*')
+                .select(
+                    { userId: 'users.userId' },
+                    { userName: 'users.userName' },
+                    { email: 'users.email' },
+                    { store_id: 'users.store_id' },
+                    { permission: 'users.permission' },
+                    { externalRefId: 'users.externalRefId' },
+                    { created_at: 'users.created_at' },
+                    { updated_at: 'users.updated_at' }
+                )
                 .where('userId', user_id);
 
             if (!data.length) {

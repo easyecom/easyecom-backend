@@ -34,13 +34,6 @@ class ProductService {
             return isValidate;
         }
 
-        await logger.success({
-            entity: 'categories',
-            message: 'Dados validos',
-            data: isValidate,
-        });
-
-        // check categories exist
         const arrayCategoryIds = await checkExist.category({
             payload,
             store_id,

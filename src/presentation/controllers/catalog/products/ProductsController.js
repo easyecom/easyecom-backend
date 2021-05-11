@@ -16,7 +16,7 @@ class ProductsController {
 
             return res.status(201).json(results);
         } catch (err) {
-            return console.error(err);
+            return console.error(err);  
         }
     }
 
@@ -44,11 +44,8 @@ class ProductsController {
             const products = await connection('products')
                 .limit(limit)
                 .offset((page - 1) * limit)
-                .innerJoin('brands', 'products.brand_id', '=', 'brands.brandId')
-                .select('products.*', 'brands.brandName')
                 .where({
                     'products.store_id': store_id,
-                    'brands.store_id': store_id,
                 });
 
             let productAll = [];
@@ -64,21 +61,14 @@ class ProductsController {
                         'prices.variation_id',
                         'variations.variationId'
                     )
-                    .join(
-                        'stocks',
-                        'stocks.variation_id',
-                        'variations.variationId'
-                    )
                     .join('brands', 'brands.brandId', 'products.brand_id')
                     .select(
-                        { productName: 'products.productName' },
-                        { variations: 'products.variations' },
-                        { brandName: 'brands.brandName' },
-                        { variationId: 'variations.variationId' },
                         { productId: 'products.productId' },
-                        { brand_id: 'brands.brandId' },
-                        { category_id: 'products.mainCategory' },
-                        { stock: 'stocks.quantity' },
+                        { productName: 'products.productName' }, // store and dashboard
+                        { descriptionShort: 'products.descriptionShort' }, // store and dashboard
+                        { variations: 'products.variations' }, // qtd dashboard
+                        { variationId: 'variations.variationId' }, // qtd dashboard
+                        { brandName: 'brands.brandName' }, // dashboard
                         { salesPrice: 'prices.salesPrice' },
                         { offerPrice: 'prices.offerPrice' }
                     )
@@ -105,7 +95,7 @@ class ProductsController {
                 },
             });
         } catch (err) {
-            console.log(err);
+            console.log({ message: err.message });
             return res.status(500).json('sorry, something broke...');
         }
     }
