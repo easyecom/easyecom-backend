@@ -1,5 +1,4 @@
 const connection = require('../../../../infra/database/connection');
-const variationImages = require('../../../../helpers/listImagesByVariation.helper');
 
 class CategoryProductController {
     async getById(req, res) {
