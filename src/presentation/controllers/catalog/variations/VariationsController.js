@@ -1,5 +1,5 @@
 const connection = require('../../../../infra/database/connection');
-const variationImages = require('../../../../helpers/listImagesByVariation.helper');
+const variationImages = require('../../../../helpers/setImagesInVariation.helper');
 const VariationService = require('../../../../domain/services/catalog/Variation.service');
 
 class VariationsController {

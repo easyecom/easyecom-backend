@@ -1,5 +1,5 @@
 const connection = require('../../../../infra/database/connection');
-const variationImages = require('../../../../helpers/listImagesByVariation.helper');
+const variationImages = require('../../../../helpers/setImagesInVariation.helper');
 
 class BrandProductController {
     async getById({ params, query }, res) {
