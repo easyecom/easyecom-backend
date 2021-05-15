@@ -73,8 +73,8 @@ class VariationsController {
             let variations = await connection('variations')
                 .limit(limit)
                 .offset((page - 1) * limit)
-                .join('prices', 'prices.variation_id', 'variations.variationId')
-                .join('stocks', 'stocks.variation_id', 'variations.variationId')
+                .leftJoin('prices', 'prices.variation_id', 'variations.variationId')
+                .leftJoin('stocks', 'stocks.variation_id', 'variations.variationId')
                 .select('*', { product_id: 'variations.product_id' })
                 .where({ 'variations.store_id': store_id });
 

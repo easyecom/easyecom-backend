@@ -1,5 +1,6 @@
 const connection = require('../../../../infra/database/connection');
 const ProductService = require('../../../../domain/services/catalog/Product.service');
+const setImagesInVariations = require('../../../../helpers/setImagesInVariation.helper');
 
 class ProductsController {
     async store({ params, body: products }, res) {
@@ -51,11 +52,7 @@ class ProductsController {
                     'products.productId',
                     'variations.product_id'
                 )
-                .join(
-                    'prices',
-                    'prices.variation_id',
-                    'variations.variationId'
-                )
+                .join('prices', 'prices.variation_id', 'variations.variationId')
                 .limit(limit)
                 .offset((page - 1) * limit)
                 .where({
@@ -80,15 +77,55 @@ class ProductsController {
         const { store_id, product_id } = req.params;
 
         try {
-            const data = await connection('products')
+            let [data] = await connection('products')
                 .where({ productId: product_id, store_id })
                 .select('*');
 
-            if (!data.length) {
+            if (!data) {
                 return res
                     .status(404)
                     .json({ error: { message: ' product does not exist' } });
             }
+
+            let variations = [];
+
+            for (let variationId of data.variations) {
+                let variation = await connection('variations')
+                    .leftJoin(
+                        'stocks',
+                        'stocks.variation_id',
+                        'variations.variationId'
+                    )
+                    .leftJoin(
+                        'sizes',
+                        'variations.size_id',
+                        'variations.variationId'
+                    )
+                    .leftJoin(
+                        'colors',
+                        'variations.color_id',
+                        'variations.variationId'
+                    )
+                    .where({ variationId })
+                    .select(
+                        { variationId: 'variations.variationId' },
+                        { variationName: 'variations.variationName' },
+                        { descriptionShort: 'variations.descriptionShort' },
+                        { description: 'variations.description' },
+                        { installment: 'variations.installment' },
+                        { freeShipping: 'variations.freeShipping' },
+                        { quantity: 'stocks.quantity' },
+                        { size: 'sizes.size' },
+                        { colorName: 'colors.colorName' },
+                        { colorHexadecimal: 'colors.hexadecimal' }
+                    );
+
+                variation = await setImagesInVariations(variation, connection);
+
+                variations.push(...variation);
+            }
+
+            data.variations = variations;
 
             return res.status(200).json(data);
         } catch (err) {
