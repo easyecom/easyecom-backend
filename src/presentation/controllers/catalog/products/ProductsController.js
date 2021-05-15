@@ -46,13 +46,13 @@ class ProductsController {
                     { salesPrice: 'prices.salesPrice' },
                     { images: 'images.url' }
                 )
-                .join('images', 'images.product_id', 'products.productId')
-                .join(
+                .leftJoin('images', 'images.product_id', 'products.productId')
+                .leftJoin(
                     'variations',
                     'products.productId',
                     'variations.product_id'
                 )
-                .join('prices', 'prices.variation_id', 'variations.variationId')
+                .leftJoin('prices', 'prices.variation_id', 'variations.variationId')
                 .limit(limit)
                 .offset((page - 1) * limit)
                 .where({
