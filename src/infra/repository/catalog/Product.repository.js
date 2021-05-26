@@ -10,6 +10,8 @@ class ProductRepository {
                 keyWords: payload.keyWords,
                 descriptionShort: payload.descriptionShort,
                 description: payload.description,
+                salesPrice: payload.salesPrice,
+                offerPrice: payload.offerPrice,
                 sku: payload.sku,
                 variations: payload.variations,
                 evaluations: payload.evaluations,

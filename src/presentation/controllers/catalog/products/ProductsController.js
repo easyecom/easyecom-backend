@@ -40,19 +40,8 @@ class ProductsController {
                 .count();
 
             const products = await connection('products')
-                .select(
-                    'products.*',
-                    { offerPrice: 'prices.offerPrice' },
-                    { salesPrice: 'prices.salesPrice' },
-                    { images: 'images.url' }
-                )
+                .select('products.*', { images: 'images.url' })
                 .leftJoin('images', 'images.product_id', 'products.productId')
-                .leftJoin(
-                    'variations',
-                    'products.productId',
-                    'variations.product_id'
-                )
-                .leftJoin('prices', 'prices.variation_id', 'variations.variationId')
                 .limit(limit)
                 .offset((page - 1) * limit)
                 .where({
@@ -97,6 +86,11 @@ class ProductsController {
                         'variations.variationId'
                     )
                     .leftJoin(
+                        'prices',
+                        'prices.variation_id',
+                        'variations.variationId'
+                    )
+                    .leftJoin(
                         'sizes',
                         'variations.size_id',
                         'variations.variationId'
@@ -115,6 +109,8 @@ class ProductsController {
                         { installment: 'variations.installment' },
                         { freeShipping: 'variations.freeShipping' },
                         { quantity: 'stocks.quantity' },
+                        { prices: 'prices.salesPrice' },
+                        { offerPrice: 'prices.offerPrice' },
                         { size: 'sizes.size' },
                         { colorName: 'colors.colorName' },
                         { colorHexadecimal: 'colors.hexadecimal' }

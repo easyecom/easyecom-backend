@@ -10,6 +10,8 @@ exports.up = knex => {
         table.boolean('isActive').defaultTo(true);
         table.boolean('isVisible').defaultTo(false);
         table.boolean('soldOut').defaultTo(false);
+        table.decimal('offerPrice');
+        table.decimal('salesPrice').notNullable();
         table.boolean('highlight').defaultTo(false);
         table.string('keyWords');
         table.string('descriptionShort')
