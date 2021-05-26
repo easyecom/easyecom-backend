@@ -43,18 +43,18 @@ class VariationsController {
 
             const [data] = await VariationService.create({
                 payload: variationsData,
-                store_id
+                store_id,
             });
 
             let variations = [];
-
+       
             const [product] = await connection('products').where({
                 productId: variationsData.product_id,
                 store_id,
             });
 
             variations.push(...product.variations, data.variationId);
-
+            console.log(variations);
             await connection('products')
                 .where({ productId: variationsData.product_id, store_id })
                 .update({ variations }, [variations]);
@@ -73,8 +73,16 @@ class VariationsController {
             let variations = await connection('variations')
                 .limit(limit)
                 .offset((page - 1) * limit)
-                .leftJoin('prices', 'prices.variation_id', 'variations.variationId')
-                .leftJoin('stocks', 'stocks.variation_id', 'variations.variationId')
+                .leftJoin(
+                    'prices',
+                    'prices.variation_id',
+                    'variations.variationId'
+                )
+                .leftJoin(
+                    'stocks',
+                    'stocks.variation_id',
+                    'variations.variationId'
+                )
                 .select('*', { product_id: 'variations.product_id' })
                 .where({ 'variations.store_id': store_id });
 

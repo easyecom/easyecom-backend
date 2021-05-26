@@ -92,13 +92,13 @@ class ProductsController {
                     )
                     .leftJoin(
                         'sizes',
-                        'variations.size_id',
-                        'variations.variationId'
+                        'variations.size_id', "=", 
+                        'sizes.sizeId'
                     )
                     .leftJoin(
                         'colors',
-                        'variations.color_id',
-                        'variations.variationId'
+                        'variations.color_id', "=",
+                        'colors.colorId'
                     )
                     .where({ variationId })
                     .select(
