@@ -99,8 +99,8 @@ class VariationsController {
 
         try {
             let data = await connection('variations')
-                .join('prices', 'prices.variation_id', 'variations.variationId')
-                .join('stocks', 'stocks.variation_id', 'variations.variationId')
+                .leftJoin('prices', 'prices.variation_id', 'variations.variationId')
+                .leftJoin('stocks', 'stocks.variation_id', 'variations.variationId')
                 .select(
                     '*',
                     { priceId: 'prices.variation_id' },

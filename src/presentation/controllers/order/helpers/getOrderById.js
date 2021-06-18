@@ -33,8 +33,8 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
             // return item
 
             const [variation] = await connection('variations')
-                .join('prices', 'prices.variation_id', 'variations.variationId')
-                .join('stocks', 'stocks.variation_id', 'variations.variationId')
+                .leftJoin('prices', 'prices.variation_id', 'variations.variationId')
+                .leftJoin('stocks', 'stocks.variation_id', 'variations.variationId')
                 .where('variationId', item.variation_id);
 
             const data = {
