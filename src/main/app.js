@@ -12,7 +12,11 @@ class App {
     }
 
     middlewares() {
-        this.server.use(cors());
+        this.server.use(
+            cors({
+                origin: 'http://localhost:8000'
+            })
+        );
         this.server.use(express.json());
         this.server.set('view engine', 'ejs');
         this.server.disable('x-powered-by');

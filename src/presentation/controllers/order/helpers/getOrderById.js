@@ -33,9 +33,19 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
             // return item
 
             const [variation] = await connection('variations')
-                .leftJoin('prices', 'prices.variation_id', 'variations.variationId')
-                .leftJoin('stocks', 'stocks.variation_id', 'variations.variationId')
+                .leftJoin(
+                    'prices',
+                    'prices.variation_id',
+                    'variations.variationId'
+                )
+                .leftJoin(
+                    'stocks',
+                    'stocks.variation_id',
+                    'variations.variationId'
+                )
                 .where('variationId', item.variation_id);
+
+                console.log(variation, "variation");
 
             const data = {
                 name: variation.variationName,
@@ -58,10 +68,13 @@ module.exports = async ({ res, connection, store_id, order_id }) => {
                 product_id: variation.product_id,
             };
             items.push(data);
+            console.log(data, "data");
             totalValue.push(data.offerPrice || data.salesPrice);
         }
+        console.log(totalValue, "totalValue");
 
         const totalOrderValue = await countCartValue(totalValue);
+        console.log(totalOrderValue, "totalOrderValue");
 
         let deliveryAddress;
         if (data[0].address_id !== data[0].addressId) {

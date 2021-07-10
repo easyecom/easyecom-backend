@@ -133,7 +133,6 @@ class VariationsController {
                     'variationName',
                     'isActive',
                     'keyWords',
-                    'title',
                     'descriptionShort',
                     'description',
                     'packagedHeight',
