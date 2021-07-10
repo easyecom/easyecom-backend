@@ -21,7 +21,7 @@ class ProductsController {
     async getAll(req, res) {
         try {
             const { store_id } = req.params;
-            const { page = 1, limit } = req.query;
+            const { page = 1, limit, search = '' } = req.query;
 
             const checkStore = await connection('stores').where({
                 storeId: store_id,
@@ -39,14 +39,36 @@ class ProductsController {
                 })
                 .count();
 
-            const products = await connection('products')
-                .select('products.*', { images: 'images.url' })
-                .leftJoin('images', 'images.product_id', 'products.productId')
-                .limit(limit)
-                .offset((page - 1) * limit)
-                .where({
-                    'products.store_id': store_id,
-                });
+            let products;
+
+            if (search) {
+                products = await connection('products')
+                    .select('products.*', { images: 'images.url' })
+                    .leftJoin(
+                        'images',
+                        'images.product_id',
+                        'products.productId'
+                    )
+                    .limit(limit)
+                    .offset((page - 1) * limit)
+                    .where({ 'products.store_id': store_id })
+                    .where('products.productName', 'ilike', `%${search}%`);
+            }
+
+            if (!search) {
+                products = await connection('products')
+                    .select('products.*', { images: 'images.url' })
+                    .leftJoin(
+                        'images',
+                        'images.product_id',
+                        'products.productId'
+                    )
+                    .limit(limit)
+                    .offset((page - 1) * limit)
+                    .where({
+                        'products.store_id': store_id,
+                    });
+            }
 
             return res.status(200).json({
                 data: products,
@@ -92,12 +114,14 @@ class ProductsController {
                     )
                     .leftJoin(
                         'sizes',
-                        'variations.size_id', "=", 
+                        'variations.size_id',
+                        '=',
                         'sizes.sizeId'
                     )
                     .leftJoin(
                         'colors',
-                        'variations.color_id', "=",
+                        'variations.color_id',
+                        '=',
                         'colors.colorId'
                     )
                     .where({ variationId })
